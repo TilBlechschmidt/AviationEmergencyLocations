@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "applications/path-finding/Cargo.toml"
+    ],
+    "rust-analyzer.lens.implementations": false
+}

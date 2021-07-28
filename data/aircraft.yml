@@ -1,0 +1,96 @@
+# All values are at MTOW unless otherwise noted
+aircraft:
+# - name: Example aircraft
+#   # Maximum height to which the performance characteristics are valid
+#   # To simplify calculations, static values instead of regressions are used where possible.
+#   # However, static cumulative values are only valid to a certain degree and height.
+#   # This property caps the maximum height at which calculations using these values may be considered accurate.
+#   dataHeightLimit: 4000
+
+#   # Maximum take-off weight (pounds)
+#   mtow: 2450
+
+#   # Takeoff characteristics disregarding pressure altitude
+#   # All values at standard temperature, at MSL, no wind.
+#   takeoff:
+#     # Distance to clear 50ft obstacle
+#     distance: 443
+#     # Best angle of climb speed (KIAS)
+#     speed: 56
+
+#   # Climb characteristics
+#   # These values all use Vy instead of Vx to provide a conservative estimate.
+#   climb:
+#     # Climb rate at Vy (m/s)
+#     # If detailed data is available, the rate at half the dataHeightLimit may be used.
+#     rate: 4
+#     # Best Rate-of-Climb speed (KIAS)
+#     speed: 79
+
+  - name: Cessna 150
+    dataHeightLimit: 4000
+    mtow: 1600
+    takeoff:
+      distance: 422
+      speed: 61
+    climb:
+      rate: 3.403
+      speed: 66
+    glide:
+      distance: 2.5
+      speed: 61
+    landing:
+      distance: 328
+      speed: 52
+
+  - name: Cessna 172
+    dataHeightLimit: 4000
+    mtow: 2450
+    takeoff:
+      distance: 522
+      speed: 57
+    climb:
+      rate: 3.09
+      speed: 79
+    glide:
+      distance: 2.78
+      speed: 65
+    landing:
+      distance: 395
+      speed: 62
+
+  - name: Cessna 172 (Diesel)
+    dataHeightLimit: 4000
+    mtow: 2450
+    takeoff:
+      distance: 443
+      speed: 56
+    climb:
+      rate: 3.817
+      speed: 70
+    impossibleTurn:
+      # TODO These values are from the non-Diesel C172!
+      bankAngle: 45
+      height: -450
+    glide:
+      distance: 2.78
+      speed: 65
+    landing:
+      distance: 395
+      speed: 62
+
+  - name: Piper Archer II
+    dataHeightLimit: 4000
+    mtow: 2550
+    takeoff:
+      distance: 550
+      speed: 58
+    climb:
+      rate: 3.454
+      speed: 76
+    glide:
+      distance: 2.963
+      speed: 76
+    landing:
+      distance: 430
+      speed: 66

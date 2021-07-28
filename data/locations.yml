@@ -1,0 +1,12 @@
+locations:
+  - name: Somewhere
+    type: Park # | Agriculture | Water | Industrial | Construction
+    reversible: false
+    coordinates:
+      start: [51.993, 10.02]
+      end: [51.994, 10.03]
+    hazards:
+      - type: "???"
+    assets:
+      - file: "assets/some-image.jpg"
+        location: [51.993, 10.02]
