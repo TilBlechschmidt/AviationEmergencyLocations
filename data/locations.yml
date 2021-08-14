@@ -1,12 +1,50 @@
-locations:
-  - name: Somewhere
-    type: Park # | Agriculture | Water | Industrial | Construction
-    reversible: false
-    coordinates:
-      start: [51.993, 10.02]
-      end: [51.994, 10.03]
-    hazards:
-      - type: "???"
-    assets:
-      - file: "assets/some-image.jpg"
-        location: [51.993, 10.02]
+- name: EDDH
+  reversible: true
+  surface: Asphalt
+  coordinates:
+    start: [53.61997283331443, 9.967174743158031]
+    end: [53.636016866522446, 9.999672285710245]
+  assets: []
+
+- name: EDDH
+  reversible: true
+  surface: Asphalt
+  coordinates:
+    start: [53.628698122437584, 9.997448723998712]
+    end: [53.6544163274263, 9.97522678986149]
+  assets: []
+
+- name: Trabrennbahn
+  # TODO Note hazards (large tents) at the beginning of reversed approach
+  reversible: true
+  surface: Gras
+  coordinates:
+    start: [53.57498723809755, 9.894788966570447]
+    end: [53.5781310988626, 9.891261992975943]
+  assets: []
+
+- name: Entenwerder
+  reversible: true
+  surface: Gras
+  humanPresence: true
+  coordinates:
+    start: [53.53253376707803, 10.03262271790665]
+    end: [53.5302303399631, 10.03988502034493]
+  assets: []
+
+- name: Entenwerder
+  reversible: true
+  surface: Gras
+  humanPresence: true
+  coordinates:
+    start: [53.53225754970094, 10.031181284746324]
+    end: [53.52999624482738, 10.037632288733692]
+  assets: []
+
+- name: Niendorfer Gehege
+  reversible: true
+  surface: Gras
+  coordinates:
+    start: [53.622996603775725, 9.93373064886108]
+    end: [53.62200200098883, 9.926906758751242]
+  assets: []

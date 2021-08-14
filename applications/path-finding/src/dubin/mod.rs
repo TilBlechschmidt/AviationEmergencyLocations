@@ -1,31 +1,35 @@
 mod ccc;
 mod csc;
+mod geo;
 mod structs;
 
-use crate::{Distance, Location};
+type Distance = Length;
+type Location = (Distance, Distance);
+
 use csc::csc_paths;
 use structs::*;
 use uom::si::{angle::radian, f64::*, length::meter};
 
+pub use self::geo::*;
 pub use structs::{Arc, Circle, Direction, DubinPath, Tangent};
 
 use self::ccc::ccc_paths;
 
 pub fn calculate_dubin_path_candidates(
-    start: Location,
-    end: Location,
+    start: Point,
+    end: Point,
     start_angle: Angle,
     end_angle: Angle,
     radius: Distance,
 ) -> Vec<DubinPath> {
     // Internally we use radians and meters (obviously), convert everything up-front :)
     let start = DirectedPoint {
-        point: Point::new(start.0.get::<meter>(), start.1.get::<meter>()),
+        point: start,
         angle: start_angle.get::<radian>(),
     };
 
     let end = DirectedPoint {
-        point: Point::new(end.0.get::<meter>(), end.1.get::<meter>()),
+        point: end,
         angle: end_angle.get::<radian>(),
     };
 

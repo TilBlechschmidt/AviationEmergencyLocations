@@ -1,5 +1,4 @@
 use super::*;
-use crate::{Distance, Location};
 use geo::prelude::EuclideanDistance;
 use uom::si::length::meter;
 

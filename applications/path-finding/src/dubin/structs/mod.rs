@@ -5,6 +5,8 @@ mod directed_point;
 mod path;
 mod tangent;
 
+use super::{Distance, Location};
+
 pub use arc::*;
 pub use circle::*;
 pub use circle_set::*;

@@ -1,8 +1,5 @@
 use std::fmt::Display;
-
 use uom::si::length::meter;
-
-use crate::{Distance, Location};
 
 use super::*;
 

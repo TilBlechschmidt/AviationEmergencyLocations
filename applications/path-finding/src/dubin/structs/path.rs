@@ -1,5 +1,4 @@
 use super::*;
-use crate::Distance;
 
 #[derive(Debug)]
 pub enum DubinPath {
