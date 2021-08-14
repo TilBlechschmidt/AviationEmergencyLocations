@@ -16,6 +16,7 @@ use geo::{
     geodesic_distance::GeodesicDistance,
     point,
     prelude::{Bearing, HaversineDestination, HaversineDistance},
+    simplify::Simplify,
     Coordinate, LineString, Point, Polygon,
 };
 use geojson::{Feature, FeatureCollection, GeoJson, Value};
@@ -209,6 +210,7 @@ impl Simulation {
         aircraft: &Aircraft,
         location: &Location,
         altitude: Length,
+        epsilon: f64,
     ) -> Polygon<f64> {
         let resolution = self.resolution;
         let maximum_range = aircraft.glide.ground_track_for_height_lost(altitude) * 2.0;
@@ -291,8 +293,11 @@ impl Simulation {
         let convex_hull = quick_hull(&mut all_reachable_points);
         // TODO Make sure all pixels within the hull are filled
 
+        // Reduce the complexity of the polygon to save some space
+        let simplified_hull = convex_hull.simplify(&epsilon);
+
         // Convert the geometric convex hull to geographic coordinates
-        let geographic_convex_hull: LineString<f64> = convex_hull
+        let geographic_convex_hull: LineString<f64> = simplified_hull
             .into_points()
             .into_iter()
             .map(|point| geometric_point_to_geographic(point, centroid))
@@ -313,11 +318,12 @@ impl Simulation {
         &self,
         location: &Location,
         aircraft: &Aircraft,
+        epsilon: f64,
     ) -> HashMap<usize, GeoJson> {
         self.altitudes
             .iter()
             .map(|altitude| {
-                let polygon = self.range_profile(aircraft, location, *altitude);
+                let polygon = self.range_profile(aircraft, location, *altitude, epsilon);
                 let geojson = GeoJson::Feature(Feature {
                     bbox: None,
                     geometry: Some((&polygon).into()),

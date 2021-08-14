@@ -183,7 +183,7 @@ impl DerivedLocation {
             .map(|aircraft| {
                 (
                     aircraft.id,
-                    simulation.generate_range_profiles(&location, aircraft),
+                    simulation.generate_range_profiles(&location, aircraft, 0.75),
                 )
             })
             .collect();
