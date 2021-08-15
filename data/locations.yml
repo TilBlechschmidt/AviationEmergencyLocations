@@ -120,3 +120,12 @@
     start: [53.64340328571133, 10.139759253824579]
     end: [53.64544500564857, 10.14935811623714]
   assets: []
+
+# This one has a powerline on the north-east end and is thus NOT reversible
+- name: Öjendorf
+  reversible: false
+  surface: Gras
+  coordinates:
+    start: [53.55645789342882, 10.148696427996084]
+    end: [53.559520491179335, 10.155491450922636]
+  assets: []
