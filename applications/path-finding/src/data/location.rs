@@ -92,6 +92,7 @@ pub struct Location {
     pub airport: bool,
 
     /// Start and end coordinates of the location
+    #[serde(skip_serializing)]
     coordinates: LocationCoordinates,
 
     /// List of assets related to the location

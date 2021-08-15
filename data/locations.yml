@@ -96,3 +96,27 @@
     start: [53.503977263135816, 9.882311865361673]
     end: [53.50236743287558, 9.894900267406769]
   assets: []
+
+- name: Raakmoor
+  reversible: true
+  surface: Gras
+  coordinates:
+    start: [53.65693868034535, 10.04121597091139]
+    end: [53.66052252364227, 10.04539790910962]
+  assets: []
+
+- name: Glashütte
+  reversible: true
+  surface: Gras
+  coordinates:
+    start: [53.67109333560332, 10.03581385234672]
+    end: [53.677195459778794, 10.040745739992893]
+  assets: []
+
+- name: Klosterwiese
+  reversible: true
+  surface: Gras
+  coordinates:
+    start: [53.64340328571133, 10.139759253824579]
+    end: [53.64544500564857, 10.14935811623714]
+  assets: []

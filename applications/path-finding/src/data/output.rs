@@ -3,7 +3,8 @@ use super::{
     RiskClassification, SurfaceType, TakeoffPerformance,
 };
 use crate::Simulation;
-use geojson::GeoJson;
+use geo::{Line, LineString};
+use geojson::{Feature, GeoJson};
 use rayon::iter::{IntoParallelIterator, IntoParallelRefIterator, ParallelIterator};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -174,6 +175,9 @@ pub struct DerivedLocation {
 
     /// Risk classifications for each aircraft
     pub risks: HashMap<AircraftIdentifier, RiskClassification>,
+
+    /// GeoJSON line representing the landable location
+    pub geojson: GeoJson,
 }
 
 impl DerivedLocation {
@@ -199,12 +203,21 @@ impl DerivedLocation {
             None
         };
 
+        let geojson = GeoJson::Feature(Feature {
+            bbox: None,
+            geometry: Some((&Line::new(location.start(), location.end())).into()),
+            id: None,
+            properties: None,
+            foreign_members: None,
+        });
+
         Self {
             length: location.length().get::<meter>().round() as usize,
             bearing: convert_angle(location.bearing()),
             reverse_bearing,
             ranges,
             risks,
+            geojson,
             location,
         }
     }

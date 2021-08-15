@@ -53,7 +53,7 @@
     speed: 62
 
 - name: Piper Archer II
-  id: PA28-181
+  id: PA28
   mtow: 2550
   takeoff:
     groundRoll: 850
