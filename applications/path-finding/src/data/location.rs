@@ -10,7 +10,7 @@ use strum::EnumIter;
 use uom::si::{angle::degree, f64::*, length::meter};
 use uuid::Uuid;
 
-pub type LocationIdentifier = Uuid;
+pub type LocationIdentifier = String;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct SerializedCoordinate([f64; 2]);
@@ -64,8 +64,8 @@ pub enum RiskClassification {
     Unsafe,
 }
 
-fn new_uuid() -> Uuid {
-    Uuid::new_v4()
+fn new_uuid() -> String {
+    Uuid::new_v4().to_string()
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -85,6 +85,11 @@ pub struct Location {
     // TODO Record other potential hazards like power lines or tents
     #[serde(default)]
     pub human_presence: bool,
+
+    /// Whether the location is an actual airport which can be found in public charts
+    /// This allows us to later on not draw a (duplicated) runway on the map
+    #[serde(default)]
+    pub airport: bool,
 
     /// Start and end coordinates of the location
     coordinates: LocationCoordinates,

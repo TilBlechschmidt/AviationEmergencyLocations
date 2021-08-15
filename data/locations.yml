@@ -1,6 +1,7 @@
 - name: EDDH
   reversible: true
   surface: Asphalt
+  airport: true
   coordinates:
     start: [53.61997283331443, 9.967174743158031]
     end: [53.636016866522446, 9.999672285710245]
@@ -9,9 +10,28 @@
 - name: EDDH
   reversible: true
   surface: Asphalt
+  airport: true
   coordinates:
     start: [53.628698122437584, 9.997448723998712]
     end: [53.6544163274263, 9.97522678986149]
+  assets: []
+
+- name: EDHI
+  reversible: true
+  surface: Asphalt
+  airport: true
+  coordinates:
+    start: [53.543150815117485, 9.85217192823437]
+    end: [53.524926235161125, 9.813468185929425]
+  assets: []
+
+- name: Segelflugplatz Boberg
+  reversible: true
+  surface: Gras
+  airport: true
+  coordinates:
+    start: [53.517889359903755, 10.134514801417021]
+    end: [53.511839435267355, 10.153154986935162]
   assets: []
 
 - name: Trabrennbahn
@@ -47,4 +67,32 @@
   coordinates:
     start: [53.622996603775725, 9.93373064886108]
     end: [53.62200200098883, 9.926906758751242]
+  assets: []
+
+# The Planetarium has a height of 63.5m and the landing calculations account for a ~15m high obstruction.
+# To retain the reversibility of the remaining park, the Planetarium and Stadtpark have been split up.
+- name: Stadtpark
+  reversible: true
+  surface: Gras
+  humanPresence: true
+  coordinates:
+    start: [53.593754092541836, 10.023320901601247]
+    end: [53.595781235707456, 10.01525390086504]
+  assets: []
+
+- name: Planetarium
+  reversible: false
+  surface: Gras
+  humanPresence: true
+  coordinates:
+    start: [53.596127089368856, 10.013798957452522]
+    end: [53.59705083847244, 10.01010346889216]
+  assets: []
+
+- name: Brakenburg
+  reversible: true
+  surface: Gras
+  coordinates:
+    start: [53.503977263135816, 9.882311865361673]
+    end: [53.50236743287558, 9.894900267406769]
   assets: []

@@ -197,7 +197,7 @@ impl Simulation {
                     })
                     .min_by(|x, y| self.compare_path_height_loss(&aircraft, x, y))
                     .map(|path| LandingOption {
-                        location_id: location.id,
+                        location_id: location.id.clone(),
                         height_loss: self.height_loss_over_path(&aircraft, &path),
                         path,
                     })

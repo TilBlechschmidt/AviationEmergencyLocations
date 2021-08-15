@@ -1,4 +1,5 @@
 - name: Cessna 150
+  id: C150
   mtow: 1600
   takeoff:
     groundRoll: 735
@@ -16,6 +17,7 @@
     speed: 52
 
 - name: Cessna 172
+  id: C172
   mtow: 2450
   takeoff:
     groundRoll: 945
@@ -33,6 +35,7 @@
     speed: 62
 
 - name: Cessna 172 (Diesel)
+  id: C172D
   mtow: 2450
   takeoff:
     groundRoll: 760
@@ -50,6 +53,7 @@
     speed: 62
 
 - name: Piper Archer II
+  id: PA28-181
   mtow: 2550
   takeoff:
     groundRoll: 850

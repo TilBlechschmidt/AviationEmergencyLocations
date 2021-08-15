@@ -182,7 +182,7 @@ impl DerivedLocation {
             .par_iter()
             .map(|aircraft| {
                 (
-                    aircraft.id,
+                    aircraft.id.clone(),
                     simulation.generate_range_profiles(&location, aircraft, 0.75),
                 )
             })
@@ -190,7 +190,7 @@ impl DerivedLocation {
 
         let risks = aircrafts
             .iter()
-            .map(|aircraft| (aircraft.id, location.risk(&aircraft)))
+            .map(|aircraft| (aircraft.id.clone(), location.risk(&aircraft)))
             .collect();
 
         let reverse_bearing = if location.reversible {

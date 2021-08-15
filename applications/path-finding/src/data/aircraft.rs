@@ -22,7 +22,7 @@ use super::SurfaceType;
 const TURN_AIRSPEED_SAFETY_FACTOR: f64 = 1.5;
 const SPECIFIC_GRAVITY: f64 = 9.81;
 
-pub type AircraftIdentifier = Uuid;
+pub type AircraftIdentifier = String;
 
 fn turn_radius(speed: Velocity, bank: Angle) -> Length {
     let speed = speed * TURN_AIRSPEED_SAFETY_FACTOR;
@@ -30,15 +30,15 @@ fn turn_radius(speed: Velocity, bank: Angle) -> Length {
     speed.powi(P2::new()) / (gravity * bank.tan())
 }
 
-fn new_uuid() -> Uuid {
-    Uuid::new_v4()
+fn new_uuid() -> String {
+    Uuid::new_v4().to_string()
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Aircraft {
     #[serde(default = "new_uuid")]
-    pub id: Uuid,
+    pub id: AircraftIdentifier,
     pub name: String,
 
     // Maximum takeoff weight (pounds)
