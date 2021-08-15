@@ -155,7 +155,6 @@ impl Location {
         // Iterate over the insets at each end
         if inset_at_ends > 0.0 {
             let bearing = self.bearing().get::<degree>();
-            let reverse_bearing = self.reverse_bearing().get::<degree>();
             let step_count = (inset_at_ends / resolution).floor() as usize;
 
             for i in 1..(step_count + 1) {
@@ -167,9 +166,10 @@ impl Location {
 
                 // Inset from end
                 if self.reversible {
-                    let inset_from_end = self
-                        .end()
-                        .haversine_destination(reverse_bearing, step_distance);
+                    let inset_from_end = self.end().haversine_destination(
+                        self.reverse_bearing().get::<degree>(),
+                        step_distance,
+                    );
                     points.push((inset_from_end, self.reverse_bearing()));
                 }
             }

@@ -275,7 +275,7 @@ impl Simulation {
 
             let points = if landable_bearing == location.bearing() {
                 &reachable_points
-            } else if landable_bearing == location.reverse_bearing() {
+            } else if location.reversible && landable_bearing == location.reverse_bearing() {
                 &reverse_reachable_points
             } else {
                 unreachable!()
