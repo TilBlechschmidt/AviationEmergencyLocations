@@ -85,6 +85,7 @@ pub struct Location {
     // TODO Record other potential hazards like power lines or tents
     #[serde(default)]
     pub human_presence: bool,
+    // TODO Include usage category e.g. Agricultural, Park, Event, Airport, NatureReserve for user-filtering
 
     /// Whether the location is an actual airport which can be found in public charts
     /// This allows us to later on not draw a (duplicated) runway on the map
