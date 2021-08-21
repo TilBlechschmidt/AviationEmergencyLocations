@@ -174,7 +174,7 @@ pub struct DerivedLocation {
     pub ranges: HashMap<AircraftIdentifier, HashMap<usize, GeoJson>>,
 
     /// Risk classifications for each aircraft
-    pub risks: HashMap<AircraftIdentifier, RiskClassification>,
+    pub landing_headroom_ratios: HashMap<AircraftIdentifier, f64>,
 
     /// GeoJSON line representing the landable location
     pub geojson: GeoJson,
@@ -192,9 +192,9 @@ impl DerivedLocation {
             })
             .collect();
 
-        let risks = aircrafts
+        let landing_headroom_ratios = aircrafts
             .iter()
-            .map(|aircraft| (aircraft.id.clone(), location.risk(&aircraft)))
+            .map(|aircraft| (aircraft.id.clone(), location.landing_headroom(&aircraft)))
             .collect();
 
         let reverse_bearing = if location.reversible {
@@ -216,7 +216,7 @@ impl DerivedLocation {
             bearing: convert_angle(location.bearing()),
             reverse_bearing,
             ranges,
-            risks,
+            landing_headroom_ratios,
             geojson,
             location,
         }

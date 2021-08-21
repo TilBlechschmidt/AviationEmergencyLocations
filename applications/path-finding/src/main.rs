@@ -86,7 +86,6 @@ fn main() {
         bank: Angle::new::<degree>(45.0),
         resolution: Length::new::<meter>(10.0),
         altitudes: vec![
-            Length::new::<foot>(1000.0),
             Length::new::<foot>(1500.0),
             Length::new::<foot>(2000.0),
             Length::new::<foot>(2300.0),

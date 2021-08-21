@@ -45,6 +45,36 @@ pub enum SurfaceType {
     Water,
 }
 
+#[derive(Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Clone, Copy)]
+#[serde(rename_all = "PascalCase")]
+pub enum UsageType {
+    Agricultural,
+    Aeronautical,
+    Nature,
+    Waterway,
+    Event,
+    Park,
+}
+
+#[derive(Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Clone, Copy)]
+#[serde(rename_all = "PascalCase")]
+pub enum HumanPresenceCategory {
+    /// During daylight and especially with good weather strong human presence is to be expected, potentially making the location unviable
+    Dense,
+    /// Humans may occasionally be present but are usually spread out and on the move, it is usually possible to find a landing path without any in the way
+    Sparse,
+    /// Generally no humans are on-site unless an event is taking place
+    EventOnly,
+    /// It is not likely that humans will ever pose a risk at this location
+    Unlikely,
+}
+
+impl Default for HumanPresenceCategory {
+    fn default() -> Self {
+        HumanPresenceCategory::Unlikely
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Asset {
@@ -84,13 +114,10 @@ pub struct Location {
     /// Whether humans could be present that may or may not give way
     // TODO Record other potential hazards like power lines or tents
     #[serde(default)]
-    pub human_presence: bool,
-    // TODO Include usage category e.g. Agricultural, Park, Event, Airport, NatureReserve for user-filtering
+    pub human_presence: HumanPresenceCategory,
 
-    /// Whether the location is an actual airport which can be found in public charts
-    /// This allows us to later on not draw a (duplicated) runway on the map
-    #[serde(default)]
-    pub airport: bool,
+    /// What the location is used for
+    pub usage: UsageType,
 
     /// Start and end coordinates of the location
     #[serde(skip_serializing)]
@@ -179,27 +206,10 @@ impl Location {
         points
     }
 
-    pub fn risk(&self, aircraft: &Aircraft) -> RiskClassification {
-        let mut risky = false;
-        let mut not_safe = false;
-
-        // Check the landing distance
+    pub fn landing_headroom(&self, aircraft: &Aircraft) -> f64 {
         let required_landing_distance = aircraft.landing.total_distance_on_surface(&self.surface);
         let remaining_landing_distance = self.length() - required_landing_distance;
-        risky = risky || remaining_landing_distance.get::<meter>() < 0.0;
 
-        // Check the surface type for destructive properties
-        not_safe = not_safe || self.surface == SurfaceType::Water;
-
-        // Check for pesky humans
-        risky = risky || self.human_presence;
-
-        if not_safe {
-            RiskClassification::Unsafe
-        } else if risky {
-            RiskClassification::Risky
-        } else {
-            RiskClassification::Safe
-        }
+        remaining_landing_distance.get::<meter>() / required_landing_distance.get::<meter>()
     }
 }
