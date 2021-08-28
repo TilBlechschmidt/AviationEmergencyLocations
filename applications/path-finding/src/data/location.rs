@@ -105,6 +105,9 @@ pub struct Location {
     pub id: LocationIdentifier,
     pub name: String,
 
+    /// Elevation above MSL in meters
+    // pub elevation: usize,
+
     /// Whether or not the runway may be used in both directions
     pub reversible: bool,
 
@@ -112,7 +115,6 @@ pub struct Location {
     pub surface: SurfaceType,
 
     /// Whether humans could be present that may or may not give way
-    // TODO Record other potential hazards like power lines or tents
     #[serde(default)]
     pub human_presence: HumanPresenceCategory,
 
@@ -125,6 +127,9 @@ pub struct Location {
 
     /// List of assets related to the location
     assets: Vec<Asset>,
+    //
+    // TODO Record other potential hazards like power lines or tents
+    // TODO Add free-form text and web links (e.g. event calendar)
 }
 
 impl Location {

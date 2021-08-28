@@ -1,11 +1,13 @@
 use super::{
     Aircraft, AircraftIdentifier, GlidePerformance, LandingPerformance, Location,
-    RiskClassification, SurfaceType, TakeoffPerformance,
+    LocationIdentifier, RiskClassification, SurfaceType, TakeoffPerformance,
 };
 use crate::Simulation;
 use geo::{Line, LineString};
 use geojson::{Feature, GeoJson};
-use rayon::iter::{IntoParallelIterator, IntoParallelRefIterator, ParallelIterator};
+// use rayon::iter::{
+//     IndexedParallelIterator, IntoParallelIterator, IntoParallelRefIterator, ParallelIterator,
+// };
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use strum::IntoEnumIterator;
@@ -18,8 +20,8 @@ use uom::si::{
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Output {
-    pub aircrafts: Vec<DerivedAircraft>,
-    pub locations: Vec<DerivedLocation>,
+    pub aircrafts: HashMap<AircraftIdentifier, DerivedAircraft>,
+    pub locations: HashMap<LocationIdentifier, DerivedLocation>,
     pub parameters: SimulationParameters,
 }
 
@@ -28,13 +30,24 @@ impl Output {
         let parameters = SimulationParameters::new(&simulation);
 
         let locations = locations
-            .into_par_iter()
-            .map(|location| DerivedLocation::new(location, &aircrafts, &simulation))
+            .into_iter()
+            .map(|location| {
+                (
+                    location.id.clone(),
+                    DerivedLocation::new(location, &aircrafts),
+                )
+            })
             .collect();
 
         let aircrafts = aircrafts
             .into_iter()
-            .map(|aircraft| DerivedAircraft::new(aircraft, simulation.bank))
+            .map(|aircraft| {
+                println!("{}", aircraft.name);
+                (
+                    aircraft.id.clone(),
+                    DerivedAircraft::new(aircraft, &simulation),
+                )
+            })
             .collect();
 
         Self {
@@ -79,14 +92,24 @@ pub struct DerivedAircraft {
     #[serde(flatten)]
     pub aircraft: Aircraft,
 
+    /// Linear regressions of the aircrafts range to a landing location for 36 rays cast from the approach end, offset by `derivedPerformance.glide.turnRadius`.
+    /// Contains three values each, the ray angle in radians, the slope (m), and the offset (b). The range for a given direction
+    /// may be calculated with `mx + b = y` where x is the altitude in feet and y is the range in meters.
+    ///
+    /// The first 18 values describe the semicircle at the approach end, the last 18 values describe the circle behind the approach end.
+    /// In order to generate a range polygon, take the first 18 values and place them in regards to the approach end. Then, take the last 18 values
+    /// and place them in relation to the last landable point. Connect the two halves with straight lines. Make sure to always use the Y-offset!
+    pub range: Vec<(f64, f64, f64)>,
+
     /// Performance numbers that have been derived from the official information
     pub derived_performance: DerivedAircraftPerformance,
 }
 
 impl DerivedAircraft {
-    pub fn new(aircraft: Aircraft, bank: Angle) -> Self {
+    pub fn new(aircraft: Aircraft, simulation: &Simulation) -> Self {
         Self {
-            derived_performance: DerivedAircraftPerformance::new(&aircraft, bank),
+            range: simulation.generate_aircraft_distance_regression(&aircraft),
+            derived_performance: DerivedAircraftPerformance::new(&aircraft, simulation.bank),
             aircraft,
         }
     }
@@ -170,10 +193,7 @@ pub struct DerivedLocation {
     /// Bearing of the reverse direction
     pub reverse_bearing: Option<usize>,
 
-    /// Geographic range polygons for each aircraft and altitude (in feet)
-    pub ranges: HashMap<AircraftIdentifier, HashMap<usize, GeoJson>>,
-
-    /// Risk classifications for each aircraft
+    /// Percentage of the aircrafts required landing distance that is not used in a perfect landing
     pub landing_headroom_ratios: HashMap<AircraftIdentifier, f64>,
 
     /// GeoJSON line representing the landable location
@@ -181,17 +201,7 @@ pub struct DerivedLocation {
 }
 
 impl DerivedLocation {
-    pub fn new(location: Location, aircrafts: &Vec<Aircraft>, simulation: &Simulation) -> Self {
-        let ranges = aircrafts
-            .par_iter()
-            .map(|aircraft| {
-                (
-                    aircraft.id.clone(),
-                    simulation.generate_range_profiles(&location, aircraft, 0.75),
-                )
-            })
-            .collect();
-
+    pub fn new(location: Location, aircrafts: &Vec<Aircraft>) -> Self {
         let landing_headroom_ratios = aircrafts
             .iter()
             .map(|aircraft| (aircraft.id.clone(), location.landing_headroom(&aircraft)))
@@ -215,7 +225,6 @@ impl DerivedLocation {
             length: location.length().get::<meter>().round() as usize,
             bearing: convert_angle(location.bearing()),
             reverse_bearing,
-            ranges,
             landing_headroom_ratios,
             geojson,
             location,

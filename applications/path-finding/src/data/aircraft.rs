@@ -30,14 +30,9 @@ fn turn_radius(speed: Velocity, bank: Angle) -> Length {
     speed.powi(P2::new()) / (gravity * bank.tan())
 }
 
-fn new_uuid() -> String {
-    Uuid::new_v4().to_string()
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Aircraft {
-    #[serde(default = "new_uuid")]
     pub id: AircraftIdentifier,
     pub name: String,
 
@@ -205,9 +200,10 @@ impl LandingPerformance {
     }
 
     pub fn ground_roll_on_surface(&self, surface: &SurfaceType) -> Length {
+        // TODO When the surface is wet, these numbers no longer apply
         match surface {
             SurfaceType::Asphalt => self.ground_roll(),
-            SurfaceType::Gras => self.ground_roll() * 1.45,
+            SurfaceType::Gras => self.ground_roll() * 1.20,
             // TODO This is an unknown figure
             SurfaceType::Water => self.ground_roll(),
         }
