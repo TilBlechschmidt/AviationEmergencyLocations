@@ -1,6 +1,6 @@
-# Aviation Emergency Locations
+# E.L.S.A. — Emergency Locations Site Assessment
 
-This repository contains a non-exhaustive list of potential emergency landing spots in and around Hamburg. To raise awareness for the general scarcity of landing location and help in locating those that do exist, this list has been created. It should be noted, however, that this collection is not officially endorsed by anyone!
+This repository contains a non-exhaustive list of potential emergency landing spots in and around the town of Hamburg. To raise awareness for the general scarcity of landing location and help in locating those that do exist, this list has been created. It should be noted, however, that this collection is not officially endorsed by anyone and has mostly been created out of personal interest! However, feel free to use the information provided to make a more educated guess regarding which regions to avoid 😉
 
 ## Disclaimer
 
