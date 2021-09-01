@@ -1,6 +1,7 @@
 {
     "rust-analyzer.linkedProjects": [
-        "applications/path-finding/Cargo.toml"
+        // "applications/path-finding/Cargo.toml",
+        "web-app/elsa/Cargo.toml"
     ],
     "rust-analyzer.lens.implementations": false
 }

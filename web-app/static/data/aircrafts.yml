@@ -53,7 +53,7 @@
     speed: 62
 
 - name: Piper Archer II
-  id: PA28
+  id: PA28-181
   mtow: 2550
   takeoff:
     groundRoll: 850
@@ -69,3 +69,22 @@
     groundRoll: 920
     totalDistance: 1400
     speed: 66
+#
+# Excluded for now as the availability of CAPS demands a different thought process along the lines of "where can I land vertically the safest" instead of "where is a runway"!
+# - name: Cirrus SR20
+#   id: SR20
+#   mtow: 3000
+#   takeoff:
+#     groundRoll: 1444
+#     totalDistance: 2060
+#     speed: 68
+#   climb:
+#     rate: 828
+#     speed: 85
+#   glide:
+#     distance: 1.79
+#     speed: 96
+#   landing:
+#     groundRoll: 1015
+#     totalDistance: 2040
+#     speed: 75

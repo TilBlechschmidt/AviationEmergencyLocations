@@ -1,0 +1,192 @@
+use serde::{Deserialize, Serialize};
+use uom::si::{
+    acceleration::meter_per_second_squared,
+    angle::radian,
+    f64::{Acceleration, Length, Mass, Velocity},
+    length::{foot, meter, nautical_mile},
+    mass::{kilogram, pound},
+    velocity::knot,
+};
+use wasm_bindgen::prelude::*;
+
+use crate::{dubin::DubinPath, SurfaceType};
+
+const TURN_AIRSPEED_SAFETY_FACTOR: f64 = 1.5;
+const SPECIFIC_GRAVITY: f64 = 9.81;
+
+#[wasm_bindgen]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Aircraft {
+    #[wasm_bindgen(skip)]
+    pub id: String,
+
+    #[wasm_bindgen(skip)]
+    pub name: String,
+
+    #[wasm_bindgen(skip)]
+    #[serde(rename = "mtow")]
+    pub raw_mtow: usize,
+
+    pub takeoff: TakeoffPerformance,
+    pub climb: ClimbPerformance,
+    pub glide: GlidePerformance,
+    pub landing: LandingPerformance,
+}
+
+#[wasm_bindgen]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
+pub struct TakeoffPerformance {
+    // Distance required to reach rotation speed (ft)
+    ground_roll: usize,
+    // Total distance required to clear a 50ft obstacle (ft)
+    total_distance: usize,
+    // Speed reached when clearing the 50ft obstacle (KIAS)
+    speed: usize,
+}
+
+#[wasm_bindgen]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
+pub struct ClimbPerformance {
+    // Speed for best Rate-of-Climb (KIAS)
+    speed: usize,
+    // Climb rate with full throttle and pitched for Vy (ft/min)
+    rate: usize,
+}
+
+#[wasm_bindgen]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
+pub struct GlidePerformance {
+    // Ground distance covered per 1.000ft of altitude lost (nm)
+    distance: f64,
+    // Speed for best glide distance (KIAS)
+    speed: usize,
+}
+
+#[wasm_bindgen]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
+pub struct LandingPerformance {
+    // Ground roll required after touchdown to come to a complete stop (ft)
+    ground_roll: usize,
+    // Total distance required to clear a 50ft obstacle and come to a full stop (ft)
+    total_distance: usize,
+    // Speed when passing the 50ft obstacle (KIAS)
+    speed: usize,
+}
+
+#[wasm_bindgen]
+impl Aircraft {
+    #[wasm_bindgen(getter)]
+    pub fn id(&self) -> JsValue {
+        JsValue::from_str(&self.id)
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn name(&self) -> JsValue {
+        JsValue::from_str(&self.name)
+    }
+
+    /// Maximum takeoff weight (in kg)
+    #[wasm_bindgen(getter)]
+    pub fn mtow(&self) -> f64 {
+        Mass::new::<pound>(self.raw_mtow as f64).get::<kilogram>()
+    }
+}
+
+impl GlidePerformance {
+    pub fn speed(&self) -> Velocity {
+        Velocity::new::<knot>(self.speed as f64)
+    }
+
+    /// Calculates units of height lost per units of ground track covered
+    pub fn height_lost_for_ground_track(&self, distance: f64) -> f64 {
+        distance / self.glide_ratio()
+    }
+
+    /// Calculates meters of height lost per radians of turn commenced at the given bank (in radians)
+    pub fn height_lost_in_turn(&self, angle: f64, bank: f64) -> f64 {
+        let radius = self.turn_radius(bank);
+        let distance = (radius * angle).abs();
+
+        // TODO During a turn the airspeed has to be increased above the ideal gliding speed.
+        //      Additionally, due to the bank some lift component is "wasted" on turning and thus overall vertical lift decreases further.
+        //      Those factors will likely yield a worse number than we account for!
+        // For now we will just use a safety factor roughly based on the load factor to compensate! But this is likely absolutely wrong ...
+        let safety_factor = 1.0 / bank.cos();
+
+        self.height_lost_for_ground_track(distance) * safety_factor
+    }
+
+    pub fn height_loss_over_geometric_path(&self, path: &DubinPath, bank: f64) -> f64 {
+        match path {
+            DubinPath::CSC(arc1, straight, arc2) => {
+                self.height_lost_in_turn(arc1.angle().get::<radian>(), bank)
+                    + self.height_lost_for_ground_track(straight.length().get::<meter>())
+                    + self.height_lost_in_turn(arc2.angle().get::<radian>(), bank)
+            }
+            DubinPath::CCC(arc1, arc2, arc3) => {
+                self.height_lost_in_turn(arc1.angle().get::<radian>(), bank)
+                    + self.height_lost_in_turn(arc2.angle().get::<radian>(), bank)
+                    + self.height_lost_in_turn(arc3.angle().get::<radian>(), bank)
+            }
+        }
+    }
+}
+
+#[wasm_bindgen]
+impl GlidePerformance {
+    /// Units of distance covered per unit of height lost.
+    /// Commonly expressed as a ratio e.g. `1:10` where `10` is the value returned.
+    #[wasm_bindgen(getter, js_name = glideRatio)]
+    pub fn glide_ratio(&self) -> f64 {
+        let height = Length::new::<foot>(1000.0);
+        let track = Length::new::<nautical_mile>(self.distance);
+        track.get::<meter>() / height.get::<meter>()
+    }
+
+    /// Turn radius in meters while gliding at the given bank (in radians)
+    #[wasm_bindgen(js_name = turnRadius)]
+    pub fn turn_radius(&self, bank: f64) -> f64 {
+        // TODO This should really be based on the clean stall speed and how close we are to it!
+        let speed = self.speed() * TURN_AIRSPEED_SAFETY_FACTOR;
+        let gravity = Acceleration::new::<meter_per_second_squared>(SPECIFIC_GRAVITY);
+        let radius = speed.powi(uom::typenum::P2::new()) / (gravity * bank.tan());
+        radius.get::<meter>()
+    }
+}
+
+#[wasm_bindgen]
+impl LandingPerformance {
+    #[wasm_bindgen(getter)]
+    pub fn ground_roll(&self) -> f64 {
+        Length::new::<foot>(self.ground_roll as f64).get::<meter>()
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn total_distance(&self) -> f64 {
+        Length::new::<foot>(self.total_distance as f64).get::<meter>()
+    }
+}
+
+impl LandingPerformance {
+    pub fn ground_roll_on_surface(&self, surface: &SurfaceType) -> f64 {
+        // TODO When the surface is wet, these numbers no longer apply
+        match surface {
+            SurfaceType::Asphalt => self.ground_roll(),
+            SurfaceType::Gras => self.ground_roll() * 1.20,
+            // TODO This is an unknown figure
+            SurfaceType::Water => self.ground_roll(),
+            _ => unreachable!(),
+        }
+    }
+
+    pub fn total_distance_on_surface(&self, surface: &SurfaceType) -> f64 {
+        let clearance_distance = self.total_distance() - self.ground_roll();
+        let ground_roll = self.ground_roll_on_surface(&surface);
+
+        clearance_distance + ground_roll
+    }
+}

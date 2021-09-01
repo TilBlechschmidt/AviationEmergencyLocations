@@ -2,7 +2,7 @@ import adapter from '@sveltejs/adapter-static';
 import preprocess from 'svelte-preprocess';
 import { resolve } from 'path';
 
-const gaelicPackageDir = resolve(resolve(), 'pkg');
+const elsaPackageDir = resolve(resolve(), 'elsa', 'target', 'pkg');
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -19,7 +19,7 @@ const config = {
 		vite: {
 			resolve: {
 				alias: {
-					'gaelic': gaelicPackageDir,
+					'elsa': elsaPackageDir,
 				},
 			}
 		}

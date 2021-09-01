@@ -6,7 +6,6 @@
     start: [53.61997283331443, 9.967174743158031]
     end: [53.636016866522446, 9.999672285710245]
   assets: []
-
 - name: EDDH 15/33
   reversible: true
   surface: Asphalt
@@ -151,6 +150,35 @@
     end: [53.61857044528648, 10.07182556866117]
   assets: []
 
+- name: Stellmoorer Tunneltal
+  reversible: true
+  surface: Gras
+  usage: Nature
+  coordinates:
+    start: [53.62332189315408, 10.173036379760257]
+    end: [53.628184661534654, 10.176646069868104]
+  assets: []
+
+- name: Außenalster
+  reversible: true
+  surface: Water
+  usage: Waterway
+  humanPresence: Sparse
+  coordinates:
+    start: [53.57388927668382, 10.006789650350846]
+    end: [53.55869625363589, 9.997048417203736]
+  assets: []
+
+# Hazard (Radar tower) at the east approach end which can be bypassed
+- name: Waltershof
+  reversible: true
+  surface: Gras
+  usage: Nature
+  coordinates:
+    start: [53.53720509301974, 9.886760161354283]
+    end: [53.53681275443701, 9.900422921840766]
+  assets: []
+
 - name: Horner Rennbahn
   reversible: true
   surface: Gras
@@ -168,35 +196,6 @@
   coordinates:
     start: [53.58119745406609, 10.16494240422142]
     end: [53.575954628757856, 10.167789965758704]
-  assets: []
-
-- name: Stellmoorer Tunneltal
-  reversible: true
-  surface: Gras
-  usage: Nature
-  coordinates:
-    start: [53.62332189315408, 10.173036379760257]
-    end: [53.628184661534654, 10.176646069868104]
-  assets: []
-
-# Hazard (Radar tower) at the east approach end which can be bypassed
-- name: Waltershof
-  reversible: true
-  surface: Gras
-  usage: Nature
-  coordinates:
-    start: [53.53720509301974, 9.886760161354283]
-    end: [53.53681275443701, 9.900422921840766]
-  assets: []
-
-- name: Außenalster
-  reversible: true
-  surface: Water
-  usage: Waterway
-  humanPresence: Sparse
-  coordinates:
-    start: [53.57388927668382, 10.006789650350846]
-    end: [53.55869625363589, 9.997048417203736]
   assets: []
 # - name: Norderelbe
 #   reversible: true

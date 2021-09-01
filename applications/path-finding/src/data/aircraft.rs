@@ -24,12 +24,6 @@ const SPECIFIC_GRAVITY: f64 = 9.81;
 
 pub type AircraftIdentifier = String;
 
-fn turn_radius(speed: Velocity, bank: Angle) -> Length {
-    let speed = speed * TURN_AIRSPEED_SAFETY_FACTOR;
-    let gravity = Acceleration::new::<meter_per_second_squared>(SPECIFIC_GRAVITY);
-    speed.powi(P2::new()) / (gravity * bank.tan())
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Aircraft {
@@ -146,7 +140,9 @@ impl GlidePerformance {
     }
 
     pub fn turn_radius(&self, bank: Angle) -> Length {
-        turn_radius(self.speed(), bank)
+        let speed = self.speed() * TURN_AIRSPEED_SAFETY_FACTOR;
+        let gravity = Acceleration::new::<meter_per_second_squared>(SPECIFIC_GRAVITY);
+        speed.powi(P2::new()) / (gravity * bank.tan())
     }
 
     pub fn ground_track_for_height_lost(&self, height: Length) -> Length {

@@ -2,7 +2,7 @@
 	import { onMount, getContext, onDestroy } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { contextKey } from '@beyonk/svelte-mapbox';
-	import { overviewCamera, assessLocationRisk, FLY_SPEED } from './map';
+	import { overviewCamera, FLY_SPEED } from './map';
 	import { createEventDispatcher } from 'svelte';
 	import { aircraftID } from './stores';
 
@@ -109,7 +109,8 @@
 		}
 	}
 
-	$: risk = assessLocationRisk(location, aircraft);
+	// TODO Exchange the risk (and all other data sources ...)
+	$: risk = 'risky';
 	$: flyToLocation(location);
 	$: landingHeadroom = location.landingHeadroomRatios[$aircraftID];
 	$: formattedLandingHeadroom = `${Math.round(landingHeadroom * 100)}%`;

@@ -67,20 +67,13 @@
 >
 	<SatelliteImagery />
 	<CriticalArea />
-	<LocationRanges
-		name="ranges"
-		{locations}
-		{aircraft}
-		altitude={$altitude}
-	/>
-	<LocationLines name="lines" {locations} {aircraft} />
+	<LocationRanges name="ranges" aircraft={aircraft.id} altitude={$altitude} />
+	<LocationLines name="lines" aircraft={aircraft.id} />
 	<slot />
 </Map>
 
 <div class="absolute top-0 right-0">
-	<select
-		bind:value={$aircraftID}
-	>
+	<select bind:value={$aircraftID}>
 		{#each Object.values(data.aircrafts) as aircraft}
 			<option value={aircraft.id}>
 				{aircraft.name}

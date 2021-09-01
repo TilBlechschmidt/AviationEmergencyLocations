@@ -1,21 +1,29 @@
 <script>
 	import { onMount, getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
-	import { firstNonBackgroundLayer, generateLocationLineGeoJSON } from './map';
+	import { firstNonBackgroundLayer } from './map';
+	import { riskColors } from '$lib/constants';
+	import { elsa } from '$lib/elsa';
 
 	export let name;
-	export let locations;
 	export let aircraft;
 
 	const { getMap } = getContext(contextKey);
 	const map = getMap();
 
-	onMount(() => {
+	async function generateGeoJSON(aircraft) {
+		const lines = await elsa.locationGeoJSON(aircraft);
+		return lines;
+	}
+
+	onMount(async () => {
+		await elsa.startup;
+
 		const lowerLayer = firstNonBackgroundLayer(map);
 
 		map.addSource(name, {
 			type: 'geojson',
-			data: generateLocationLineGeoJSON(locations, aircraft)
+			data: await generateGeoJSON(aircraft)
 		});
 
 		map.addLayer(
@@ -26,7 +34,7 @@
 				paint: {
 					'line-opacity': 0.75,
 					'line-width': 4,
-					'line-color': ['get', 'color']
+					'line-color': ['get', ['get', 'risk'], ['literal', riskColors]]
 				}
 			},
 			lowerLayer
@@ -38,12 +46,23 @@
 		};
 	});
 
-	$: {
-		const geoJSON = generateLocationLineGeoJSON(locations, aircraft);
+	const updateRanges = async (aircraft) => {
+		const geoJSON = await generateGeoJSON(aircraft);
 		const source = map.getSource(name);
 
 		if (source) {
 			source.setData(geoJSON);
 		}
-	}
+	};
+
+	$: updateRanges(aircraft);
+
+	// $: {
+	// 	const geoJSON = generateLocationLineGeoJSON(locations, aircraft);
+	// 	const source = map.getSource(name);
+
+	// 	if (source) {
+	// 		source.setData(geoJSON);
+	// 	}
+	// }
 </script>
