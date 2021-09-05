@@ -347,14 +347,12 @@ impl Calculator {
         aircraft: &Aircraft,
         locations: &LocationMap,
     ) -> String {
-        let resolution = 10.0;
         let start = Point::new(longitude, latitude);
         let radius = Length::new::<meter>(aircraft.glide.turn_radius(self.preferences.bank));
 
         let features = locations
             .locations()
             .filter_map(|location| {
-                // let points = location.landable_points(aircraft, resolution);
                 let mut points = vec![(location.start(), location.bearing())];
                 if location.reversible {
                     points.push((location.end(), location.reverse_bearing()));

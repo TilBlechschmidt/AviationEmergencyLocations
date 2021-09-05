@@ -20,6 +20,7 @@
 			'interpolate',
 			['linear'],
 			['get', 'heightLoss'],
+			// TODO Make this a user-configurable parameter :)
 			feetToMeters(altitude * 0.5),
 			1,
 			feetToMeters(altitude),
