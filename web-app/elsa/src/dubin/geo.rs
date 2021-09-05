@@ -2,16 +2,16 @@ use super::*;
 use ::geo::{
     geodesic_distance::GeodesicDistance,
     point,
-    prelude::{
-        Bearing, EuclideanDistance, GeodesicIntermediate, HaversineDestination, HaversineDistance,
-    },
+    prelude::{Bearing, EuclideanDistance, HaversineDestination, HaversineDistance},
 };
-use std::f64::consts::{FRAC_PI_2, TAU};
+use std::f64::consts::FRAC_PI_2;
 
 #[derive(Debug)]
 pub struct GeographicTangent {
     pub start: Point,
     pub end: Point,
+
+    pub geometric_tangent: Tangent,
 }
 
 impl GeographicTangent {
@@ -30,18 +30,19 @@ pub struct GeographicArc {
     pub radius: Length,
     pub direction: Direction,
 
-    geometric_arc: Arc,
+    pub geometric_arc: Arc,
     geographic_origin: Point,
 }
 
 impl GeographicArc {
-    pub fn points(&self) -> Vec<Point> {
+    pub fn points<'a>(&self) -> impl Iterator<Item = Point> {
+        let origin = self.geographic_origin;
+
         self.geometric_arc
             .points()
             .into_iter()
-            .map(|point| geometric_point_to_geographic(point, self.geographic_origin))
+            .map(move |point| geometric_point_to_geographic(point, origin))
             .rev()
-            .collect()
     }
 }
 
@@ -49,6 +50,38 @@ impl GeographicArc {
 pub enum GeographicDubinPath {
     CSC(GeographicArc, GeographicTangent, GeographicArc),
     CCC(GeographicArc, GeographicArc, GeographicArc),
+}
+
+impl GeographicDubinPath {
+    pub fn points(&self) -> impl Iterator<Item = Point> {
+        // Bit of a cheated polymorphism but oh well
+        let mut iter_a = None;
+        let mut iter_b = None;
+
+        match self {
+            GeographicDubinPath::CSC(arc1, tangent, arc2) => {
+                iter_a = Some(
+                    arc1.points()
+                        .chain(vec![tangent.start, tangent.end].into_iter())
+                        .chain(arc2.points())
+                        .into_iter(),
+                )
+            }
+            GeographicDubinPath::CCC(arc1, arc2, arc3) => {
+                iter_b = Some(
+                    arc1.points()
+                        .chain(arc2.points())
+                        .chain(arc3.points())
+                        .into_iter(),
+                )
+            }
+        };
+
+        iter_a
+            .into_iter()
+            .flatten()
+            .chain(iter_b.into_iter().flatten())
+    }
 }
 
 pub fn geometric_point_to_geographic(point: Point, geographic_origin: Point) -> Point {
@@ -63,7 +96,10 @@ pub fn geometric_point_to_geographic(point: Point, geographic_origin: Point) -> 
     geographic_origin.haversine_destination(bearing, distance)
 }
 
-pub fn relative_geometric_position_of(geographic_point: Point, to_geographic_target: Point) -> Point {
+pub fn relative_geometric_position_of(
+    geographic_point: Point,
+    to_geographic_target: Point,
+) -> Point {
     // Convert the geographic bearing between `start` and `end` to a geometric angle.
     let bearing = to_geographic_target.bearing(geographic_point).to_radians() - FRAC_PI_2;
     let distance = to_geographic_target.haversine_distance(&geographic_point);
@@ -79,6 +115,7 @@ fn tangent_to_geographic(tangent: &Tangent, geographic_origin: Point) -> Geograp
     GeographicTangent {
         start: geometric_point_to_geographic(tangent.start, geographic_origin),
         end: geometric_point_to_geographic(tangent.end, geographic_origin),
+        geometric_tangent: tangent.clone(),
     }
 }
 

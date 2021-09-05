@@ -4,7 +4,6 @@
 	import { contextKey } from '@beyonk/svelte-mapbox';
 	import { overviewCamera, FLY_SPEED } from './map';
 	import { createEventDispatcher } from 'svelte';
-	import { aircraftID } from './stores';
 
 	import MdClose from 'svelte-icons/md/MdClose.svelte';
 	import FaCompass from 'svelte-icons/fa/FaCompass.svelte';
@@ -17,7 +16,6 @@
 	import Labelled from './Labelled.svelte';
 
 	export let location;
-	export let aircraft;
 
 	const { getMap } = getContext(contextKey);
 	const dispatch = createEventDispatcher();
@@ -29,8 +27,7 @@
 	let targetCenter;
 
 	function flyToLocation(location) {
-		const bbox = location.geojson.geometry.coordinates;
-		const newCameraTransform = map.cameraForBounds(bbox, {
+		const newCameraTransform = map.cameraForBounds(location.coordinates, {
 			padding: { top: 100, bottom: 100, left: 100 + padding, right: 100 }
 		});
 
@@ -98,6 +95,10 @@
 	};
 
 	function formatBearing(bearing) {
+		if (bearing < 0) {
+			bearing += 360;
+		}
+
 		const number = Math.round(bearing / 10);
 
 		if (String(number).length == 1) {
@@ -109,11 +110,10 @@
 		}
 	}
 
-	// TODO Exchange the risk (and all other data sources ...)
-	$: risk = 'risky';
 	$: flyToLocation(location);
-	$: landingHeadroom = location.landingHeadroomRatios[$aircraftID];
+	$: landingHeadroom = location.landingHeadroom;
 	$: formattedLandingHeadroom = `${Math.round(landingHeadroom * 100)}%`;
+	// TODO Put the smaller bearing first when the location is reversible
 	$: formattedBearing = `${formatBearing(location.bearing)} / ${
 		location.reverseBearing ? `${formatBearing(location.reverseBearing)}` : '--'
 	}`;
@@ -139,11 +139,11 @@
 				<div class="text-gray-500">{usageLabels[location.usage]}</div>
 			</div>
 			<div class="pr-2">
-				{#if risk == 'risky'}
+				{#if location.risk == 'Risky'}
 					<div class="w-6 h-6 text-yellow-500">
 						<FaExclamationTriangle />
 					</div>
-				{:else if risk == 'unsafe'}
+				{:else if location.risk == 'Unsafe'}
 					<div class="w-7 h-7 text-red-500">
 						<MdReport />
 					</div>
@@ -158,7 +158,7 @@
 			</IconLabelled>
 			<IconLabelled>
 				<FaRulerHorizontal slot="icon" />
-				{location.length}m
+				{Math.round(location.length)}m
 			</IconLabelled>
 			<IconLabelled>
 				<FaMountain slot="icon" />

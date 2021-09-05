@@ -2,8 +2,9 @@ use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
 use geo::geodesic_distance::GeodesicDistance;
-use geo::prelude::{Bearing, Centroid};
+use geo::prelude::{Bearing, Centroid, HaversineDestination};
 use geo::{point, Line, Point};
+use js_sys::Array;
 use serde::{Deserialize, Serialize};
 use strum::EnumIter;
 use wasm_bindgen::prelude::*;
@@ -86,7 +87,7 @@ pub struct Location {
     pub surface: SurfaceType,
 
     /// Whether humans could be present that may or may not give way
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(readonly, js_name = "humanPresence")]
     #[serde(default)]
     pub human_presence: HumanPresenceCategory,
 
@@ -112,9 +113,51 @@ impl Location {
         self.coordinates.end.point()
     }
 
+    /// Line representing the landable surface
+    pub fn line(&self) -> Line<f64> {
+        Line::new(self.start(), self.end())
+    }
+
     /// Center of the runway
     pub fn centroid(&self) -> Point<f64> {
-        Line::new(self.start(), self.end()).centroid()
+        self.line().centroid()
+    }
+
+    /// Returns a number of points with a given resolution in meters where a given airplane can land
+    pub fn landable_points(&self, aircraft: &Aircraft, resolution: f64) -> Vec<(Point<f64>, f64)> {
+        let inset_at_ends =
+            self.length() - aircraft.landing.total_distance_on_surface(&self.surface);
+
+        let mut points = vec![(self.start(), self.bearing())];
+
+        // Add the other start point if applicable
+        if self.reversible {
+            points.push((self.end(), self.reverse_bearing()));
+        }
+
+        // Iterate over the insets at each end
+        if inset_at_ends > 0.0 {
+            let bearing = self.bearing();
+            let step_count = (inset_at_ends / resolution).floor() as usize;
+
+            for i in 1..(step_count + 1) {
+                let step_distance = resolution * (i as f64);
+
+                // Inset from start
+                let inset_from_start = self.start().haversine_destination(bearing, step_distance);
+                points.push((inset_from_start, self.bearing()));
+
+                // Inset from end
+                if self.reversible {
+                    let inset_from_end = self
+                        .end()
+                        .haversine_destination(self.reverse_bearing(), step_distance);
+                    points.push((inset_from_end, self.reverse_bearing()));
+                }
+            }
+        }
+
+        points
     }
 }
 
@@ -135,6 +178,29 @@ impl Location {
         format!("{:x}", hasher.finish())
     }
 
+    #[wasm_bindgen(getter)]
+    pub fn name(&self) -> String {
+        self.name.clone()
+    }
+
+    /// Coordinates of the runway
+    #[wasm_bindgen(getter)]
+    pub fn coordinates(&self) -> Array {
+        let start_array = Array::new();
+        start_array.push(&self.coordinates.start.longitude().into());
+        start_array.push(&self.coordinates.start.latitude().into());
+
+        let end_array = Array::new();
+        end_array.push(&self.coordinates.end.longitude().into());
+        end_array.push(&self.coordinates.end.latitude().into());
+
+        let coordinate_array = Array::new();
+        coordinate_array.push(&start_array);
+        coordinate_array.push(&end_array);
+
+        coordinate_array
+    }
+
     /// Usable length of the runway
     #[wasm_bindgen(getter)]
     pub fn length(&self) -> f64 {
@@ -148,7 +214,7 @@ impl Location {
     }
 
     /// Same as bearing but for the reverse direction
-    #[wasm_bindgen(getter)]
+    #[wasm_bindgen(getter, js_name = "reverseBearing")]
     pub fn reverse_bearing(&self) -> f64 {
         assert!(
             self.reversible,
@@ -167,6 +233,7 @@ impl Location {
     }
 
     /// Fraction of required landing distance that is available in addition to the base 100%
+    #[wasm_bindgen(js_name = "landingHeadroom")]
     pub fn landing_headroom(&self, aircraft: &Aircraft) -> f64 {
         let required_landing_distance = aircraft.landing.total_distance_on_surface(&self.surface);
         let remaining_landing_distance = self.length() - required_landing_distance;

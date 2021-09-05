@@ -1,5 +1,7 @@
 use crate::{Aircraft, Location};
+use geo::{prelude::HaversineDistance, Point};
 use js_sys::{Array, Map};
+use serde_json::json;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
@@ -51,6 +53,23 @@ impl LocationMap {
 
     pub fn get(&self, id: String) -> Option<Location> {
         self.0.get(&id).cloned()
+    }
+
+    pub fn closest(&self, latitude: f64, longitude: f64) -> JsValue {
+        let point = Point::new(longitude, latitude);
+
+        self.0
+            .values()
+            .min_by_key(|location| location.centroid().haversine_distance(&point) as usize)
+            .map(|location| {
+                let json = json!({
+                    "location": location.id(),
+                    "distance": location.centroid().haversine_distance(&point)
+                });
+
+                JsValue::from(&json.to_string())
+            })
+            .unwrap_or(JsValue::NULL)
     }
 }
 

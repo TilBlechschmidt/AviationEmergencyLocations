@@ -1,6 +1,11 @@
 use crate::{
-    dubin::calculate_dubin_path_candidates, helpers::binary_search, Aircraft,
-    HumanPresenceCategory, Location, LocationMap, RiskClassification, SurfaceType, UsageType,
+    dubin::{
+        calculate_dubin_path_candidates, calculate_georeferenced_dubin_path_candidates,
+        GeographicDubinPath,
+    },
+    helpers::binary_search,
+    Aircraft, HumanPresenceCategory, Location, LocationMap, RiskClassification, SurfaceType,
+    UsageType,
 };
 use geo::{
     prelude::{EuclideanDistance, HaversineDestination},
@@ -10,7 +15,7 @@ use geo::{
 use geo_booleanop::boolean::BooleanOp;
 use geojson::{feature::Id, Feature, FeatureCollection, GeoJson};
 use serde_json::{to_value, Map};
-use std::{collections::HashMap, f64::consts::FRAC_PI_2};
+use std::{cmp::Ordering, collections::HashMap, f64::consts::FRAC_PI_2};
 use strum::IntoEnumIterator;
 use uom::si::{
     angle::{degree, radian},
@@ -39,7 +44,7 @@ pub struct Calculator {
 
 impl Calculator {
     fn aircraft_range_profile(&self, aircraft: &Aircraft, altitude: f64) -> AircraftRangeProfile {
-        let maximum_range = aircraft.glide.glide_ratio() * altitude * 2.0;
+        let maximum_range = aircraft.glide.ratio() * altitude * 2.0;
         let circle_radius = aircraft.glide.turn_radius(self.preferences.bank);
         let circle_origin = Point::new(-circle_radius, 0.0);
 
@@ -72,6 +77,7 @@ impl Calculator {
                 let path_candidates = calculate_dubin_path_candidates(
                     ray_target,
                     origin,
+                    // TODO Make it an option to "invert" the start angle and thus get a "best case" range. Just out of curiosity on how much it changes the ranges :P
                     ray_typed,
                     origin_angle,
                     radius,
@@ -178,6 +184,7 @@ impl Calculator {
         Self { preferences }
     }
 
+    #[wasm_bindgen(js_name = assessRisk)]
     pub fn assess_risk(&self, location: &Location, aircraft: &Aircraft) -> RiskClassification {
         let mut risky = false;
         let mut deadly = false;
@@ -284,11 +291,7 @@ impl Calculator {
     }
 
     #[wasm_bindgen(js_name = locationGeoJSON)]
-    pub fn location_geojson(
-        &self,
-        location_map: &LocationMap,
-        aircraft: &Aircraft,
-    ) -> Result<String, JsValue> {
+    pub fn location_geojson(&self, location_map: &LocationMap, aircraft: &Aircraft) -> String {
         let features = location_map
             .locations()
             .filter(|location| location.usage != UsageType::Aeronautical)
@@ -331,7 +334,88 @@ impl Calculator {
             foreign_members: None,
         });
 
-        Ok(serde_json::to_string(&geojson).map_err(|e| e.to_string())?)
+        geojson.to_string()
+    }
+
+    #[wasm_bindgen(js_name = landingOptions)]
+    pub fn landing_options(
+        &self,
+        latitude: f64,
+        longitude: f64,
+        heading: f64,
+        altitude: f64,
+        aircraft: &Aircraft,
+        locations: &LocationMap,
+    ) -> String {
+        let resolution = 10.0;
+        let start = Point::new(longitude, latitude);
+        let radius = Length::new::<meter>(aircraft.glide.turn_radius(self.preferences.bank));
+
+        let features = locations
+            .locations()
+            .filter_map(|location| {
+                // let points = location.landable_points(aircraft, resolution);
+                let mut points = vec![(location.start(), location.bearing())];
+                if location.reversible {
+                    points.push((location.end(), location.reverse_bearing()));
+                }
+
+                points
+                    .into_iter()
+                    .flat_map(|(end, target_heading)| {
+                        let start_bearing = Angle::new::<degree>(heading);
+                        let end_bearing = Angle::new::<degree>(target_heading);
+
+                        calculate_georeferenced_dubin_path_candidates(
+                            start,
+                            end,
+                            start_bearing,
+                            end_bearing,
+                            radius,
+                        )
+                    })
+                    .map(|path| {
+                        let height_loss = aircraft
+                            .glide
+                            .height_loss_over_geographic_path(&path, self.preferences.bank);
+
+                        (path, height_loss, location)
+                    })
+                    .filter(|(_, height_loss, _)| *height_loss < altitude)
+                    .min_by(|(_, height_loss_a, _), (_, height_loss_b, _)| {
+                        height_loss_a
+                            .partial_cmp(&height_loss_b)
+                            .unwrap_or(Ordering::Equal)
+                    })
+            })
+            .map(
+                |(path, height_loss, location): (GeographicDubinPath, f64, &Location)| {
+                    let points = path.points().map(|p| p.0).collect::<Vec<_>>();
+                    let line = LineString(points);
+                    let risk = self.assess_risk(location, aircraft);
+
+                    let mut properties = Map::new();
+                    properties.insert(String::from("risk"), to_value(risk).unwrap());
+                    properties.insert(String::from("heightLoss"), to_value(height_loss).unwrap());
+
+                    Feature {
+                        bbox: None,
+                        geometry: Some((&line).into()),
+                        id: Some(Id::String(location.id())),
+                        properties: Some(properties),
+                        foreign_members: None,
+                    }
+                },
+            )
+            .collect::<Vec<_>>();
+
+        let geojson = GeoJson::FeatureCollection(FeatureCollection {
+            bbox: None,
+            features,
+            foreign_members: None,
+        });
+
+        geojson.to_string()
     }
 }
 

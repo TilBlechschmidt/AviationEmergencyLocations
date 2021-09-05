@@ -1,25 +1,32 @@
 <script>
+	import MdArrowForward from 'svelte-icons/md/MdArrowForward.svelte';
+	import { goto } from '$app/navigation';
+	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { elsa } from '$lib/elsa';
 
-	onMount(async () => await elsa.startup);
+	let shown = false;
 
-	let altitude = 300;
-	let time = 42;
-
-	async function doStuff(altitude) {
-		const start = new Date();
-		const geoJSON = await elsa.reachabilityGeoJSON('C150', altitude);
-		time = new Date() - start;
-		console.log(geoJSON);
-	}
-
-	$: doStuff(altitude);
+	onMount(() => {
+		shown = true;
+	});
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<div class="w-full h-full flex flex-col justify-center items-center" out:fade={{ duration: 500 }}>
+	{#if shown}
+		<h1 class="text-5xl" in:fly={{ y: 200, duration: 1000 }}>E.L.S.A.</h1>
+		<p class="text-3xl text-gray-500 pt-4" in:fade={{ duration: 1000, delay: 750 }}>
+			Emergency Landing Site Assessment
+		</p>
 
-<br />
-<input type="range" min="300" max="1000" step="10" bind:value={altitude} />
-{altitude}m — took {time}ms
+		<button
+			in:fade={{ y: 200, duration: 1000, delay: 750 }}
+			class="m-8 p-4 rounded border-gray-200 border-solid border text-gray-500 hover:shadow-md transition-all"
+			on:click={() => goto('/aircrafts')}
+		>
+			Choose your aircraft
+			<span class="w-6 h-6 text-gray-500 align-middle inline-block -mt-1 ml-2">
+				<MdArrowForward />
+			</span>
+		</button>
+	{/if}
+</div>

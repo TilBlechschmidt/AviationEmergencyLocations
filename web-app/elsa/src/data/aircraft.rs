@@ -9,7 +9,10 @@ use uom::si::{
 };
 use wasm_bindgen::prelude::*;
 
-use crate::{dubin::DubinPath, SurfaceType};
+use crate::{
+    dubin::{DubinPath, GeographicDubinPath},
+    SurfaceType,
+};
 
 const TURN_AIRSPEED_SAFETY_FACTOR: f64 = 1.5;
 const SPECIFIC_GRAVITY: f64 = 9.81;
@@ -96,6 +99,28 @@ impl Aircraft {
     }
 }
 
+#[wasm_bindgen]
+impl TakeoffPerformance {
+    #[wasm_bindgen(getter, js_name = groundRoll)]
+    pub fn ground_roll(&self) -> f64 {
+        Length::new::<foot>(self.ground_roll as f64).get::<meter>()
+    }
+
+    #[wasm_bindgen(getter, js_name = totalDistance)]
+    pub fn total_distance(&self) -> f64 {
+        Length::new::<foot>(self.total_distance as f64).get::<meter>()
+    }
+}
+
+#[wasm_bindgen]
+impl ClimbPerformance {
+    /// Maximum rate of climb (ft/min)
+    #[wasm_bindgen(getter)]
+    pub fn rate(&self) -> f64 {
+        self.rate as f64
+    }
+}
+
 impl GlidePerformance {
     pub fn speed(&self) -> Velocity {
         Velocity::new::<knot>(self.speed as f64)
@@ -103,7 +128,7 @@ impl GlidePerformance {
 
     /// Calculates units of height lost per units of ground track covered
     pub fn height_lost_for_ground_track(&self, distance: f64) -> f64 {
-        distance / self.glide_ratio()
+        distance / self.ratio()
     }
 
     /// Calculates meters of height lost per radians of turn commenced at the given bank (in radians)
@@ -134,14 +159,31 @@ impl GlidePerformance {
             }
         }
     }
+
+    pub fn height_loss_over_geographic_path(&self, path: &GeographicDubinPath, bank: f64) -> f64 {
+        match path {
+            GeographicDubinPath::CSC(arc1, straight, arc2) => {
+                self.height_lost_in_turn(arc1.geometric_arc.angle().get::<radian>(), bank)
+                    + self.height_lost_for_ground_track(
+                        straight.geometric_tangent.length().get::<meter>(),
+                    )
+                    + self.height_lost_in_turn(arc2.geometric_arc.angle().get::<radian>(), bank)
+            }
+            GeographicDubinPath::CCC(arc1, arc2, arc3) => {
+                self.height_lost_in_turn(arc1.geometric_arc.angle().get::<radian>(), bank)
+                    + self.height_lost_in_turn(arc2.geometric_arc.angle().get::<radian>(), bank)
+                    + self.height_lost_in_turn(arc3.geometric_arc.angle().get::<radian>(), bank)
+            }
+        }
+    }
 }
 
 #[wasm_bindgen]
 impl GlidePerformance {
     /// Units of distance covered per unit of height lost.
     /// Commonly expressed as a ratio e.g. `1:10` where `10` is the value returned.
-    #[wasm_bindgen(getter, js_name = glideRatio)]
-    pub fn glide_ratio(&self) -> f64 {
+    #[wasm_bindgen(getter)]
+    pub fn ratio(&self) -> f64 {
         let height = Length::new::<foot>(1000.0);
         let track = Length::new::<nautical_mile>(self.distance);
         track.get::<meter>() / height.get::<meter>()
@@ -160,12 +202,12 @@ impl GlidePerformance {
 
 #[wasm_bindgen]
 impl LandingPerformance {
-    #[wasm_bindgen(getter)]
+    #[wasm_bindgen(getter, js_name = groundRoll)]
     pub fn ground_roll(&self) -> f64 {
         Length::new::<foot>(self.ground_roll as f64).get::<meter>()
     }
 
-    #[wasm_bindgen(getter)]
+    #[wasm_bindgen(getter, js_name = totalDistance)]
     pub fn total_distance(&self) -> f64 {
         Length::new::<foot>(self.total_distance as f64).get::<meter>()
     }

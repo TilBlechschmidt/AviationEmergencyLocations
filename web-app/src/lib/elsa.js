@@ -40,18 +40,41 @@ class ElsaWorker {
         });
     }
 
-    reachabilityGeoJSON(aircraft, altitudeInFeet) {
+    reachabilityGeoJSON(aircraftID, altitudeInFeet) {
         const altitude = feetToMeters(altitudeInFeet);
 
         return this.submitRequest('REACHABILITY_GEOJSON', {
-            aircraft,
-            altitude
+            aircraftID, altitude
         }).then(JSON.parse);
     }
 
-    locationGeoJSON(aircraft) {
-        return this.submitRequest('LOCATION_GEOJSON', {
-            aircraft
+    locationLinesGeoJSON(aircraftID) {
+        return this.submitRequest('LOCATION_LINES_GEOJSON', {
+            aircraftID
+        }).then(JSON.parse);
+    }
+
+    closestLocationWithinReach(latitude, longitude, maximumDistance) {
+        return this.submitRequest('CLOSEST_LOCATION_ID', {
+            latitude, longitude
+        })
+            .then(JSON.parse)
+            .then(r => r !== null && r.distance < maximumDistance ? r.location : null);
+    }
+
+    fetchLocation(locationID, aircraftID) {
+        return this.submitRequest('LOCATION_DATA', { locationID, aircraftID });
+    }
+
+    fetchAircraftList() {
+        return this.submitRequest('AIRCRAFT_LIST');
+    }
+
+    landingOptions(latitude, longitude, heading, altitudeInFeet, aircraftID) {
+        const altitude = feetToMeters(altitudeInFeet);
+
+        return this.submitRequest('LANDING_OPTIONS', {
+            latitude, longitude, heading, altitude, aircraftID
         }).then(JSON.parse);
     }
 }
