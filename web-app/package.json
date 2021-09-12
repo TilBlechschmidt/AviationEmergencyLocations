@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "svelte-kit dev",
-		"build": "svelte-kit build && wasm-opt -Oz -o ./build/elsa.wasm elsa/target/pkg/elsa_bg.wasm",
+		"build": "svelte-kit build && cp ./elsa/target/pkg/elsa_bg.wasm ./build/elsa.wasm",
+		"build:arm": "svelte-kit build && wasm-opt -Oz -o ./build/elsa.wasm elsa/target/pkg/elsa_bg.wasm",
 		"preview": "svelte-kit preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
