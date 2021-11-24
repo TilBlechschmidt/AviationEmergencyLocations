@@ -2,16 +2,7 @@ import init, { Parser, Calculator, Preferences } from 'elsa';
 import { dev } from '$app/env';
 
 function parsePrefs(preferences) {
-    if (preferences !== null) {
-        try {
-            return new Preferences(JSON.stringify(preferences));
-        } catch {
-            console.warn("Failed to parse preferences, falling back to default!");
-            return new Preferences();
-        }
-    } else {
-        return new Preferences();
-    }
+    return new Preferences(JSON.stringify(preferences))
 }
 
 async function run() {
@@ -47,15 +38,13 @@ async function run() {
             case 'REACHABILITY_GEOJSON': {
                 let { preferences, aircraftID, altitude } = data;
                 const aircraftInstance = aircrafts.get(aircraftID);
-                preferences = parsePrefs(preferences);
-                response = calculator.reachabilityGeoJSON(preferences, locations, aircraftInstance, altitude);
+                response = calculator.reachabilityGeoJSON(parsePrefs(preferences), locations, aircraftInstance, altitude);
                 break;
             }
             case 'LOCATION_LINES_GEOJSON': {
                 let { preferences, aircraftID } = data;
                 const aircraft = aircrafts.get(aircraftID);
-                preferences = parsePrefs(preferences);
-                response = calculator.locationGeoJSON(preferences, locations, aircraft);
+                response = calculator.locationGeoJSON(parsePrefs(preferences), locations, aircraft);
                 break;
             }
             case 'CLOSEST_LOCATION_ID': {
@@ -67,8 +56,7 @@ async function run() {
                 let { preferences, locationID, aircraftID } = data;
                 const aircraft = aircrafts.get(aircraftID);
                 const location = locations.get(locationID);
-                preferences = parsePrefs(preferences);
-                response = serializeLocation(location, aircraft, calculator, preferences);
+                response = serializeLocation(location, aircraft, calculator, parsePrefs(preferences));
                 break;
             }
             case 'AIRCRAFT_LIST': {
@@ -83,19 +71,13 @@ async function run() {
             case 'LANDING_OPTIONS': {
                 let { preferences, latitude, longitude, heading, altitude, aircraftID } = data;
                 const aircraft = aircrafts.get(aircraftID);
-                preferences = parsePrefs(preferences);
-                response = calculator.landingOptions(preferences, latitude, longitude, heading, altitude, aircraft, locations);
+                response = calculator.landingOptions(parsePrefs(preferences), latitude, longitude, heading, altitude, aircraft, locations);
                 break;
             }
             case 'TAKEOFF_PROFILE': {
                 const { aircraftID } = data;
                 const aircraft = aircrafts.get(aircraftID);
                 response = calculator.takeoffProfile(aircraft);
-                break;
-            }
-            case 'VERIFY_PREFERENCES': {
-                const { preferences } = data;
-                response = parsePrefs(preferences).serialize();
                 break;
             }
             default:

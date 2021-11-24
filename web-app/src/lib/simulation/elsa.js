@@ -87,10 +87,6 @@ class ElsaWorker {
     takeoffProfile(aircraftID) {
         return this.submitRequest('TAKEOFF_PROFILE', { aircraftID });
     }
-
-    verifyPreferences(preferences) {
-        return this.submitRequest('VERIFY_PREFERENCES', { preferences }).then(JSON.parse);
-    }
 }
 
 export const elsa = new ElsaWorker();

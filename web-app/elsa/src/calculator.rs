@@ -632,29 +632,11 @@ impl Calculator {
 #[wasm_bindgen]
 impl Preferences {
     #[wasm_bindgen(constructor)]
-    pub fn new(serialized: Option<String>) -> Result<Preferences, JsValue> {
-        match serialized {
-            Some(serialized) => Ok(serde_json::from_str(&serialized).map_err(|e| e.to_string())?),
-            None => Ok(Self::default()),
-        }
+    pub fn new(serialized: String) -> Result<Preferences, JsValue> {
+        Ok(serde_json::from_str(&serialized).map_err(|e| e.to_string())?)
     }
 
     pub fn serialize(&self) -> Result<String, JsValue> {
         Ok(serde_json::to_string(&self).map_err(|e| e.to_string())?)
-    }
-}
-
-impl Default for Preferences {
-    fn default() -> Self {
-        Self {
-            bank: 45.0f64.to_radians(),
-            epsilon: 0.1,
-
-            unsafe_landing_headroom: -0.15,
-            risky_landing_headroom: -0.05,
-
-            event_location_classification: RiskClassification::Risky,
-            densely_crowded_classification: RiskClassification::Risky,
-        }
     }
 }

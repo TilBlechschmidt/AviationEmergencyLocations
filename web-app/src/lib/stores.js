@@ -1,5 +1,6 @@
 import { browser } from '$app/env';
 import { writable } from 'svelte/store'
+import { defaultPreferences } from './data/constants';
 
 const altitudeKey = 'altitude';
 const aircraftKey = 'aircraft';
@@ -18,5 +19,10 @@ aircraftID.subscribe(aircraft => { if (browser) localStorage.setItem(aircraftKey
 export const disclaimerRead = writable((browser && sessionStorage.getItem(disclaimerKey) == "true") || false);
 disclaimerRead.subscribe(value => { if (browser) sessionStorage.setItem(disclaimerKey, value) });
 
-export const preferences = writable((browser && JSON.parse(localStorage.getItem(preferencesKey))) || null);
-preferences.subscribe(value => { if (browser) localStorage.setItem(preferencesKey, JSON.stringify(value)) });
+export const preferences = writable((browser && JSON.parse(localStorage.getItem(preferencesKey))) || defaultPreferences);
+preferences.subscribe(value => {
+    if (browser) {
+        console.log('SETTING PREFERENCES');
+        localStorage.setItem(preferencesKey, JSON.stringify(value))
+    }
+});

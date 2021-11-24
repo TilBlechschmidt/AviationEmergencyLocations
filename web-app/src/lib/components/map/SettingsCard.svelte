@@ -9,12 +9,12 @@
 	import { _ } from 'svelte-i18n';
 	import HeadroomThresholdDropdowns from '../HeadroomThresholdDropdowns.svelte';
 	import HumanPresenceDropdowns from '../HumanPresenceDropdowns.svelte';
+	import { bankAngles } from '$lib/data/constants';
 
 	let aircraftName = 'Loading ...';
 
 	onMount(async () => {
 		await elsa.startup;
-		$preferences = await elsa.verifyPreferences($preferences);
 		updateAircraft($aircraftID);
 	});
 
@@ -34,7 +34,7 @@
 
 {#if $preferences}
 	<div
-		class="absolute top-0 right-0 h-full overflow-y-auto p-8"
+		class="absolute top-0 right-0 h-full overflow-y-auto p-8 z-10"
 		transition:fly={{ x: padding, duration, opacity: 1 }}
 	>
 		<div class="w-80 text-sm card">
@@ -50,8 +50,9 @@
 				<Labelled>
 					<span slot="label">{$_('settings.flight.bank')}</span>
 					<select name="bank" bind:value={$preferences.bank} class="custom-select">
-						<option value={degreesToRadians(45)}>45º</option>
-						<option value={degreesToRadians(60)}>60º</option>
+						{#each bankAngles as bank}
+							<option value={degreesToRadians(bank)}>{bank}º</option>
+						{/each}
 					</select>
 				</Labelled>
 			</div>

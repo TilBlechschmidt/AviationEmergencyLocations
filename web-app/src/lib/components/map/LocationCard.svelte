@@ -75,7 +75,7 @@
 </script>
 
 <div
-	class="absolute top-0 left-8 h-full overflow-y-auto"
+	class="absolute top-0 left-8 h-full overflow-y-auto z-10"
 	transition:fly={{ x: -padding, duration: transitionDuration, opacity: 1 }}
 >
 	<div class="w-80 card mt-8 mb-8">

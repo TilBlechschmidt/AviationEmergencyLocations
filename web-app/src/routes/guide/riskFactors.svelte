@@ -5,7 +5,6 @@
 	import { _ } from 'svelte-i18n';
 
 	const factors = ['headroom', 'humanPresence', 'surface'];
-	// TODO When preferences have not been set in localStorage, this page does not render!
 </script>
 
 <CardDetailView

@@ -4,7 +4,7 @@
 	import Disclaimer from '$lib/components/guide/Disclaimer.svelte';
 
 	function nextStep() {
-		goto('./locations');
+		goto('/guide/locations');
 	}
 </script>
 

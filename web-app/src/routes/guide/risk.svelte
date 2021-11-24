@@ -3,9 +3,9 @@
 	import CardDetailView from '$lib/components/guide/CardDetailView.svelte';
 	import IconLabelled from '../../lib/components/IconLabelled.svelte';
 	import { _ } from 'svelte-i18n';
+	import { riskCategories } from '$lib/data';
 
 	let selectedRisk = 'safe';
-	const risks = ['safe', 'risky', 'unsafe'];
 	const riskColors = {
 		safe: 'text-green-500',
 		risky: 'text-yellow-500',
@@ -23,7 +23,7 @@
 	{$_('guide.risk.preface')}
 
 	<div class="flex justify-around pt-8">
-		{#each risks as risk}
+		{#each riskCategories as risk}
 			<div
 				class="{selectedRisk == risk ? 'border-b border-gray-300' : ''} cursor-pointer"
 				on:click={() => (selectedRisk = risk)}
