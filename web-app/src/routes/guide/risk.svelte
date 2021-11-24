@@ -3,7 +3,7 @@
 	import CardDetailView from '$lib/components/guide/CardDetailView.svelte';
 	import IconLabelled from '../../lib/components/IconLabelled.svelte';
 	import { _ } from 'svelte-i18n';
-	import { riskCategories } from '$lib/data';
+	import { riskCategories } from '$lib/data/constants';
 
 	let selectedRisk = 'safe';
 	const riskColors = {
