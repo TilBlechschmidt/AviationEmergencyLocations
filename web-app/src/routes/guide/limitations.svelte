@@ -32,8 +32,10 @@
 				href="https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L135"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="border-b border-blue-900 text-blue-900">the glide factor is reduced</a
-			> based on the glide angle. However, this only serves as an approximation! Your mileage may vary.
+			>
+				the glide factor is reduced
+			</a>
+			based on the glide angle. However, this only serves as an approximation! Your mileage may vary.
 		</li>
 		<li class="pt-4">
 			<strong>Short field technique.</strong> — For calculation of the landing distances, short
@@ -44,18 +46,16 @@
 				href="https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L217"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="border-b border-blue-900 text-blue-900">is applied to grass surfaces</a
-			>.
+			>
+				is applied to grass surfaces
+			</a>.
 		</li>
 		<li class="pt-4">
 			<strong>Turns included.</strong> — The ranges on the map are worst-case estimates and assume
 			that you are facing away from the target location. We do calculate
-			<a
-				href="https://en.wikipedia.org/wiki/Dubins_path"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="border-b border-blue-900 text-blue-900">the mathematically proven shortest path</a
-			>
+			<a href="https://en.wikipedia.org/wiki/Dubins_path" target="_blank" rel="noopener noreferrer">
+				the mathematically proven shortest path
+			</a>
 			given the aircrafts turn radius at your selected bank angle. So if you are actually facing towards
 			the target location, there is a bit of headroom included. However, note that this applies
 			<code>ONLY</code> to range circles displayed on the map!
