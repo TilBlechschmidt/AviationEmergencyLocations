@@ -1,13 +1,15 @@
+<script context="module">
+	import { waitLocale } from 'svelte-i18n';
+
+	export async function load() {
+		await waitLocale();
+		return {};
+	}
+</script>
+
 <script>
 	import '../app.postcss';
 	import '$lib/i18n';
-
-	import { waitLocale } from 'svelte-i18n';
-	import { onMount } from 'svelte';
-
-	onMount(async () => {
-		await waitLocale();
-	});
 </script>
 
 <div id="container">
