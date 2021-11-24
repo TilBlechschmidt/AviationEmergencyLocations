@@ -1,6 +1,19 @@
 import init, { Parser, Calculator, Preferences } from 'elsa';
 import { dev } from '$app/env';
 
+function parsePrefs(preferences) {
+    if (preferences !== null) {
+        try {
+            return new Preferences(JSON.stringify(preferences));
+        } catch {
+            console.warn("Failed to parse preferences, falling back to default!");
+            return new Preferences();
+        }
+    } else {
+        return new Preferences();
+    }
+}
+
 async function run() {
     // Start fetching everything we need
     const elsaPromise = init(dev ? undefined : '/elsa.wasm');
@@ -18,28 +31,31 @@ async function run() {
     const locations = parser.parseLocations(locationsYAML);
 
     // Create instances of all the important stuff
-    const preferences = new Preferences();
-    const calculator = new Calculator(preferences);
+    const calculator = new Calculator();
 
     // Handle incoming requests
     onmessage = msg => {
         const { id, type, data } = msg.data;
 
-        // console.debug(`Processing request #${id} — ${type} - ${JSON.stringify(data)}`);
+        const logData = Object.assign({}, data);
+        delete logData.preferences;
+        console.debug(`Processing request #${id} — ${type} - ${JSON.stringify(logData)}`);
 
         let response;
 
         switch (type) {
             case 'REACHABILITY_GEOJSON': {
-                const { aircraftID, altitude } = data;
+                let { preferences, aircraftID, altitude } = data;
                 const aircraftInstance = aircrafts.get(aircraftID);
-                response = calculator.reachabilityGeoJSON(locations, aircraftInstance, altitude);
+                preferences = parsePrefs(preferences);
+                response = calculator.reachabilityGeoJSON(preferences, locations, aircraftInstance, altitude);
                 break;
             }
             case 'LOCATION_LINES_GEOJSON': {
-                const { aircraftID } = data;
+                let { preferences, aircraftID } = data;
                 const aircraft = aircrafts.get(aircraftID);
-                response = calculator.locationGeoJSON(locations, aircraft);
+                preferences = parsePrefs(preferences);
+                response = calculator.locationGeoJSON(preferences, locations, aircraft);
                 break;
             }
             case 'CLOSEST_LOCATION_ID': {
@@ -48,20 +64,38 @@ async function run() {
                 break;
             }
             case 'LOCATION_DATA': {
-                const { locationID, aircraftID } = data;
+                let { preferences, locationID, aircraftID } = data;
                 const aircraft = aircrafts.get(aircraftID);
                 const location = locations.get(locationID);
-                response = serializeLocation(location, aircraft, calculator);
+                preferences = parsePrefs(preferences);
+                response = serializeLocation(location, aircraft, calculator, preferences);
                 break;
             }
             case 'AIRCRAFT_LIST': {
                 response = Array.from(aircrafts.values()).map(serializeAircraft)
                 break;
             }
+            case 'AIRCRAFT': {
+                const { aircraftID } = data;
+                response = serializeAircraft(aircrafts.get(aircraftID));
+                break;
+            }
             case 'LANDING_OPTIONS': {
-                const { latitude, longitude, heading, altitude, aircraftID } = data;
+                let { preferences, latitude, longitude, heading, altitude, aircraftID } = data;
                 const aircraft = aircrafts.get(aircraftID);
-                response = calculator.landingOptions(latitude, longitude, heading, altitude, aircraft, locations);
+                preferences = parsePrefs(preferences);
+                response = calculator.landingOptions(preferences, latitude, longitude, heading, altitude, aircraft, locations);
+                break;
+            }
+            case 'TAKEOFF_PROFILE': {
+                const { aircraftID } = data;
+                const aircraft = aircrafts.get(aircraftID);
+                response = calculator.takeoffProfile(aircraft);
+                break;
+            }
+            case 'VERIFY_PREFERENCES': {
+                const { preferences } = data;
+                response = parsePrefs(preferences).serialize();
                 break;
             }
             default:
@@ -81,13 +115,14 @@ run()
     .then(() => console.info('Worker ready.'))
     .catch(e => console.error('Worker failed:', e));
 
-function serializeLocation(location, aircraft, calculator) {
+function serializeLocation(location, aircraft, calculator, preferences) {
     return {
         id: location.id,
         name: location.name,
 
         coordinates: location.coordinates,
         length: location.length,
+        elevation: location.elevation,
         reversible: location.reversible,
 
         bearing: location.bearing,
@@ -97,8 +132,11 @@ function serializeLocation(location, aircraft, calculator) {
         surface: location.surface,
         humanPresence: location.humanPresence,
 
-        risk: calculator.assessRisk(location, aircraft),
+        risk: calculator.assessRisk(preferences, location, aircraft),
         landingHeadroom: location.landingHeadroom(aircraft),
+
+        surveyDate: location.surveyDate,
+        remarks: location.remarks
     };
 }
 
@@ -116,7 +154,6 @@ function serializeAircraft(aircraft) {
         },
         glide: {
             ratio: aircraft.glide.ratio,
-            // TODO Use the bank angle from preferences!
             turnRadius: aircraft.glide.turnRadius(45)
         },
         landing: {

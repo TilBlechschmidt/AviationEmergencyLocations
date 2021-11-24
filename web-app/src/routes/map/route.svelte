@@ -1,7 +1,7 @@
 <script>
-	import AircraftRange from '$lib/AircraftRange.svelte';
-	import AltitudeSlider from '$lib/AltitudeSlider.svelte';
-	import Line from '$lib/Line.svelte';
+	import AircraftRange from '$lib/components/map/layers/AircraftRange.svelte';
+	import AltitudeSlider from '$lib/components/map/AltitudeSlider.svelte';
+	import Line from '$lib/components/map/layers/Line.svelte';
 	import { aircraftID, altitude } from '$lib/stores';
 
 	import { lineString } from '@turf/helpers';

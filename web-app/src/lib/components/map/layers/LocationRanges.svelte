@@ -1,9 +1,10 @@
 <script>
 	import { onMount, getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
-	import { firstNonBackgroundLayer } from './map';
-	import { riskColors } from '$lib/constants';
-	import { elsa } from '$lib/elsa';
+	import { firstNonBackgroundLayer } from '../helpers';
+	import { riskColors } from '$lib/data/constants';
+	import { elsa } from '$lib/simulation/elsa';
+	import { preferences } from '$lib/stores';
 
 	export let name;
 	export let aircraft;
@@ -19,7 +20,7 @@
 
 		map.addSource(name, {
 			type: 'geojson',
-			data: await elsa.reachabilityGeoJSON(aircraft, altitude)
+			data: await elsa.reachabilityGeoJSON($preferences, aircraft, altitude)
 		});
 
 		map.addLayer(
@@ -41,8 +42,8 @@
 		};
 	});
 
-	const updateRanges = async (aircraft, altitude) => {
-		const geoJSON = await elsa.reachabilityGeoJSON(aircraft, altitude);
+	const updateRanges = async (preferences, aircraft, altitude) => {
+		const geoJSON = await elsa.reachabilityGeoJSON(preferences, aircraft, altitude);
 		const source = map.getSource(name);
 
 		if (source) {
@@ -50,5 +51,5 @@
 		}
 	};
 
-	$: updateRanges(aircraft, altitude);
+	$: updateRanges($preferences, aircraft, altitude);
 </script>

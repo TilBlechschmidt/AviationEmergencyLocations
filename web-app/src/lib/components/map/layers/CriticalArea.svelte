@@ -1,7 +1,7 @@
 <script>
 	import { onMount, getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
-	import { firstNonBackgroundLayer } from './map';
+	import { firstNonBackgroundLayer } from '../helpers';
 	import criticalArea from '$lib/data/criticalArea.json';
 	import smoothPolygon from '@turf/polygon-smooth';
 

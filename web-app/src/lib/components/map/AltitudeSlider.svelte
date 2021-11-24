@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="absolute top-8 right-8 bg-white p-4 rounded w-24 flex flex-col items-center"
+	class="absolute bottom-14 right-8 bg-white p-4 rounded w-24 flex flex-col items-center"
 	transition:fly={{ x: padding, duration, opacity: 1 }}
 >
 	<input

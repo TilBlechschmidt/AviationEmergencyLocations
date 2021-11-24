@@ -2,12 +2,12 @@
 	import { getContext, onDestroy, onMount } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
 	import { goto } from '$app/navigation';
-	import CriticalArea from '$lib/CriticalArea.svelte';
 
-	import AltitudeSlider from '$lib/AltitudeSlider.svelte';
-	import LocationRanges from '$lib/LocationRanges.svelte';
+	import CriticalArea from '$lib/components/map/layers/CriticalArea.svelte';
+	import LocationRanges from '$lib/components/map/layers/LocationRanges.svelte';
+
 	import { altitude, aircraftID } from '$lib/stores';
-	import { elsa } from '$lib/elsa';
+	import { elsa } from '$lib/simulation/elsa';
 
 	const { getMap } = getContext(contextKey);
 	const map = getMap();
@@ -31,7 +31,6 @@
 	}
 </script>
 
-<AltitudeSlider bind:altitude={$altitude} />
 <CriticalArea />
 <LocationRanges name="ranges" aircraft={$aircraftID} altitude={$altitude} />
 <slot />

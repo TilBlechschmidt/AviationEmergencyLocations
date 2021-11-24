@@ -2,10 +2,10 @@
 	import { onMount } from 'svelte';
 	import { Map } from '@beyonk/svelte-mapbox';
 
-	import SatelliteImagery from '$lib/SatelliteImagery.svelte';
-	import LocationLines from '$lib/LocationLines.svelte';
+	import SatelliteImagery from '$lib/components/map/layers/SatelliteImagery.svelte';
+	import LocationLines from '$lib/components/map/layers/LocationLines.svelte';
 
-	import { elsa } from '$lib/elsa';
+	import { elsa } from '$lib/simulation/elsa';
 	import { aircraftID } from '$lib/stores';
 
 	onMount(async () => await elsa.startup);
@@ -23,7 +23,6 @@
 	}}
 >
 	<SatelliteImagery />
-
 	<LocationLines aircraft={$aircraftID} />
 	<slot />
 </Map>

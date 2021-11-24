@@ -2,22 +2,25 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import LocationCard from '$lib/LocationCard.svelte';
-	import { elsa } from '$lib/elsa';
-	import { aircraftID } from '$lib/stores';
+
+	import LocationCard from '$lib/components/map/LocationCard.svelte';
+
+	import { elsa } from '$lib/simulation/elsa';
+	import { aircraftID, preferences } from '$lib/stores';
 
 	let location;
 
 	onMount(async () => await elsa.startup);
 
-	async function fetchLocation(locationID, aircraftID) {
+	async function fetchLocation(preferences, locationID, aircraftID) {
 		// TODO Show a loading indicator or smth
 		location = null;
 
-		if (locationID && aircraftID) location = await elsa.fetchLocation(locationID, aircraftID);
+		if (locationID && aircraftID)
+			location = await elsa.fetchLocation(preferences, locationID, aircraftID);
 	}
 
-	$: fetchLocation($page.params.locationID, $aircraftID);
+	$: fetchLocation($preferences, $page.params.locationID, $aircraftID);
 </script>
 
 {#if location}

@@ -1,5 +1,13 @@
 <script>
 	import '../app.postcss';
+	import '$lib/i18n';
+
+	import { waitLocale } from 'svelte-i18n';
+	import { onMount } from 'svelte';
+
+	onMount(async () => {
+		await waitLocale();
+	});
 </script>
 
 <div id="container">

@@ -2,8 +2,8 @@ use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
 use geo::geodesic_distance::GeodesicDistance;
-use geo::prelude::{Bearing, Centroid, HaversineDestination};
-use geo::{point, Line, Point};
+use geo::prelude::{Bearing, BoundingRect, Centroid, HaversineDestination};
+use geo::{point, Line, Point, Rect};
 use js_sys::Array;
 use serde::{Deserialize, Serialize};
 use strum::EnumIter;
@@ -68,6 +68,11 @@ pub enum RiskClassification {
     Unsafe = "Unsafe",
 }
 
+// TODO Remove this default
+fn fourty_two() -> u32 {
+    42
+}
+
 #[wasm_bindgen]
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -95,8 +100,21 @@ pub struct Location {
     #[wasm_bindgen(readonly)]
     pub usage: UsageType,
 
+    /// Field elevation above MSL in feet
+    #[wasm_bindgen(readonly)]
+    #[serde(default = "fourty_two")]
+    pub elevation: u32,
+
     /// Start and end coordinates of the location
     coordinates: LocationCoordinates,
+
+    /// Date at which the data was last verified
+    #[wasm_bindgen(skip)]
+    pub survey_date: String,
+
+    /// Human-readable remarks about the location
+    #[wasm_bindgen(skip)]
+    pub remarks: Option<String>,
     //
     // TODO Record other potential hazards like power lines or tents
     // TODO Add free-form text and web links (e.g. event calendar)
@@ -121,6 +139,10 @@ impl Location {
     /// Center of the runway
     pub fn centroid(&self) -> Point<f64> {
         self.line().centroid()
+    }
+
+    pub fn bounding_rect(&self) -> Rect<f64> {
+        self.line().bounding_rect()
     }
 
     /// Returns a number of points with a given resolution in meters where a given airplane can land
@@ -181,6 +203,18 @@ impl Location {
     #[wasm_bindgen(getter)]
     pub fn name(&self) -> String {
         self.name.clone()
+    }
+
+    /// Human-readable remarks about the location
+    #[wasm_bindgen(getter)]
+    pub fn remarks(&self) -> Option<String> {
+        self.remarks.clone()
+    }
+
+    /// Date at which the data was last verified
+    #[wasm_bindgen(getter, js_name = "surveyDate")]
+    pub fn survey_date(&self) -> String {
+        self.survey_date.clone()
     }
 
     /// Coordinates of the runway

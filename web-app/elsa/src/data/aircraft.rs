@@ -1,3 +1,7 @@
+use crate::{
+    dubin::{DubinPath, GeographicDubinPath},
+    SurfaceType,
+};
 use serde::{Deserialize, Serialize};
 use uom::si::{
     acceleration::meter_per_second_squared,
@@ -5,14 +9,9 @@ use uom::si::{
     f64::{Acceleration, Length, Mass, Velocity},
     length::{foot, meter, nautical_mile},
     mass::{kilogram, pound},
-    velocity::knot,
+    velocity::{foot_per_minute, knot, meter_per_second},
 };
 use wasm_bindgen::prelude::*;
-
-use crate::{
-    dubin::{DubinPath, GeographicDubinPath},
-    SurfaceType,
-};
 
 const TURN_AIRSPEED_SAFETY_FACTOR: f64 = 1.5;
 const SPECIFIC_GRAVITY: f64 = 9.81;
@@ -78,6 +77,8 @@ pub struct LandingPerformance {
     total_distance: usize,
     // Speed when passing the 50ft obstacle (KIAS)
     speed: usize,
+    /// Fastest descent speed in dirty configuration while maintaining landing speed (ft/min)
+    descent_rate: usize,
 }
 
 #[wasm_bindgen]
@@ -118,6 +119,26 @@ impl ClimbPerformance {
     #[wasm_bindgen(getter)]
     pub fn rate(&self) -> f64 {
         self.rate as f64
+    }
+
+    // Factor which when multiplied by the height gained yields the ground track covered
+    #[wasm_bindgen(getter)]
+    pub fn ratio(&self) -> f64 {
+        // To prevent headaches, convert everything to metric units :D
+        let speed = Velocity::new::<knot>(self.speed as f64).get::<meter_per_second>();
+        let rate = Velocity::new::<foot_per_minute>(self.rate as f64).get::<meter_per_second>();
+
+        // Rate equals the number of meters climbed per second, thus in one second we climb `rate` meters
+        // Speed gives us the ground distance covered in per second, so in one second we cover `speed` meters on the diagonal
+        // To get the ground track covered, we have to apply pythagoras on the triangle between height gained and diagonal distance covered.
+        // a = speed * 1sec = speed
+        // b = rate * 1sec = rate
+        // c = ground track covered for each rate meters of height gained
+        let track = (speed.powi(2) + rate.powi(2)).sqrt();
+
+        // To normalise the slope and get a factor which when multiplied by the height gained yields the ground distance covered,
+        // we divide the track by the height gained in one second (aka rate)
+        track / rate
     }
 }
 
@@ -210,6 +231,26 @@ impl LandingPerformance {
     #[wasm_bindgen(getter, js_name = totalDistance)]
     pub fn total_distance(&self) -> f64 {
         Length::new::<foot>(self.total_distance as f64).get::<meter>()
+    }
+
+    // Factor which when multiplied by the height lost yields the ground track covered
+    #[wasm_bindgen(getter)]
+    pub fn descend_ratio(&self) -> f64 {
+        // To prevent headaches, convert everything to metric units :D
+        let speed = Velocity::new::<knot>(self.speed as f64).get::<meter_per_second>();
+        let rate = Velocity::new::<foot_per_minute>(self.descent_rate as f64).get::<meter_per_second>();
+
+        // Rate equals the number of meters descended per second, thus in one second we climb `rate` meters
+        // Speed gives us the ground distance covered in per second, so in one second we cover `speed` meters on the diagonal
+        // To get the ground track covered, we have to apply pythagoras on the triangle between height lost and diagonal distance covered.
+        // a = speed * 1sec = speed
+        // b = rate * 1sec = rate
+        // c = ground track covered for each rate meters of height lost
+        let track = (speed.powi(2) + rate.powi(2)).sqrt();
+
+        // To normalise the slope and get a factor which when multiplied by the height lost yields the ground distance covered,
+        // we divide the track by the height lost in one second (aka rate)
+        track / rate
     }
 }
 

@@ -1,9 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import { elsa } from '$lib/elsa';
-	import { riskColors } from '$lib/constants';
+	import { elsa } from '$lib/simulation/elsa';
+	import { riskColors } from '$lib/data/constants';
 	import { feetToMeters } from '$lib/units';
-	import Line from '$lib/Line.svelte';
+	import { preferences } from '$lib/stores';
+	import Line from './Line.svelte';
 	import { Marker } from '@beyonk/svelte-mapbox';
 	import MdAirplanemodeActive from 'svelte-icons/md/MdAirplanemodeActive.svelte';
 
@@ -36,11 +37,18 @@
 		features: []
 	};
 
-	async function updateGeoJSON(latitude, longitude, heading, altitude, aircraftID) {
-		geojson = await elsa.landingOptions(latitude, longitude, heading, altitude, aircraftID);
+	async function updateGeoJSON(preferences, latitude, longitude, heading, altitude, aircraftID) {
+		geojson = await elsa.landingOptions(
+			preferences,
+			latitude,
+			longitude,
+			heading,
+			altitude,
+			aircraftID
+		);
 	}
 
-	$: updateGeoJSON(latitude, longitude, heading, altitude, aircraftID);
+	$: updateGeoJSON($preferences, latitude, longitude, heading, altitude, aircraftID);
 	$: if (icon) icon.style.transform = `rotate(${heading}deg)`;
 
 	onMount(async () => await elsa.startup);

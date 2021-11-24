@@ -14,13 +14,18 @@ use geo::{
 };
 use geo_booleanop::boolean::BooleanOp;
 use geojson::{feature::Id, Feature, FeatureCollection, GeoJson};
+use serde::{Deserialize, Serialize};
 use serde_json::{to_value, Map};
 use std::{cmp::Ordering, collections::HashMap, f64::consts::FRAC_PI_2};
 use strum::IntoEnumIterator;
+use svg::{
+    node::element::{path::Data, Path, Rectangle, Text},
+    Document,
+};
 use uom::si::{
     angle::{degree, radian},
     f64::{Angle, Length},
-    length::meter,
+    length::{foot, meter},
 };
 use wasm_bindgen::prelude::*;
 
@@ -29,23 +34,35 @@ pub struct AircraftRangeProfile([Point<f64>; 18]);
 pub struct LocationRangeProfile([Point<f64>; 18]);
 
 #[wasm_bindgen(inspectable)]
+#[derive(Serialize, Deserialize, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
 pub struct Preferences {
     pub bank: f64,
     pub epsilon: f64,
 
+    #[wasm_bindgen(js_name = "unsafeLandingHeadroom")]
     pub unsafe_landing_headroom: f64,
+    #[wasm_bindgen(js_name = "riskyLandingHeadroom")]
     pub risky_landing_headroom: f64,
+
+    #[wasm_bindgen(js_name = "eventLocationClassification")]
+    pub event_location_classification: RiskClassification,
+    #[wasm_bindgen(js_name = "denselyCrowdedClassification")]
+    pub densely_crowded_classification: RiskClassification,
 }
 
 #[wasm_bindgen]
-pub struct Calculator {
-    preferences: Preferences,
-}
+pub struct Calculator;
 
 impl Calculator {
-    fn aircraft_range_profile(&self, aircraft: &Aircraft, altitude: f64) -> AircraftRangeProfile {
+    fn aircraft_range_profile(
+        &self,
+        preferences: &Preferences,
+        aircraft: &Aircraft,
+        altitude: f64,
+    ) -> AircraftRangeProfile {
         let maximum_range = aircraft.glide.ratio() * altitude * 2.0;
-        let circle_radius = aircraft.glide.turn_radius(self.preferences.bank);
+        let circle_radius = aircraft.glide.turn_radius(preferences.bank);
         let circle_origin = Point::new(-circle_radius, 0.0);
 
         let point_on_circle = |angle: f64| {
@@ -71,7 +88,7 @@ impl Calculator {
             let ray = angle - FRAC_PI_2;
             let ray_typed = Angle::new::<radian>(ray);
 
-            let distance = binary_search(0.0, maximum_range, self.preferences.epsilon, |range| {
+            let distance = binary_search(0.0, maximum_range, preferences.epsilon, |range| {
                 let ray_target = ray_origin + Point::new(range * ray.cos(), range * ray.sin());
 
                 let path_candidates = calculate_dubin_path_candidates(
@@ -88,7 +105,7 @@ impl Calculator {
                     .map(|path| {
                         aircraft
                             .glide
-                            .height_loss_over_geometric_path(&path, self.preferences.bank)
+                            .height_loss_over_geometric_path(&path, preferences.bank)
                     })
                     .min_by(|x, y| x.partial_cmp(y).unwrap());
 
@@ -180,12 +197,40 @@ impl Calculator {
 #[wasm_bindgen]
 impl Calculator {
     #[wasm_bindgen(constructor)]
-    pub fn new(preferences: Preferences) -> Self {
-        Self { preferences }
+    pub fn new() -> Self {
+        Self {}
+    }
+
+    #[wasm_bindgen(js_name = "locationBoundingRects")]
+    pub fn location_bounding_rects(&self, location_map: &LocationMap) -> Result<String, JsValue> {
+        // TODO Use polygons that extend in each direction from the line instead of bounding rectangles!
+        let features = location_map
+            .locations()
+            .map(|location| Feature {
+                bbox: None,
+                geometry: Some((&location.bounding_rect()).into()),
+                id: Some(Id::String(location.id())),
+                properties: None,
+                foreign_members: None,
+            })
+            .collect();
+
+        let geojson = GeoJson::FeatureCollection(FeatureCollection {
+            bbox: None,
+            features,
+            foreign_members: None,
+        });
+
+        Ok(serde_json::to_string(&geojson).map_err(|e| e.to_string())?)
     }
 
     #[wasm_bindgen(js_name = assessRisk)]
-    pub fn assess_risk(&self, location: &Location, aircraft: &Aircraft) -> RiskClassification {
+    pub fn assess_risk(
+        &self,
+        preferences: &Preferences,
+        location: &Location,
+        aircraft: &Aircraft,
+    ) -> RiskClassification {
         let mut risky = false;
         let mut deadly = false;
 
@@ -197,15 +242,22 @@ impl Calculator {
 
         // Step 2: Verify landing headroom
         match location.landing_headroom(aircraft) {
-            headroom if headroom < self.preferences.unsafe_landing_headroom => deadly = true,
-            headroom if headroom < self.preferences.risky_landing_headroom => risky = true,
+            headroom if headroom < preferences.unsafe_landing_headroom => deadly = true,
+            headroom if headroom < preferences.risky_landing_headroom => risky = true,
             _ => {}
         }
 
         // Step 3: Check for human presence
+        let event_risky = preferences.event_location_classification == RiskClassification::Risky;
+        let event_unsafe = preferences.event_location_classification == RiskClassification::Unsafe;
+        let dense_risky = preferences.densely_crowded_classification == RiskClassification::Risky;
+        let dense_unsafe = preferences.densely_crowded_classification == RiskClassification::Unsafe;
+
         match location.human_presence {
-            HumanPresenceCategory::EventOnly => risky = true,
-            HumanPresenceCategory::Dense => risky = true,
+            HumanPresenceCategory::EventOnly if event_risky => risky = true,
+            HumanPresenceCategory::EventOnly if event_unsafe => deadly = true,
+            HumanPresenceCategory::Dense if dense_risky => risky = true,
+            HumanPresenceCategory::Dense if dense_unsafe => deadly = true,
             _ => {}
         }
 
@@ -222,17 +274,18 @@ impl Calculator {
     #[wasm_bindgen(js_name = reachabilityGeoJSON)]
     pub fn reachability_geojson(
         &self,
+        preferences: &Preferences,
         location_map: &LocationMap,
         aircraft: &Aircraft,
         altitude: f64,
     ) -> Result<String, JsValue> {
         // Step 1: Calculate and cache the aircraft range profile
-        let aircraft_range_profile = self.aircraft_range_profile(aircraft, altitude);
+        let aircraft_range_profile = self.aircraft_range_profile(preferences, aircraft, altitude);
 
         // Step 2: Create polygons and assess risk for each location
         let polygons = location_map.locations().map(|location| {
             (
-                self.assess_risk(location, aircraft),
+                self.assess_risk(preferences, location, aircraft),
                 self.location_range_polygon(location, aircraft, &aircraft_range_profile),
             )
         });
@@ -291,7 +344,12 @@ impl Calculator {
     }
 
     #[wasm_bindgen(js_name = locationGeoJSON)]
-    pub fn location_geojson(&self, location_map: &LocationMap, aircraft: &Aircraft) -> String {
+    pub fn location_geojson(
+        &self,
+        preferences: &Preferences,
+        location_map: &LocationMap,
+        aircraft: &Aircraft,
+    ) -> String {
         let features = location_map
             .locations()
             .filter(|location| location.usage != UsageType::Aeronautical)
@@ -315,7 +373,7 @@ impl Calculator {
                 let mut properties = Map::new();
                 properties.insert(
                     String::from("risk"),
-                    to_value(self.assess_risk(location, aircraft)).unwrap(),
+                    to_value(self.assess_risk(preferences, location, aircraft)).unwrap(),
                 );
 
                 Feature {
@@ -340,6 +398,7 @@ impl Calculator {
     #[wasm_bindgen(js_name = landingOptions)]
     pub fn landing_options(
         &self,
+        preferences: &Preferences,
         latitude: f64,
         longitude: f64,
         heading: f64,
@@ -348,7 +407,7 @@ impl Calculator {
         locations: &LocationMap,
     ) -> String {
         let start = Point::new(longitude, latitude);
-        let radius = Length::new::<meter>(aircraft.glide.turn_radius(self.preferences.bank));
+        let radius = Length::new::<meter>(aircraft.glide.turn_radius(preferences.bank));
 
         let features = locations
             .locations()
@@ -375,7 +434,7 @@ impl Calculator {
                     .map(|path| {
                         let height_loss = aircraft
                             .glide
-                            .height_loss_over_geographic_path(&path, self.preferences.bank);
+                            .height_loss_over_geographic_path(&path, preferences.bank);
 
                         (path, height_loss, location)
                     })
@@ -390,7 +449,7 @@ impl Calculator {
                 |(path, height_loss, location): (GeographicDubinPath, f64, &Location)| {
                     let points = path.points().map(|p| p.0).collect::<Vec<_>>();
                     let line = LineString(points);
-                    let risk = self.assess_risk(location, aircraft);
+                    let risk = self.assess_risk(preferences, location, aircraft);
 
                     let mut properties = Map::new();
                     properties.insert(String::from("risk"), to_value(risk).unwrap());
@@ -415,16 +474,173 @@ impl Calculator {
 
         geojson.to_string()
     }
+
+    #[wasm_bindgen(js_name = takeoffProfile)]
+    pub fn takeoff_profile(&self, aircraft: &Aircraft) -> String {
+        let fifty_feet = 15.24;
+
+        // Location geometry data
+        let available_distance = 3800.0; // 2270.0 D6; 2800 D8; 3800 A1;
+
+        // Aircraft performance data
+        let takeoff_ground_roll = aircraft.takeoff.ground_roll();
+        let takeoff_total_dist = aircraft.takeoff.total_distance();
+
+        let climb_slope = 1.0 / aircraft.climb.ratio();
+        let descent_slope = -1.0 / aircraft.landing.descend_ratio();
+
+        // TODO The ground roll is dependent on the surface (!)
+        //      When the last ~50% of the ground roll is gras,
+        //      those 50% should be multiplied by the corresponding factor!
+        let landing_ground_roll = aircraft.landing.ground_roll();
+        let landing_total_dist = aircraft.landing.total_distance();
+
+        // Helpful point definitions
+        let rotation_point = Point::new(takeoff_ground_roll, 0.0);
+        let climb_point = Point::new(takeoff_total_dist, fifty_feet);
+
+        let landing_point = Point::new(available_distance - landing_total_dist, fifty_feet);
+        let touchdown_point = Point::new(available_distance - landing_ground_roll, 0.0);
+
+        // Calculate the y-intercept for both lines
+        let climb_y_intercept = -climb_slope * climb_point.x() + fifty_feet;
+        let descent_y_intercept = -descent_slope * landing_point.x() + fifty_feet;
+
+        // Calculate the intersection between the climb and descent line
+        let intersection_x =
+            (climb_y_intercept - descent_y_intercept) / (descent_slope - climb_slope);
+        let intersection_y = climb_slope * intersection_x + climb_y_intercept;
+        let intersection = Point::new(intersection_x, intersection_y);
+
+        // Calculate the altitude when continuing the climb
+        let climb_through_altitude = climb_slope * available_distance + climb_y_intercept;
+        let climb_through_point = Point::new(available_distance, climb_through_altitude);
+
+        log::debug!("Tkoff point: {:?}", rotation_point.x());
+        log::debug!("Climb point: {:?}", climb_point);
+        log::debug!("Lndg point:  {:?}", landing_point);
+        log::debug!("Tchdn point: {:?}", touchdown_point.x());
+        log::debug!(
+            "Climb line equation: y = {} * x + {}",
+            climb_slope,
+            climb_y_intercept
+        );
+        log::debug!(
+            "Desct line equation: y = {} * x + {}",
+            descent_slope,
+            descent_y_intercept
+        );
+        log::debug!("Intersection: {:?}", intersection);
+
+        // Define the data for all lines
+        let width = available_distance;
+        let height = climb_through_altitude;
+        let coordinates = |p: Point<f64>| (p.x(), height - p.y());
+
+        let acceleration_line_data = Data::new()
+            .move_to((0.0, height))
+            .line_to(coordinates(rotation_point));
+
+        let takeoff_line_data = Data::new()
+            .move_to(coordinates(rotation_point))
+            .line_to(coordinates(climb_point));
+
+        let climb_line_data = Data::new()
+            .move_to(coordinates(climb_point))
+            .line_to(coordinates(climb_through_point));
+
+        let descent_line_data = Data::new()
+            .move_to(coordinates(intersection))
+            .line_to(coordinates(landing_point));
+
+        let landing_line_data = Data::new()
+            .move_to(coordinates(landing_point))
+            .line_to(coordinates(touchdown_point));
+
+        let deceleration_line_data = Data::new()
+            .move_to(coordinates(touchdown_point))
+            .line_to((available_distance, height));
+
+        let height_mark_data = Data::new()
+            .move_to((0.0, height - intersection_y))
+            .horizontal_line_to(width);
+
+        // Build the paths
+        let risk_color = "#FF3D00";
+        let asphalt_color = "#607D8B";
+        let route_color = "#2196F3";
+
+        let build_path = |data: Data, color: &'static str| {
+            Path::new()
+                .set("fill", "none")
+                .set("stroke", color)
+                .set("stroke-width", 2)
+                .set("d", data)
+        };
+
+        let descent_line = build_path(descent_line_data, "red").set("stroke-dasharray", "10 5");
+        let landing_line = build_path(landing_line_data, "purple").set("stroke-dasharray", "10 5");
+
+        let height_marker = build_path(height_mark_data, risk_color)
+            .set("stroke-dasharray", "15 8")
+            .set("stroke-opacity", "0.5")
+            .set("class", "label")
+            .set("label", "Hello world!");
+
+        let height_label = format!(
+            "{}m / {}ft",
+            intersection_y.round(),
+            Length::new::<meter>(intersection_y).get::<foot>().round()
+        );
+        let height_text = Text::new()
+            .set("x", 10)
+            .set("dy", 10)
+            .set("alignment-baseline", "hanging")
+            .set(
+                "y",
+                format!("{}%", (height - intersection_y) / height * 100.0),
+            )
+            .add(svg::node::Text::new(height_label));
+
+        let danger_rect = Rectangle::new()
+            .set("fill", risk_color)
+            .set("fill-opacity", "0.25")
+            .set("x", 0.0)
+            .set("y", 0.0)
+            .set("width", width)
+            .set("height", height - intersection_y);
+
+        // Assemble everything into an SVG
+        let graph = Document::new()
+            .set("viewBox", (0.0, 0.0, width, height))
+            .set("preserveAspectRatio", "none")
+            .add(danger_rect)
+            .add(height_marker)
+            .add(build_path(acceleration_line_data, asphalt_color))
+            .add(build_path(takeoff_line_data, "green"))
+            .add(build_path(climb_line_data, route_color))
+            .add(descent_line)
+            .add(landing_line)
+            .add(build_path(deceleration_line_data, asphalt_color));
+
+        let wrapper = Document::new().add(graph).add(height_text);
+
+        wrapper.to_string()
+    }
 }
 
 #[wasm_bindgen]
 impl Preferences {
     #[wasm_bindgen(constructor)]
-    pub fn new(serialized: Option<String>) -> Self {
+    pub fn new(serialized: Option<String>) -> Result<Preferences, JsValue> {
         match serialized {
-            Some(_serialized) => todo!(),
-            None => Self::default(),
+            Some(serialized) => Ok(serde_json::from_str(&serialized).map_err(|e| e.to_string())?),
+            None => Ok(Self::default()),
         }
+    }
+
+    pub fn serialize(&self) -> Result<String, JsValue> {
+        Ok(serde_json::to_string(&self).map_err(|e| e.to_string())?)
     }
 }
 
@@ -436,6 +652,9 @@ impl Default for Preferences {
 
             unsafe_landing_headroom: -0.15,
             risky_landing_headroom: -0.05,
+
+            event_location_classification: RiskClassification::Risky,
+            densely_crowded_classification: RiskClassification::Risky,
         }
     }
 }

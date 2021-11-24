@@ -29,6 +29,7 @@
 		"@turf/union": "^6.5.0",
 		"autoprefixer": "^10.3.1",
 		"cssnano": "^5.0.6",
+		"date-fns": "^2.26.0",
 		"eslint": "^7.22.0",
 		"eslint-config-prettier": "^8.1.0",
 		"eslint-plugin-svelte3": "^3.2.0",
@@ -38,6 +39,7 @@
 		"prettier-plugin-svelte": "^2.2.0",
 		"svelte": "^3.34.0",
 		"svelte-check": "^2.0.0",
+		"svelte-i18n": "^3.3.13",
 		"svelte-icons": "^2.1.0",
 		"svelte-preprocess": "^4.7.4",
 		"tailwindcss": "^2.2.4"

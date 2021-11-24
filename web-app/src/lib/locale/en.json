@@ -1,0 +1,122 @@
+{
+    "welcomeButton": "Get started",
+    "guide": {
+        "welcome": {
+            "title": "Safety Warning",
+            "text": "Welcome to E.L.S.A., before you can start using this tool, we need you to first understand and acknowledge the following prerequisites:<br><br>The data made available by this tool is provided without guarantees regarding accuracy, currency, or relevancy. You are solely responsible for the safety of your aircraft, cargo, and passengers and it is your responsibility to assess all involved risks during preflight preparations.<br><br>Furthermore, it is imperative that the data made available by this tool is only used with the proper understanding of its creation, contextualization, and presentation. Relying on any information originating from this tool without the proper understanding of how it is supposed to be used, as detailed in the following page(s), makes said information useless at best and catastrophic at worst.",
+            "text2": "Not every location in this data set may be suitable for every airplane and situation. It is your responsibility to read and understand the assumptions made for and limitations of this computer simulation. The data provided is useless at best and harmful at worst without a proper understanding of the theory involved!",
+            "confirmation1": "I acknowledge to have read and understood this disclaimer and agree to carefully read the following explanations.",
+            "confirmation2": "I will only use this tool with an understanding of all risks involved as detailed above.",
+            "button": "Continue"
+        },
+        "locations": {
+            "title": "Locations",
+            "preface": "The core functionality of this tool is to provide you with information about emergency landing sites. Our team surveyed a vast number of potential locations and collected vital data about all of them. Currently, this includes:",
+            "derivedFactors": "In addition, the tool calculates a couple of values based on the data collected. Some of these are based on the performance characteristics of your currently selected aircraft, marked with an asterisk. Here is a list of all derived values:",
+            "conclusion": "To the right, you can see a card containing all those pieces of information for an example location. When using the tool, you will frequently encounter these cards.",
+            "factors": {
+                "elevation": "Elevation",
+                "surface": "Surface type",
+                "usage": "Usage category",
+                "humanPresence": "Probability of human presence",
+                "headings": "Landable headings",
+                "remarks": "Other remarks",
+                "length": "Usable length",
+                "headroom": "Landing headroom",
+                "risk": "Risk category"
+            }
+        },
+        "risk": {
+            "title": "Risk assessment",
+            "preface": "Not every location is equally well suited for an emergency landing. A multitude of factors have to be considered when picking a potential area. Even though some of these are not known before emergency strikes, it is possible to create a rough ranking based on the known aspects. Each location is assigned to one of three risk categories below. You can click on them to see a detailed description!",
+            "explanation": {
+                "safe": "A location is considered \"safe\" when it is unlikely that you or other people will be harmed. Note that this is not a guarantee in any way! Locations may change between surveys and emergency landings still pose a hazard even after touchdown.",
+                "risky": "Risky is a term used for locations where potential damage to the aircraft, passengers, or bystanders may become unavoidable. However, the likelihood depends on the circumstances.",
+                "unsafe": "When a location is flagged as unsafe, destruction of the aircraft including injury or death is likely. Most of the locations sorted into this category have been included because they provide a lesser evil and minimize harm to bystanders."
+            },
+            "conclusion": "Whenever you see one of these three colors used on the map or elsewhere, they indicate the risk associated with the location that the colored object relates to."
+        },
+        "riskFactors": {
+            "title": "Risk factors",
+            "preface": "To determine the risk category of a location, the tool considers a number of factors. Some of these are fixed while others can be modified according to your personal preference. Below is a description of each contributing factor.",
+            "factors": {
+                "surface": {
+                    "title": "Surface type",
+                    "text": "Unfortunately, not every location is a paved asphalt runway. While grassy surfaces and agricultural areas are considered mostly safe, water bodies are an exception. Even though it is certainly possible to survive a water landing, it strongly depends on the technique and conditions. Thus, locations on water are generally considered <em>unsafe</em>."
+                },
+                "headroom": {
+                    "title": "Landing headroom",
+                    "text": "Each aircraft has different performance characteristics. When using the tool, you will select an aircraft profile. This profile determines the distance required to come to a full stop while executing an emergency landing. Since some locations are rather constrained in this regard, the so-called landing headroom will be calculated. It is a percentage of the distance required to come to a full stop: At <code>0%</code> you come to a complete stop at the end of the usable length, <code>100%</code> means you have double the required length. At <code>-15%</code> headroom you miss a couple of meters and will over-run the usable length.<br><br>For the purpose of risk categorization, two thresholds are defined which determine the category based on your currently selected aircraft. Below are the current settings, feel free to change them!"
+                },
+                "humanPresence": {
+                    "title": "Human presence",
+                    "text": "While it is unlikely for humans to roam around on the runway of an international airport, it is very likely for them to have a picnic in the park on a warm, sunny summer evening. For this reason, event locations and generally crowded areas have received their own category to which you can assign a risk.<br><br>Event locations can likely be considered safe during times where nothing is on the calendar, however, it remains your duty to check on that! The same goes for public parks and other generally crowded places. During the winter with freezing temperatures it may be unlikely for humans to flock around parks in masses. However, during the summer it is an entirely different story! Use the settings below to change your global personal preferences:"
+                }
+            }
+        },
+        "aircraft": {
+            "title": "Aircraft performance"
+        },
+        "limitations": {
+            "title": "Assumptions & Limitations"
+        },
+        "finalWords": {
+            "title": "Final words",
+            "text": "You should now have read the introductory information and explanation that should have given you an understanding of the creation, contextualization, and presentation of the data made available by this tool. If you feel you do not fully understand the data presented or unsure of how to apply it in preflight preparations, do not proceed to use this tool, but instead seek guidance and further help by contacting us at <code>elsa@blechschmidt.dev</code>.<br><br>Should you need to reacquaint yourself with these explanations in the future these pages will be available at any time by accessing the “Help” button on the bottom-right corner of the screen.<br><br>Thank you for your understanding and <em>fly safe</em>!",
+            "confirmation": "I acknowledge to have read and understood this disclaimer as well as the explanations given to you on this and the previous page.",
+            "button": "Enter E.L.S.A."
+        }
+    },
+    "landUsage": {
+        "Agricultural": "Agricultural area",
+        "Aeronautical": "Aeronautical facility",
+        "Nature": "Nature",
+        "Waterway": "Waterway",
+        "Event": "Event location",
+        "Park": "Public park"
+    },
+    "humanPresence": {
+        "Dense": "Crowded",
+        "Sparse": "Sparse",
+        "EventOnly": "During Events",
+        "Unlikely": "Unlikely"
+    },
+    "risk": {
+        "safe": "Safe",
+        "risky": "Risky",
+        "unsafe": "Unsafe"
+    },
+    "surfaceType": {
+        "Asphalt": "Asphalt",
+        "Gras": "Gras",
+        "Water": "Water"
+    },
+    "location": {
+        "surface": "Surface",
+        "humanPresence": "Human presence",
+        "landingHeadroom": "Landing headroom",
+        "lastSurveyed": "Last surveyed",
+        "remarks": "Remarks"
+    },
+    "settings": {
+        "flight": {
+            "title": "Flight profile",
+            "aircraft": "Aircraft",
+            "bank": "Bank angle",
+            "altitude": "Altitude"
+        },
+        "risk": {
+            "title": "Risk assessment",
+            "landing": {
+                "title": "Landing headroom",
+                "risky": "Risky landing",
+                "unsafe": "Unsafe landing"
+            },
+            "humanPresence": {
+                "title": "Human presence",
+                "eventLocation": "Event locations",
+                "dense": "Crowded places"
+            }
+        }
+    }
+}

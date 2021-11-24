@@ -7,10 +7,42 @@ html, body, #svelte {
     height: 100%;
 }
 
-html, body, #svelte, .mapboxgl-map { font-family: 'Inter', sans-serif !important; }
+html, body, #svelte, .mapboxgl-map {
+  font-family: 'Inter', sans-serif !important;
+}
+
 @supports (font-variation-settings: normal) {
-  html, body, #svelte, .mapboxgl-map { font-family: 'Inter var', sans-serif !important; }
+  html, body, #svelte, .mapboxgl-map {
+    font-family: 'Inter var', sans-serif !important;
+  }
 }
 
 @tailwind components;
-@tailwind utilities
+@tailwind utilities;
+
+.card {
+  @apply bg-white rounded-xl drop-shadow shadow-xl;
+}
+
+.custom-select {
+  @apply font-mono;
+
+  appearance: none;
+  cursor: pointer;
+  border-bottom: 1px dashed #999;
+
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIgaWQ9IkxheWVyXzEiIGRhdGEtbmFtZT0iTGF5ZXIgMSIgdmlld0JveD0iMCAwIDQuOTUgMTAiCiAgICB2ZXJzaW9uPSIxLjEiIGlua3NjYXBlOnZlcnNpb249IjAuOTEgcjEzNzI1IiBzb2RpcG9kaTpkb2NuYW1lPSJkb3dubG9hZC5zdmciPgogICAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjMuNTQgNS4zMyAyLjQ4IDYuODIgMS40MSA1LjMzIDMuNTQgNS4zMyIgaWQ9InBvbHlnb240MTk4IgogICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjEiIC8+Cjwvc3ZnPg==)
+    no-repeat 101% 50%;
+  background-size: 12px;
+  background-position: 100% -4px;
+  padding-right: 15px;
+}
+
+.custom-select:focus {
+  outline: none;
+}
+
+.map-component-simulation {
+  font-size: 12px;
+  line-height: 20px;
+}

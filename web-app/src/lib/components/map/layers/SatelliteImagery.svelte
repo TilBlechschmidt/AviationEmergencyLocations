@@ -1,7 +1,7 @@
 <script>
 	import { onMount, getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
-	import { firstNonBackgroundLayer } from './map';
+	import { firstNonBackgroundLayer } from '../helpers';
 
 	const { getMap } = getContext(contextKey);
 	const map = getMap();

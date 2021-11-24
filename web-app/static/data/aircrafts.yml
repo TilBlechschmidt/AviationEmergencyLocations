@@ -15,6 +15,8 @@
     groundRoll: 450
     totalDistance: 1080
     speed: 52
+    # TODO Figure out this value!
+    descentRate: 1500
 
 - name: Cessna 172
   id: C172
@@ -33,6 +35,8 @@
     groundRoll: 550
     totalDistance: 1295
     speed: 62
+    # TODO Figure out this value!
+    descentRate: 1500
 
 - name: Cessna 172 (Diesel)
   id: C172D
@@ -51,6 +55,8 @@
     groundRoll: 550
     totalDistance: 1295
     speed: 62
+    # TODO Figure out this value!
+    descentRate: 2000
 
 - name: Piper Archer II
   id: PA28-181
@@ -69,6 +75,8 @@
     groundRoll: 920
     totalDistance: 1400
     speed: 66
+    # TODO Figure out this value!
+    descentRate: 1500
 #
 # Excluded for now as the availability of CAPS demands a different thought process along the lines of "where can I land vertically the safest" instead of "where is a runway"!
 # - name: Cirrus SR20

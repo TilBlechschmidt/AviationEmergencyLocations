@@ -6,6 +6,7 @@
     start: [53.61997283331443, 9.967174743158031]
     end: [53.636016866522446, 9.999672285710245]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 - name: EDDH 15/33
   reversible: true
   surface: Asphalt
@@ -14,6 +15,7 @@
     start: [53.628698122437584, 9.997448723998712]
     end: [53.6544163274263, 9.97522678986149]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: EDHI 05/23
   reversible: true
@@ -23,6 +25,7 @@
     start: [53.543150815117485, 9.85217192823437]
     end: [53.524926235161125, 9.813468185929425]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Segelflugplatz Boberg
   reversible: true
@@ -32,6 +35,7 @@
     start: [53.517889359903755, 10.134514801417021]
     end: [53.511839435267355, 10.153154986935162]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Trabrennbahn
   # TODO Note hazards (large tents) at the beginning of reversed approach
@@ -43,6 +47,7 @@
     start: [53.57498723809755, 9.894788966570447]
     end: [53.5781310988626, 9.891261992975943]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Entenwerder Nord
   reversible: true
@@ -53,6 +58,7 @@
     start: [53.53253376707803, 10.03262271790665]
     end: [53.5302303399631, 10.03988502034493]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Entenwerder Süd
   reversible: true
@@ -63,6 +69,7 @@
     start: [53.53225754970094, 10.031181284746324]
     end: [53.52999624482738, 10.037632288733692]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Niendorfer Gehege
   reversible: true
@@ -72,6 +79,7 @@
     start: [53.622996603775725, 9.93373064886108]
     end: [53.62200200098883, 9.926906758751242]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 # The Planetarium has a height of 63.5m and the landing calculations account for a ~15m high obstruction.
 # To retain the reversibility of the remaining park, the Planetarium and Stadtpark have been split up.
@@ -84,6 +92,7 @@
     start: [53.593754092541836, 10.023320901601247]
     end: [53.595781235707456, 10.01525390086504]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Planetarium
   reversible: false
@@ -94,6 +103,8 @@
     start: [53.596127089368856, 10.013798957452522]
     end: [53.59705083847244, 10.01010346889216]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
+  remarks: Tall building (~220ft) at the NW end of the landing site, restricting landings to the SE approach only as landing calculations only assume a 50ft obstacle at the end of the landing zone!
 
 - name: Brakenburg
   reversible: true
@@ -103,6 +114,7 @@
     start: [53.503977263135816, 9.882311865361673]
     end: [53.50236743287558, 9.894900267406769]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Raakmoor
   reversible: true
@@ -112,6 +124,7 @@
     start: [53.65693868034535, 10.04121597091139]
     end: [53.66052252364227, 10.04539790910962]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Glashütte
   reversible: true
@@ -121,6 +134,7 @@
     start: [53.67109333560332, 10.03581385234672]
     end: [53.677195459778794, 10.040745739992893]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Klosterwiese
   reversible: true
@@ -130,8 +144,8 @@
     start: [53.64340328571133, 10.139759253824579]
     end: [53.64544500564857, 10.14935811623714]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
-# This one has a powerline on the north-east end and is thus NOT reversible
 - name: Öjendorf
   reversible: false
   surface: Gras
@@ -140,6 +154,8 @@
     start: [53.55645789342882, 10.148696427996084]
     end: [53.559520491179335, 10.155491450922636]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
+  remarks: High-voltage powerlines at the NE end, thus approach only possible from the SW!
 
 - name: Bramfelder See
   reversible: true
@@ -149,6 +165,7 @@
     start: [53.61997504871188, 10.061501236538598]
     end: [53.61857044528648, 10.07182556866117]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Stellmoorer Tunneltal
   reversible: true
@@ -158,6 +175,7 @@
     start: [53.62332189315408, 10.173036379760257]
     end: [53.628184661534654, 10.176646069868104]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Außenalster
   reversible: true
@@ -168,6 +186,7 @@
     start: [53.57388927668382, 10.006789650350846]
     end: [53.55869625363589, 9.997048417203736]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 # Hazard (Radar tower) at the east approach end which can be bypassed
 - name: Waltershof
@@ -178,6 +197,7 @@
     start: [53.53720509301974, 9.886760161354283]
     end: [53.53681275443701, 9.900422921840766]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Horner Rennbahn
   reversible: true
@@ -188,6 +208,7 @@
     start: [53.56094240620898, 10.08176828482619]
     end: [53.5555431120104, 10.083834171802922]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Barsbüttel
   reversible: true
@@ -197,6 +218,97 @@
     start: [53.58119745406609, 10.16494240422142]
     end: [53.575954628757856, 10.167789965758704]
   assets: []
+  surveyDate: 2021-11-21T15:42:56+0000
+
+- name: Golfplatz Treudelberg
+  reversible: true
+  surface: Gras
+  usage: Park
+  humanPresence: Sparse
+  coordinates:
+    start: [53.674068999777155, 10.088849374247205]
+    end: [53.67729037753003, 10.083351021758263]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+
+- name: Bergstedt
+  reversible: true
+  surface: Gras
+  usage: Nature
+  humanPresence: Unlikely
+  coordinates:
+    start: [53.672675763394125, 10.12700379030103]
+    end: [53.676780084868504, 10.12839997947792]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+
+- name: Moorburg
+  reversible: true
+  surface: Gras
+  usage: Agricultural
+  humanPresence: Unlikely
+  coordinates:
+    start: [53.48650889145679, 9.928787085427176]
+    end: [53.48929498991694, 9.935047831811001]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+  remarks: Powerlines 700m SW of the field, making an approach from the NE favourable.
+
+- name: Moorwerder Deich
+  reversible: true
+  surface: Gras
+  usage: Agricultural
+  humanPresence: Unlikely
+  coordinates:
+    start: [53.47627834896639, 10.039065981734016]
+    end: [53.479747556595385, 10.045393111886883]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+
+- name: Appelbüttler Tal
+  reversible: true
+  surface: Gras
+  usage: Agricultural
+  humanPresence: Unlikely
+  coordinates:
+    start: [53.43696941031531, 9.9525694257739]
+    end: [53.43693209233348, 9.962355139647725]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+
+- name: Friedrich-Ebert-Allee
+  reversible: true
+  surface: Gras
+  usage: Nature
+  humanPresence: Unlikely
+  coordinates:
+    start: [53.6099287205414, 9.860690814342677]
+    end: [53.612122016607344, 9.85521960434849]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+
+- name: Sülldorf
+  reversible: true
+  surface: Gras
+  usage: Nature
+  humanPresence: Unlikely
+  coordinates:
+    start: [53.58637486915892, 9.808321559745982]
+    end: [53.58980663849082, 9.801048612260631]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+
+- name: Travehafen
+  reversible: true
+  surface: Water
+  usage: Waterway
+  humanPresence: Sparse
+  coordinates:
+    start: [53.526483010286896, 9.9719169797221]
+    end: [53.5173489042705, 9.968121914199058]
+  assets: []
+  surveyDate: 2021-11-24T10:31:45+0000
+  remarks: Small harbor with low traffic and shallow beaches on the east shore.
 # - name: Norderelbe
 #   reversible: true
 #   surface: Water

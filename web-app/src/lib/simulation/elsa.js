@@ -1,12 +1,13 @@
 import { browser } from '$app/env';
-import Worker from '$lib/worker.js?worker';
-import { feetToMeters } from './units';
+import Worker from './worker.js?worker';
+import { feetToMeters } from '../units';
 
 class ElsaWorker {
     constructor() {
         this.idCounter = 0;
         this.worker = browser ? new Worker() : { postMessage: () => { } };
         this.responseHandlers = {};
+
         this.worker.onmessage = (msg) => {
             const { id, response } = msg.data;
             const handler = this.responseHandlers[id];
@@ -18,6 +19,7 @@ class ElsaWorker {
                 console.warn('Received message with no associated response handler!', response);
             }
         };
+
         this.worker.onerror = (e) => {
             console.error('Worker thread threw an error:', e);
         };
@@ -40,17 +42,17 @@ class ElsaWorker {
         });
     }
 
-    reachabilityGeoJSON(aircraftID, altitudeInFeet) {
+    reachabilityGeoJSON(preferences, aircraftID, altitudeInFeet) {
         const altitude = feetToMeters(altitudeInFeet);
 
         return this.submitRequest('REACHABILITY_GEOJSON', {
-            aircraftID, altitude
+            preferences, aircraftID, altitude
         }).then(JSON.parse);
     }
 
-    locationLinesGeoJSON(aircraftID) {
+    locationLinesGeoJSON(preferences, aircraftID) {
         return this.submitRequest('LOCATION_LINES_GEOJSON', {
-            aircraftID
+            preferences, aircraftID
         }).then(JSON.parse);
     }
 
@@ -62,20 +64,32 @@ class ElsaWorker {
             .then(r => r !== null && r.distance < maximumDistance ? r.location : null);
     }
 
-    fetchLocation(locationID, aircraftID) {
-        return this.submitRequest('LOCATION_DATA', { locationID, aircraftID });
+    fetchLocation(preferences, locationID, aircraftID) {
+        return this.submitRequest('LOCATION_DATA', { preferences, locationID, aircraftID });
     }
 
     fetchAircraftList() {
         return this.submitRequest('AIRCRAFT_LIST');
     }
 
-    landingOptions(latitude, longitude, heading, altitudeInFeet, aircraftID) {
+    fetchAircraft(aircraftID) {
+        return this.submitRequest('AIRCRAFT', { aircraftID });
+    }
+
+    landingOptions(preferences, latitude, longitude, heading, altitudeInFeet, aircraftID) {
         const altitude = feetToMeters(altitudeInFeet);
 
         return this.submitRequest('LANDING_OPTIONS', {
-            latitude, longitude, heading, altitude, aircraftID
+            preferences, latitude, longitude, heading, altitude, aircraftID
         }).then(JSON.parse);
+    }
+
+    takeoffProfile(aircraftID) {
+        return this.submitRequest('TAKEOFF_PROFILE', { aircraftID });
+    }
+
+    verifyPreferences(preferences) {
+        return this.submitRequest('VERIFY_PREFERENCES', { preferences }).then(JSON.parse);
     }
 }
 

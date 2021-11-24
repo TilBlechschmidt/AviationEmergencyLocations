@@ -1,8 +1,8 @@
 <script>
-	import Labelled from '$lib/Labelled.svelte';
+	import Labelled from '$lib/components/Labelled.svelte';
 	import { aircraftID } from '$lib/stores';
 	import { goto } from '$app/navigation';
-	import { elsa } from '$lib/elsa';
+	import { elsa } from '$lib/simulation/elsa';
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 
@@ -23,10 +23,7 @@
 	<div class="text-4xl font-extralight text-center mt-8 mb-4">Choose your aircraft</div>
 	<div class="flex-grow flex flex-wrap items-center justify-center">
 		{#each aircrafts as aircraft, i}
-			<div
-				class="bg-white rounded-xl drop-shadow shadow-xl w-72 m-8"
-				in:fly={{ y: 200, duration: 1000, delay: 500 + i * 200 }}
-			>
+			<div class="card w-72 m-8" in:fly={{ y: 200, duration: 1000, delay: 500 + i * 200 }}>
 				<h1 class="text-2xl text-center pt-4 pb-4">{aircraft.name}</h1>
 				<hr class="text-gray-200" />
 				<div class="p-4">
