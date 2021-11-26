@@ -20,6 +20,18 @@ html, body, #svelte, .mapboxgl-map {
 @tailwind components;
 @tailwind utilities;
 
+.mapbox-improve-map {
+  display: none;
+}
+
+.mapboxgl-ctrl-attrib-inner > a {
+  border: none;
+}
+
+.mapboxgl-ctrl-attrib-inner > a:not(:last-child)::after {
+  content: ' |'
+}
+
 .card {
   @apply bg-white rounded-xl drop-shadow shadow-xl;
 }
