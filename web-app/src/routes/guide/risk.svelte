@@ -4,6 +4,9 @@
 	import IconLabelled from '../../lib/components/IconLabelled.svelte';
 	import { _ } from 'svelte-i18n';
 	import { riskCategories } from '$lib/data/constants';
+	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
+
+	requireDisclaimer([DISCLAIMERS.INTRODUCTION]);
 
 	let selectedRisk = 'safe';
 	const riskColors = {

@@ -4,6 +4,7 @@
 	import { aircraftID, preferences } from '$lib/stores';
 	import { guideLocation } from '$lib/data/constants';
 	import { _ } from 'svelte-i18n';
+	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
 
 	import LocationCardContent from '$lib/components/map/LocationCardContent.svelte';
 	import CardDetailView from '../../lib/components/guide/CardDetailView.svelte';
@@ -14,10 +15,12 @@
 		await elsa.startup;
 		location = await elsa.fetchLocation($preferences, guideLocation, $aircraftID);
 	});
+
+	requireDisclaimer([DISCLAIMERS.INTRODUCTION]);
 </script>
 
 <CardDetailView
-	previousLocation="/guide/welcome"
+	previousLocation="/guide"
 	previousLabel={$_('guide.welcome.title')}
 	title={$_('guide.locations.title')}
 	nextLocation="/guide/risk"

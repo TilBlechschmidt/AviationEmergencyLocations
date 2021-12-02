@@ -7,8 +7,10 @@
 
 	import { elsa } from '$lib/simulation/elsa';
 	import { aircraftID } from '$lib/stores';
+	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
 
 	onMount(async () => await elsa.startup);
+	requireDisclaimer([DISCLAIMERS.INTRODUCTION, DISCLAIMERS.SAFETY_GUIDE]);
 
 	let innerWidth = 0;
 </script>

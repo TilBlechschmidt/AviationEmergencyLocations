@@ -1,6 +1,9 @@
 <script>
 	import CardDetailView from '$lib/components/guide/CardDetailView.svelte';
 	import { _ } from 'svelte-i18n';
+	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
+
+	requireDisclaimer([DISCLAIMERS.INTRODUCTION]);
 </script>
 
 <CardDetailView

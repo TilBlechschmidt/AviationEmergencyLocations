@@ -1,10 +1,18 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { _ } from 'svelte-i18n';
 	import Disclaimer from '$lib/components/guide/Disclaimer.svelte';
+	import {
+		restorePreDisclaimerDestination,
+		completeDisclaimer,
+		requireDisclaimer,
+		DISCLAIMERS
+	} from '$lib/components/guide/guard';
+
+	requireDisclaimer([DISCLAIMERS.INTRODUCTION]);
 
 	function nextStep() {
-		goto('/aircrafts');
+		completeDisclaimer(DISCLAIMERS.SAFETY_GUIDE);
+		restorePreDisclaimerDestination('/aircrafts');
 	}
 </script>
 

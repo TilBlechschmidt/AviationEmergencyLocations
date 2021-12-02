@@ -3,14 +3,12 @@
 	import { createEventDispatcher } from 'svelte';
 	import { _ } from 'svelte-i18n';
 
-	export let includeReminder = false;
-	export let warning;
+	export let warning = false;
 
 	export let title;
 	export let text;
-	export let text2;
 	export let confirmation1;
-	export let confirmation2;
+	export let confirmation2 = null;
 	export let button;
 
 	let confirmation1Checked = false;
@@ -39,11 +37,6 @@
 <hr class="text-gray-200" />
 <div class="text-base text-gray-500 text-justify pt-6 pb-6">
 	{@html text}
-	{#if includeReminder}
-		<br />
-		<br />
-		{@html text2}
-	{/if}
 </div>
 
 <div>

@@ -4,9 +4,10 @@ import { defaultPreferences } from './data/constants';
 
 const altitudeKey = 'altitude';
 const aircraftKey = 'aircraft';
-const disclaimerKey = 'disclaimerRead';
+const passedDisclaimersKey = 'passedDisclaimers';
 const preferencesKey = 'preferences';
 
+const defaultDisclaimersPassed = [];
 const defaultAircraft = 'C150';
 const defaultAltitude = 2000;
 
@@ -16,13 +17,8 @@ altitude.subscribe((value) => { if (browser) localStorage.setItem(altitudeKey, v
 export const aircraftID = writable((browser && localStorage.getItem(aircraftKey)) || defaultAircraft);
 aircraftID.subscribe(aircraft => { if (browser) localStorage.setItem(aircraftKey, aircraft) });
 
-export const disclaimerRead = writable((browser && sessionStorage.getItem(disclaimerKey) == "true") || false);
-disclaimerRead.subscribe(value => { if (browser) sessionStorage.setItem(disclaimerKey, value) });
+export const passedDisclaimers = writable((browser && JSON.parse(localStorage.getItem(passedDisclaimersKey))) || defaultDisclaimersPassed);
+passedDisclaimers.subscribe(value => { if (browser) localStorage.setItem(passedDisclaimersKey, JSON.stringify(value)) });
 
 export const preferences = writable((browser && JSON.parse(localStorage.getItem(preferencesKey))) || defaultPreferences);
-preferences.subscribe(value => {
-    if (browser) {
-        console.log('SETTING PREFERENCES');
-        localStorage.setItem(preferencesKey, JSON.stringify(value))
-    }
-});
+preferences.subscribe(value => { if (browser) localStorage.setItem(preferencesKey, JSON.stringify(value)) });

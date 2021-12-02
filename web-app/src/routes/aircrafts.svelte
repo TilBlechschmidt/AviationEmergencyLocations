@@ -5,6 +5,7 @@
 	import { elsa } from '$lib/simulation/elsa';
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
+	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
 
 	let aircrafts = [];
 
@@ -12,6 +13,8 @@
 		await elsa.startup;
 		aircrafts = await elsa.fetchAircraftList();
 	});
+
+	requireDisclaimer([DISCLAIMERS.INTRODUCTION, DISCLAIMERS.SAFETY_GUIDE]);
 
 	function select(newAircraftID) {
 		$aircraftID = newAircraftID;
