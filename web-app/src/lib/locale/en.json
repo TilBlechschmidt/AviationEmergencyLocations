@@ -58,7 +58,28 @@
             "title": "Aircraft performance"
         },
         "limitations": {
-            "title": "Assumptions & Limitations"
+            "title": "Assumptions & Limitations",
+            "preface": "Even though we try our very best to provide you with the most relevant information for your specific situation, it is not possible to create a perfect simulation and we do not happen to have supercomputers at hand to run an extensive computational fluid-dynamic analysis to determine the impact every last pesky insect on your airframe will make on your glide performance.",
+            "bulletIntro": "Jokes aside, here is a number of assumptions and limitations that you have to take into account when consuming the data provided:",
+            "bulletPoints": {
+                "wind": {
+                    "title": "No wind.",
+                    "content": "While wind is favourable on take-off, it might be harmful when trying to glide somewhere or attempting a landing with that dreaded tailwind. <code>IT IS CRUCIAL</code> that you take a few minutes to figure out how wind will impact the presented data!"
+                },
+                "glide": {
+                    "title": "Best glide.",
+                    "content": "All calculations are made at best-glide speed. When turning, <a href=\"https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L135\" target=\"_blank\" rel=\"noopener noreferrer\">the glide factor is reduced</a> based on the glide angle. However, this only serves as an approximation! Your mileage may vary, quite literally."
+                },
+                "shortField": {
+                    "title": "Short field technique.",
+                    "content": "For calculation of the landing distances, short field technique as described in the POH is assumed. However, landing distances on non-standard surfaces like grass or when wet may not be accurate. In accordance with most handbooks, a <code>20%</code> increase <a href=\"https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L217\" target=\"_blank\" rel=\"noopener noreferrer\">is applied to grass surfaces</a>."
+                },
+                "humanFactors": {
+                    "title": "Human factors.",
+                    "content": "We do not account for <em>any</em> human factors! It is likely that an engine failure may startle you or you forget to put out full flaps for landing. Additionally, it is unlikely that you hold the glide speed perfectly or execute a flawless turn when your life is at stake. <code>DO NOT TAKE THIS LIGHTLY</code>! You <em>WILL</em> not be handling everything perfectly as past examples show."
+                }
+            },
+            "conclusion": "While everything up to this section has been valuable information, the above points are absolutely critical. Make sure you keep everything mentioned here in mind!"
         },
         "finalWords": {
             "title": "Final words",
