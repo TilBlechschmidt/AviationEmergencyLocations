@@ -35,7 +35,7 @@
 		</div>
 	</div>
 	{#if $$slots.card}
-		<div class="map-component-simulation my-auto">
+		<div class="my-auto">
 			<div class="m-8 w-80 card">
 				<slot name="card" />
 			</div>

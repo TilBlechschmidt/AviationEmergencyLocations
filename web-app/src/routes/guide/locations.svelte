@@ -47,7 +47,7 @@
 
 	{$_('guide.locations.conclusion')}
 
-	<span slot="card">
+	<span slot="card" class="map-component-simulation">
 		{#if location}
 			<LocationCardContent {location} />
 		{/if}

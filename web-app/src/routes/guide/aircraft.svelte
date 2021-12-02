@@ -1,7 +1,17 @@
 <script>
 	import CardDetailView from '$lib/components/guide/CardDetailView.svelte';
 	import { _ } from 'svelte-i18n';
+	import { onMount } from 'svelte';
+	import { elsa } from '$lib/simulation/elsa';
 	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
+	import AircraftCardContent from '$lib/components/AircraftCardContent.svelte';
+
+	let aircraft;
+
+	onMount(async () => {
+		await elsa.startup;
+		aircraft = await elsa.fetchAircraft('PA28-181');
+	});
 
 	requireDisclaimer([DISCLAIMERS.INTRODUCTION]);
 </script>
@@ -21,5 +31,10 @@
 	<br />
 	TODO Figure out what I actually want to say here ^^
 	<br />
-	And add an example card to the right!
+
+	<span slot="card">
+		{#if aircraft}
+			<AircraftCardContent {aircraft} />
+		{/if}
+	</span>
 </CardDetailView>
