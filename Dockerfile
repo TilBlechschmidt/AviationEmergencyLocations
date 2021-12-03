@@ -18,5 +18,11 @@ COPY --from=wasm /app/target/pkg /app/elsa/target/pkg
 RUN npm run build
 
 # ----- Delivery
-FROM caddy:2-alpine
-COPY --from=web /app/build /usr/share/caddy
+FROM node:17-alpine3.12
+
+WORKDIR /app
+COPY --from=web /app/build .
+COPY --from=web /app/package.json .
+
+EXPOSE 3000
+CMD ["node", "index.js"]

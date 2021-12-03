@@ -3,8 +3,8 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "svelte-kit dev",
-		"build": "svelte-kit build && cp ./elsa/target/pkg/elsa_bg.wasm ./build/elsa.wasm",
-		"build:arm": "svelte-kit build && wasm-opt -Oz -o ./build/elsa.wasm elsa/target/pkg/elsa_bg.wasm",
+		"build": "svelte-kit build && cp ./elsa/target/pkg/elsa_bg.wasm ./build/assets/elsa.wasm",
+		"build:arm": "svelte-kit build && wasm-opt -Oz -o ./build/assets/elsa.wasm elsa/target/pkg/elsa_bg.wasm",
 		"preview": "svelte-kit preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -13,6 +13,7 @@
 	},
 	"devDependencies": {
 		"@beyonk/svelte-mapbox": "^8.1.4",
+		"@sveltejs/adapter-node": "^1.0.0-next.55",
 		"@sveltejs/adapter-static": "^1.0.0-next.17",
 		"@sveltejs/kit": "next",
 		"@turf/along": "^6.5.0",

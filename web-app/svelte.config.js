@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-node';
 import preprocess from 'svelte-preprocess';
 import { resolve } from 'path';
 
@@ -11,10 +11,11 @@ const config = {
 	preprocess: [preprocess({
 		"postcss": true
 	})],
-
 	kit: {
-		adapter: adapter(),
-		// hydrate the <div id="svelte"> element in src/app.html
+		adapter: adapter({
+			out: 'build',
+			precompress: true,
+		}),
 		target: '#svelte',
 		vite: {
 			resolve: {
