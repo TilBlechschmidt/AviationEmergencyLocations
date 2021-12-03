@@ -74,6 +74,10 @@
                     "title": "Short field technique.",
                     "content": "For calculation of the landing distances, short field technique as described in the POH is assumed. However, landing distances on non-standard surfaces like grass or when wet may not be accurate. In accordance with most handbooks, a <code>20%</code> increase <a href=\"https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L217\" target=\"_blank\" rel=\"noopener noreferrer\">is applied to grass surfaces</a>."
                 },
+                "aboveGroundLevel": {
+                    "title": "Height AGL.",
+                    "content": "The tool assumes that every location is at the same height of 0ft. This obviously does not hold true in reality, the elevation difference across the covered area is roughly 100ft. Keep this in mind when setting the altitude, especially in relation to airspace restrictions! When in doubt, use a lower value. For more details see <a href=\"https://github.com/TilBlechschmidt/ELSA/issues/1#issuecomment-985833109\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>."
+                },
                 "humanFactors": {
                     "title": "Human factors.",
                     "content": "We do not account for <em>any</em> human factors! It is likely that an engine failure may startle you or you forget to put out full flaps for landing. Additionally, it is unlikely that you hold the glide speed perfectly or execute a flawless turn when your life is at stake. <code>DO NOT TAKE THIS LIGHTLY</code>! You <em>WILL</em> not be handling everything perfectly as past examples show."

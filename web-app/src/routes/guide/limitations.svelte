@@ -5,7 +5,7 @@
 
 	requireDisclaimer([DISCLAIMERS.INTRODUCTION]);
 
-	const bulletPoints = ['wind', 'glide', 'shortField', 'humanFactors'];
+	const bulletPoints = ['wind', 'glide', 'shortField', 'aboveGroundLevel', 'humanFactors'];
 </script>
 
 <CardDetailView
