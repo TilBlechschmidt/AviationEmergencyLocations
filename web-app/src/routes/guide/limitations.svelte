@@ -12,8 +12,8 @@
 	previousLocation="/guide/aircraft"
 	previousLabel={$_('guide.aircraft.title')}
 	title={$_('guide.limitations.title')}
-	nextLocation="/guide/finalWords"
-	nextLabel={$_('guide.finalWords.title')}
+	nextLocation="/guide/ranges"
+	nextLabel={$_('guide.ranges.intro.title')}
 >
 	{$_('guide.limitations.preface')}
 	<br />
