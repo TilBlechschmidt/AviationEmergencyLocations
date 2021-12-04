@@ -98,6 +98,8 @@ run()
     .catch(e => console.error('Worker failed:', e));
 
 function serializeLocation(location, aircraft, calculator, preferences) {
+    if (!location) return null;
+
     return {
         id: location.id,
         name: location.name,

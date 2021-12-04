@@ -13,11 +13,12 @@
 	onMount(async () => await elsa.startup);
 
 	async function fetchLocation(preferences, locationID, aircraftID) {
-		// TODO Show a loading indicator or smth
 		location = null;
 
-		if (locationID && aircraftID)
+		if (locationID && aircraftID) {
 			location = await elsa.fetchLocation(preferences, locationID, aircraftID);
+			if (!location) goto('/map/location');
+		}
 	}
 
 	$: fetchLocation($preferences, $page.params.locationID, $aircraftID);
