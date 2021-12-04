@@ -8,7 +8,8 @@
 		<slot name="label" />
 	</div>
 	<div
-		class="{critical ? 'text-red-500' : warning ? 'text-yellow-500' : ''} {critical || warning
+		class="text-right {critical ? 'text-red-500' : warning ? 'text-yellow-500' : ''} {critical ||
+		warning
 			? 'font-medium'
 			: ''}"
 	>

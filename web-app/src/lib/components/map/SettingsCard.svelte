@@ -10,6 +10,10 @@
 	import HeadroomThresholdDropdowns from '../HeadroomThresholdDropdowns.svelte';
 	import HumanPresenceDropdowns from '../HumanPresenceDropdowns.svelte';
 	import { bankAngles } from '$lib/data/constants';
+	import GoBook from 'svelte-icons/go/GoBook.svelte';
+	import GoMention from 'svelte-icons/go/GoMention.svelte';
+	import GoIssueOpened from 'svelte-icons/go/GoIssueOpened.svelte';
+	import IconLabelled from '$lib/components/IconLabelled.svelte';
 
 	let aircraftName = 'Loading ...';
 
@@ -38,6 +42,29 @@
 		transition:fly={{ x: padding, duration, opacity: 1 }}
 	>
 		<div class="w-80 text-sm card">
+			<div class="p-4 text-center text-xl">Reachability tool</div>
+			<div class="flex justify-around p-4 pt-0 links">
+				<a href="/guide/toc">
+					<IconLabelled>
+						<GoBook slot="icon" />
+						Guide
+					</IconLabelled>
+				</a>
+				<a href="/imprint">
+					<IconLabelled>
+						<GoMention slot="icon" />
+						Imprint
+					</IconLabelled>
+				</a>
+				<a href="https://github.com/TilBlechschmidt/ELSA/issues/new" target="_blank">
+					<IconLabelled>
+						<GoIssueOpened slot="icon" />
+						Report
+					</IconLabelled>
+				</a>
+			</div>
+		</div>
+		<div class="w-80 text-sm mt-8 card">
 			<div class="p-4 text-center text-lg">{$_('settings.flight.title')}</div>
 			<hr class="text-gray-200" />
 			<div class="p-4 pt-6">
@@ -91,5 +118,9 @@
 <style>
 	.dashed-underline {
 		border-bottom: 1px dashed #999;
+	}
+
+	.links > a[href] {
+		border: none;
 	}
 </style>

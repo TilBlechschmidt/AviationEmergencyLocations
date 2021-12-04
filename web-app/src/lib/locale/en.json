@@ -117,7 +117,7 @@
         },
         "finalWords": {
             "title": "Final words",
-            "text": "You should now have read the <a href=\"/guide/locations\">introductory information and explanation</a> that should have given you an understanding of the creation, contextualization, and presentation of the data made available by this tool. If you feel you do not fully understand the data presented or are unsure on how to apply it in preflight preparations, do not proceed to use this tool, but instead seek guidance and further help by contacting us at <code>elsa@blechschmidt.dev</code>.<br><br>Should you need to reacquaint yourself with these explanations in the future these pages will be available at any time by accessing the “Help” button on the bottom-right corner of the screen.<br><br>Thank you for your understanding and <em>fly safe</em>!",
+            "text": "You should now have read the <a href=\"/guide/locations\">introductory information and explanation</a> that should have given you an understanding of the creation, contextualization, and presentation of the data made available by this tool. If you feel you do not fully understand the data presented or are unsure on how to apply it in preflight preparations, do not proceed to use this tool, but instead seek guidance and further help by contacting us at <code>elsa@blechschmidt.dev</code>.<br><br>Should you need to reacquaint yourself with these explanations in the future these pages will be available at any time by accessing the “Help” button on the top-right corner of the screen.<br><br>Thank you for your understanding and <em>fly safe</em>!",
             "confirmation": "I acknowledge to have read and understood this disclaimer as well as the explanations given to you on this and the previous page.",
             "button": "Enter E.L.S.A."
         }
@@ -173,5 +173,31 @@
                 "dense": "Crowded places"
             }
         }
+    },
+    "imprint": {
+        "idea": "Original idea",
+        "dev": "Developer & Maintainer",
+        "content": {
+            "title": "Content authors",
+            "disclaimer": "Disclaimers",
+            "safety": "Safety guides",
+            "tools": "Tool guides",
+            "translation": "Translation",
+            "languages": {
+                "german": "German"
+            }
+        },
+        "survey": {
+            "title": "Survey team",
+            "drone": "Aerial photography",
+            "sites": "Site assessment"
+        },
+        "special": {
+            "title": "Special thanks",
+            "drone": "Photography hardware",
+            "eduAndFinances": "Education & Financing"
+        },
+        "bugs": "For <em>bug reports & feature requests</em> please create an issue on",
+        "inquiry": "For <em>questions & inquiries</em> contact"
     }
 }
