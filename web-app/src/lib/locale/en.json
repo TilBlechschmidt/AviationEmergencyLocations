@@ -55,7 +55,15 @@
             }
         },
         "aircraft": {
-            "title": "Aircraft performance"
+            "title": "Aircraft profiles",
+            "preface": "Not every aircraft is made equally. Purpose built gliders can reach dozens of miles given a couple hundred feet, while a Piper figuratively plummets to the ground in comparison. The same goes for stall speeds and other performance characteristics. For this reason, E.L.S.A. provides you with profiles for each aircraft which you can select later. These profiles contain:",
+            "factors": {
+                "mtow": "Maximum takeoff weight",
+                "takeoff": "Takeoff performance",
+                "glide": "Glide characteristics",
+                "landing": "Landing requirements"
+            },
+            "conclusion": "You can see an example on the right. Keep in mind that while we try to provide the most up-to-date profiles, your aircraft might differ. So make sure to compare the values provided against your POH!"
         },
         "limitations": {
             "title": "Assumptions & Limitations",
@@ -88,7 +96,7 @@
         "ranges": {
             "intro": {
                 "title": "Reachability tool",
-                "content": "The core tool provided by E.L.S.A. displays you all available landing sites on a map. Each location is surrounded by a colored area. As long as you fly within this area, you are likely to reach the location — subject to the limitations outlined in the safety briefing.<br /><br />On the right, you can see a preview of the tool with a number of locations and ranges displayed. On the next few pages, we will be covering all the aspects and peculiarities of the data displayed on the map.<br /><br />Remember that previously discussed aspects still hold true — e.g. colors representing risk associated with a location."
+                "content": "The core tool provided by E.L.S.A. displays you all available landing sites on a map. Each location is surrounded by a colored area. As long as you fly within this area, you are likely to reach the location — subject to the limitations outlined previously.<br /><br />On the right, you can see a preview of the tool with a number of locations and ranges displayed. On the next few pages, we will be covering all the aspects and peculiarities of the data displayed on the map.<br /><br />Remember that previously discussed aspects still hold true — e.g. colors representing risk associated with a location."
             },
             "dubinsPath": {
                 "title": "Shortest path",

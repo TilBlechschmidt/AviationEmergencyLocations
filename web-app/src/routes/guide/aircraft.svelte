@@ -14,6 +14,8 @@
 	});
 
 	requireDisclaimer([DISCLAIMERS.INTRODUCTION]);
+
+	const factors = ['mtow', 'takeoff', 'glide', 'landing'];
 </script>
 
 <CardDetailView
@@ -23,14 +25,15 @@
 	nextLocation="/guide/limitations"
 	nextLabel={$_('guide.limitations.title')}
 >
-	Since each aircraft has different takeoff, glide, and landing characteristics, the tool allows you
-	to select an aircraft to use for all calculations. For the most common aircraft, we provide
-	presets for you to select later on. However, make sure the numbers shown actually line up with the
-	POH of your aircraft!
-	<br />
-	<br />
-	TODO Figure out what I actually want to say here ^^
-	<br />
+	{$_('guide.aircraft.preface')}
+
+	<ul class="p-4 list-disc list-inside">
+		{#each factors as factor}
+			<li>{$_(`guide.aircraft.factors.${factor}`)}</li>
+		{/each}
+	</ul>
+
+	{$_('guide.aircraft.conclusion')}
 
 	<span slot="card">
 		{#if aircraft}
