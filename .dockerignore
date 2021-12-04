@@ -1,3 +1,4 @@
-web-app/.svelte-kit
-web-app/node_modules
-web-app/elsa/target
+.svelte-kit
+node_modules
+elsa/target
+Dockerfile

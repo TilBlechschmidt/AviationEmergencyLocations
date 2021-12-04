@@ -2,8 +2,8 @@ FROM node:17-alpine3.12
 
 WORKDIR /app
 
-COPY web-app/package.json /app
-COPY web-app/build /app
+COPY package.json /app
+COPY build /app
 
 EXPOSE 3000
 CMD ["node", "index.js"]

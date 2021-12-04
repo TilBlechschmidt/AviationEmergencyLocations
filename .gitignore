@@ -1,4 +1,6 @@
 /push.sh
+/build
+/.svelte-kit
 
 # Created by https://www.toptal.com/developers/gitignore/api/rust,node,linux,macos,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=rust,node,linux,macos,windows,visualstudiocode
