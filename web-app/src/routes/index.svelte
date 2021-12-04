@@ -4,12 +4,19 @@
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
+	import { hasUserPassedDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
 
 	let shown = false;
 
 	onMount(() => {
 		shown = true;
 	});
+
+	function enter() {
+		if (!hasUserPassedDisclaimer(DISCLAIMERS.INTRODUCTION)) goto('/guide');
+		else if (!hasUserPassedDisclaimer(DISCLAIMERS.SAFETY_GUIDE)) goto('/guide/toc');
+		else goto('/map/location');
+	}
 </script>
 
 <div class="w-full h-full flex flex-col justify-center items-center" out:fade={{ duration: 500 }}>
@@ -22,7 +29,7 @@
 		<button
 			in:fade={{ y: 200, duration: 1000, delay: 750 }}
 			class="m-8 p-4 rounded border-gray-200 border-solid border text-gray-500 hover:shadow-md transition-all"
-			on:click={() => goto('/guide')}
+			on:click={enter}
 		>
 			{$_('welcomeButton')}
 			<span class="w-6 h-6 text-gray-500 align-middle inline-block -mt-1 ml-2">

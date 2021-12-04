@@ -15,8 +15,6 @@ export const DISCLAIMERS = {
         route: "/guide/finalWords"
     }
 }
-export const INTRODUCTION = "intro";
-export const SAFETY_GUIDE = "safety";
 
 export const completeDisclaimer = disclaimer => {
     passedDisclaimers.update(value => value.concat([disclaimer.key]));
