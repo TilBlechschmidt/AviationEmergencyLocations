@@ -56,6 +56,10 @@ class ElsaWorker {
         }).then(JSON.parse);
     }
 
+    locationHitboxes(distance) {
+        return this.submitRequest('LOCATION_HITBOXES', { distance }).then(JSON.parse);
+    }
+
     closestLocationWithinReach(latitude, longitude, maximumDistance) {
         return this.submitRequest('CLOSEST_LOCATION_ID', {
             latitude, longitude

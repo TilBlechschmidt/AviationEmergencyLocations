@@ -47,6 +47,11 @@ async function run() {
                 response = calculator.locationGeoJSON(parsePrefs(preferences), locations, aircraft);
                 break;
             }
+            case 'LOCATION_HITBOXES': {
+                const { distance } = data;
+                response = calculator.locationHitboxes(locations, distance);
+                break;
+            }
             case 'CLOSEST_LOCATION_ID': {
                 const { latitude, longitude } = data;
                 response = locations.closest(latitude, longitude);

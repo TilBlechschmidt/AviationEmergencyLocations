@@ -3,7 +3,7 @@ use std::hash::{Hash, Hasher};
 
 use geo::geodesic_distance::GeodesicDistance;
 use geo::prelude::{Bearing, BoundingRect, Centroid, HaversineDestination};
-use geo::{point, Line, Point, Rect};
+use geo::{point, Line, LineString, Point, Polygon, Rect};
 use js_sys::Array;
 use serde::{Deserialize, Serialize};
 use strum::EnumIter;
@@ -143,6 +143,21 @@ impl Location {
 
     pub fn bounding_rect(&self) -> Rect<f64> {
         self.line().bounding_rect()
+    }
+
+    pub fn spaced_polygon(&self, distance: f64) -> Polygon<f64> {
+        let start = self.start();
+        let end = self.end();
+        let bearing = self.start().bearing(self.end());
+        let reverse_bearing = self.end().bearing(self.start());
+
+        let a = start.haversine_destination(reverse_bearing + 45.0, distance);
+        let b = start.haversine_destination(reverse_bearing - 45.0, distance);
+
+        let c = end.haversine_destination(bearing + 45.0, distance);
+        let d = end.haversine_destination(bearing - 45.0, distance);
+
+        Polygon::new(LineString::from(vec![a, b, c, d]), vec![])
     }
 
     /// Returns a number of points with a given resolution in meters where a given airplane can land

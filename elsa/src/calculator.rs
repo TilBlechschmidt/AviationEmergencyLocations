@@ -201,17 +201,28 @@ impl Calculator {
         Self {}
     }
 
-    #[wasm_bindgen(js_name = "locationBoundingRects")]
-    pub fn location_bounding_rects(&self, location_map: &LocationMap) -> Result<String, JsValue> {
-        // TODO Use polygons that extend in each direction from the line instead of bounding rectangles!
+    #[wasm_bindgen(js_name = "locationHitboxes")]
+    pub fn location_hitboxes(
+        &self,
+        location_map: &LocationMap,
+        distance: f64,
+    ) -> Result<String, JsValue> {
         let features = location_map
             .locations()
-            .map(|location| Feature {
-                bbox: None,
-                geometry: Some((&location.bounding_rect()).into()),
-                id: Some(Id::String(location.id())),
-                properties: None,
-                foreign_members: None,
+            .map(|location| {
+                let centroid = location.centroid();
+                let mut properties = Map::new();
+                properties.insert("id".into(), location.id().into());
+                properties.insert("lat".into(), centroid.lat().into());
+                properties.insert("lng".into(), centroid.lng().into());
+
+                Feature {
+                    bbox: None,
+                    geometry: Some((&location.spaced_polygon(distance)).into()),
+                    id: Some(Id::String(location.id())),
+                    properties: Some(properties),
+                    foreign_members: None,
+                }
             })
             .collect();
 
@@ -287,20 +298,40 @@ impl Calculator {
             (
                 self.assess_risk(preferences, location, aircraft),
                 self.location_range_polygon(location, aircraft, &aircraft_range_profile),
+                location.id(),
             )
         });
 
-        // Step 3: Group and union the polygons by risk
-        let mut risk_map: HashMap<RiskClassification, MultiPolygon<f64>> =
-            polygons.fold(HashMap::new(), |mut acc, (risk, polygon)| {
-                let polygon = match acc.remove(&risk) {
+        // Step 3: Group and union the polygons by risk and create individual features
+        let (mut risk_map, feature_map): (
+            HashMap<RiskClassification, MultiPolygon<f64>>,
+            HashMap<String, Feature>,
+        ) = polygons.fold(
+            (HashMap::new(), HashMap::new()),
+            |(mut risk_map, mut feature_map), (risk, polygon, id)| {
+                // Create an individual geojson feature
+                let mut properties = Map::new();
+                properties.insert("id".into(), id.clone().into());
+                properties.insert("risk".into(), to_value(risk).unwrap());
+                let feature = Feature {
+                    bbox: None,
+                    geometry: Some((&polygon).into()),
+                    id: None,
+                    properties: Some(properties),
+                    foreign_members: None,
+                };
+                feature_map.insert(id, feature);
+
+                // Union the polygon with the corresponding risk category
+                let polygon = match risk_map.remove(&risk) {
                     Some(existing_polygon) => existing_polygon.union(&polygon),
                     None => MultiPolygon(vec![polygon]),
                 };
 
-                acc.insert(risk, polygon);
-                acc
-            });
+                risk_map.insert(risk, polygon);
+                (risk_map, feature_map)
+            },
+        );
 
         // Step 4: Subtract lower risk polygons from higher risk ones so they do not overlap on the map
         RiskClassification::iter().fold(vec![], |mut less_risky_polygons, risk| {
@@ -334,13 +365,18 @@ impl Calculator {
             })
             .collect::<Vec<_>>();
 
-        let geojson = GeoJson::FeatureCollection(FeatureCollection {
+        let by_risk_geojson = GeoJson::FeatureCollection(FeatureCollection {
             bbox: None,
             features,
             foreign_members: None,
         });
 
-        Ok(serde_json::to_string(&geojson).map_err(|e| e.to_string())?)
+        let combined = serde_json::json!({
+            "byRisk": by_risk_geojson,
+            "byID": feature_map
+        });
+
+        Ok(serde_json::to_string(&combined).map_err(|e| e.to_string())?)
     }
 
     #[wasm_bindgen(js_name = locationGeoJSON)]
