@@ -3,7 +3,13 @@
     "guide": {
         "overview": {
             "title": "Overview",
-            "content": "Nothing here yet."
+            "preface": "<strong>Welcome to the E.L.S.A. Handbook!</strong><br/>This guide encompasses a multitude of topics for you to read. We recommend you take the time to go through them all! The guide includes:",
+            "sections": {
+                "introduction": "Fundamental concepts used throughout E.L.S.A.",
+                "tools": "Explanations for all the tools",
+                "knowledge": "Aviation knowledge for emergency situations"
+            },
+            "conclusion": "We hope that this compendium serves you well! If you have any questions, feedback on how we can do even better, or ideas for new features feel free to reach out using the contact information in the <a href=\"/imprint\">imprint</a>.<br /><br /><em>Thank you for using E.L.S.A. — fly safe and see you in the sky!</em>"
         },
         "introduction": {
             "title": "Introduction",
