@@ -17,7 +17,8 @@
 <div class="flex justify-around pt-8">
 	{#each riskCategories as risk}
 		<div
-			class="{selectedRisk == risk ? 'border-b border-gray-300' : ''} cursor-pointer"
+			class:border-dashed={selectedRisk !== risk}
+			class="border-b border-gray-300 hover:border-solid hover:border-blue-400 transition-all cursor-pointer"
 			on:click={() => (selectedRisk = risk)}
 		>
 			<IconLabelled iconColor={riskColors[risk]} textColor="text-black">
