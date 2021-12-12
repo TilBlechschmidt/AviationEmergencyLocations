@@ -1,5 +1,5 @@
 <script>
-	import { onMount, getContext } from 'svelte';
+	import { onMount, onDestroy, getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
 	import { firstNonBackgroundLayer } from '../helpers';
 
@@ -47,11 +47,11 @@
 			},
 			lowerLayer
 		);
+	});
 
-		return () => {
-			map.removeLayer(`${name}-mapbox`);
-			map.removeLayer(`${name}-dop20`);
-			map.removeSource(`${name}-dop20`);
-		};
+	onDestroy(() => {
+		map.removeLayer(`${name}-mapbox`);
+		map.removeLayer(`${name}-dop20`);
+		map.removeSource(`${name}-dop20`);
 	});
 </script>

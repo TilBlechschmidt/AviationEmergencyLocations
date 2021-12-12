@@ -5,7 +5,7 @@
 	import { feetToMeters } from '$lib/units';
 	import { preferences } from '$lib/stores';
 	import Line from './Line.svelte';
-	import { Marker } from '@beyonk/svelte-mapbox';
+	import Marker from './Marker.svelte';
 	import MdAirplanemodeActive from 'svelte-icons/md/MdAirplanemodeActive.svelte';
 
 	export let aircraftID;

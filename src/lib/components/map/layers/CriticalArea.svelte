@@ -1,5 +1,5 @@
 <script>
-	import { onMount, getContext } from 'svelte';
+	import { onMount, onDestroy, getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
 	import { firstNonBackgroundLayer } from '../helpers';
 	import criticalArea from '$lib/data/criticalArea.json';
@@ -7,9 +7,9 @@
 
 	const { getMap } = getContext(contextKey);
 	const map = getMap();
+	const name = 'critical-area';
 
 	onMount(() => {
-		const name = 'critical-area';
 		const lowerLayer = firstNonBackgroundLayer(map);
 		const criticalAreaPolygon = smoothPolygon(criticalArea, { iterations: 10 });
 
@@ -32,10 +32,10 @@
 			},
 			lowerLayer
 		);
+	});
 
-		return () => {
-			map.removeLayer(name);
-			map.removeSource(name);
-		};
+	onDestroy(() => {
+		map.removeLayer(name);
+		map.removeSource(name);
 	});
 </script>

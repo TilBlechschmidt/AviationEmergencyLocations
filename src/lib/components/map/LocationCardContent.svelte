@@ -37,7 +37,7 @@
 </script>
 
 <img src="/exampleAerial.jpg" class="rounded-t-xl object-cover h-48 w-full" alt="" />
-<div class="w-full">
+<div class="w-full text-xs leading-5">
 	<div class="p-4 flex items-center justify-between">
 		<div>
 			<div class="text-2xl">{location.name}</div>

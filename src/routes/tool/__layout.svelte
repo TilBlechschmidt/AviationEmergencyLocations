@@ -1,18 +1,26 @@
 <script>
 	import { onMount } from 'svelte';
 	import { Map } from '@beyonk/svelte-mapbox';
+	import { _ } from 'svelte-i18n';
 
+	import Modal from '$lib/components/Modal.svelte';
+	import Disclaimer from '$lib/components/Disclaimer.svelte';
 	import SatelliteImagery from '$lib/components/map/layers/SatelliteImagery.svelte';
 	import LocationLines from '$lib/components/map/layers/LocationLines.svelte';
 
 	import { elsa } from '$lib/simulation/elsa';
-	import { aircraftID } from '$lib/stores';
-	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
+	import { aircraftID, disclaimerSeen } from '$lib/stores';
 
-	onMount(async () => await elsa.startup);
-	requireDisclaimer([DISCLAIMERS.INTRODUCTION, DISCLAIMERS.SAFETY_GUIDE]);
+	onMount(async () => {
+		await elsa.startup;
+	});
 
 	let innerWidth = 0;
+
+	function dismissGuide() {
+		disclaimerSeen.set(true);
+		window.open('/guide', '_blank');
+	}
 </script>
 
 <svelte:window bind:innerWidth />
@@ -21,8 +29,8 @@
 	<Map
 		accessToken="pk.eyJ1IjoidGlsYmxlY2hzY2htaWR0IiwiYSI6ImNqczYxZXplZjA3bnM0M3A5djB1cDl3azUifQ.MEU9Fe4JHD1_3U1BLNJWbg"
 		style="mapbox://styles/tilblechschmidt/ckraoako74wms18mx5xv38zea/draft"
-		center={[9.99, 53.55]}
-		zoom={10.3}
+		center={[9.99, 53.95]}
+		zoom={7.5}
 		options={{
 			customAttribution: ['Til Blechschmidt', 'LGV Hamburg'],
 			maxPitch: 0,
@@ -33,6 +41,20 @@
 		<LocationLines aircraft={$aircraftID} />
 		<slot />
 	</Map>
+
+	<Modal hidden={$disclaimerSeen}>
+		<div class="p-8">
+			<Disclaimer
+				warning
+				title={$_('guide.welcome.title')}
+				text={$_('guide.welcome.text')}
+				confirmation1={$_('guide.welcome.confirmation1')}
+				confirmation2={$_('guide.welcome.confirmation2')}
+				button={$_('guide.welcome.button')}
+				on:submit={dismissGuide}
+			/>
+		</div>
+	</Modal>
 {:else}
 	<div class="flex items-center justify-center h-full">
 		<div class="p-8 text-center mx-auto">

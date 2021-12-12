@@ -1,11 +1,9 @@
 <script>
-	import Labelled from '$lib/components/Labelled.svelte';
 	import { aircraftID } from '$lib/stores';
 	import { goto } from '$app/navigation';
 	import { elsa } from '$lib/simulation/elsa';
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
-	import { requireDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
 	import AircraftCardContent from '$lib/components/AircraftCardContent.svelte';
 
 	let aircrafts = [];
@@ -14,8 +12,6 @@
 		await elsa.startup;
 		aircrafts = await elsa.fetchAircraftList();
 	});
-
-	requireDisclaimer([DISCLAIMERS.INTRODUCTION, DISCLAIMERS.SAFETY_GUIDE]);
 
 	function onSelect(e) {
 		$aircraftID = e.detail;

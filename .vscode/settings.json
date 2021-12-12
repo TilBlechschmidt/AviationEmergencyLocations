@@ -2,5 +2,6 @@
     "rust-analyzer.linkedProjects": [
         "elsa/Cargo.toml"
     ],
-    "rust-analyzer.lens.implementations": false
+    "rust-analyzer.lens.implementations": false,
+    "css.lint.unknownAtRules": "ignore"
 }

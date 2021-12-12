@@ -10,6 +10,7 @@
 	import HeadroomThresholdDropdowns from '../HeadroomThresholdDropdowns.svelte';
 	import HumanPresenceDropdowns from '../HumanPresenceDropdowns.svelte';
 	import { bankAngles } from '$lib/data/constants';
+	import GoChevronDown from 'svelte-icons/go/GoChevronDown.svelte';
 	import GoBook from 'svelte-icons/go/GoBook.svelte';
 	import GoMention from 'svelte-icons/go/GoMention.svelte';
 	import GoIssueOpened from 'svelte-icons/go/GoIssueOpened.svelte';
@@ -42,24 +43,27 @@
 		transition:fly={{ x: padding, duration, opacity: 1 }}
 	>
 		<div class="w-80 text-sm card">
-			<div class="p-4 text-center text-xl">Reachability tool</div>
+			<a class="p-4 text-center text-xl cursor-pointer no-default block" href="/tool">
+				{$_('tool.reachability.title')}
+				<span class="w-4 h-4 -mb-0.5 inline-block"><GoChevronDown /></span>
+			</a>
 			<div class="flex justify-around p-4 pt-0 links">
-				<a href="/guide/toc">
+				<a href="/guide/tool/reachability">
 					<IconLabelled>
 						<GoBook slot="icon" />
-						Guide
+						{$_('settings.links.guide')}
 					</IconLabelled>
 				</a>
 				<a href="/imprint">
 					<IconLabelled>
 						<GoMention slot="icon" />
-						Imprint
+						{$_('settings.links.imprint')}
 					</IconLabelled>
 				</a>
 				<a href="https://github.com/TilBlechschmidt/ELSA/issues/new" target="_blank">
 					<IconLabelled>
 						<GoIssueOpened slot="icon" />
-						Report
+						{$_('settings.links.report')}
 					</IconLabelled>
 				</a>
 			</div>

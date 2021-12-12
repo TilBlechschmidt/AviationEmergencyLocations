@@ -12,11 +12,13 @@ const config = {
 		"postcss": true
 	})],
 	kit: {
+		// Disabled due to issues with hydration+i18n duplicating HTML elements after {@html $_('...')} tags
+		ssr: false,
+		target: '#svelte',
 		adapter: adapter({
 			out: 'build',
 			precompress: true,
 		}),
-		target: '#svelte',
 		vite: {
 			resolve: {
 				alias: {

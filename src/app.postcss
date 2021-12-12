@@ -20,18 +20,6 @@ html, body, #svelte, .mapboxgl-map {
 @tailwind components;
 @tailwind utilities;
 
-.mapbox-improve-map {
-  display: none;
-}
-
-.mapboxgl-ctrl-attrib-inner > a {
-  border: none;
-}
-
-.mapboxgl-ctrl-attrib-inner > a:not(:last-child)::after {
-  content: ' |'
-}
-
 .card {
   @apply bg-white rounded-xl drop-shadow shadow-xl;
 }
@@ -54,15 +42,34 @@ html, body, #svelte, .mapboxgl-map {
   outline: none;
 }
 
-.map-component-simulation {
+.mapboxgl-map {
+  font: inherit !important;
+}
+
+.mapboxgl-ctrl-attrib {
   font-size: 12px;
   line-height: 20px;
 }
 
-a[href] {
-  border-bottom: 1px dashed #999;
+.mapbox-improve-map {
+  display: none;
 }
 
-a[href].mapboxgl-ctrl-logo {
+.mapboxgl-ctrl-attrib-inner > a:not(:last-child)::after {
+  content: ' |'
+}
+
+a[href]:not(.no-default) {
+  @apply border-b border-dashed border-gray-400 hover:border-solid hover:border-blue-400;
+}
+
+a[href].mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib-inner a[href] {
   border: none;
+}
+
+.guide-cover-image {
+  @apply rounded-xl w-full mb-8 overflow-hidden object-cover;
+  
+  max-height: 30vh;
+  min-height: 10rem;
 }

@@ -10,6 +10,9 @@
 
 	let location;
 
+	const originTool = $page.query.get('ref') || '';
+	const returnURL = `/tool/${originTool}`;
+
 	onMount(async () => await elsa.startup);
 
 	async function fetchLocation(preferences, locationID, aircraftID) {
@@ -17,7 +20,7 @@
 
 		if (locationID && aircraftID) {
 			location = await elsa.fetchLocation(preferences, locationID, aircraftID);
-			if (!location) goto('/map/location');
+			if (!location) goto(returnURL);
 		}
 	}
 
@@ -28,7 +31,7 @@
 	<LocationCard
 		{location}
 		on:dismiss={() => {
-			if (location) goto('/map/location');
+			if (location) goto(returnURL);
 		}}
 	/>
 {/if}

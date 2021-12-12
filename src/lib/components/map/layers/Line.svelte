@@ -1,5 +1,5 @@
 <script>
-	import { onMount, getContext } from 'svelte';
+	import { onMount, onDestroy, getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
 	import { firstNonBackgroundLayer } from '../helpers';
 
@@ -30,11 +30,11 @@
 			},
 			lowerLayer
 		);
+	});
 
-		return () => {
-			map.removeLayer(name);
-			map.removeSource(name);
-		};
+	onDestroy(() => {
+		map.removeLayer(name);
+		map.removeSource(name);
 	});
 
 	const updateData = async (data) => {

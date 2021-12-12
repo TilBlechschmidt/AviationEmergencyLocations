@@ -1,31 +1,20 @@
-<script>
-	import { goto } from '$app/navigation';
-	import { _ } from 'svelte-i18n';
-	import Disclaimer from '$lib/components/guide/Disclaimer.svelte';
-	import { completeDisclaimer, DISCLAIMERS } from '$lib/components/guide/guard';
+<img
+	src="/guide/learning.gif"
+	alt="Bad joke, I don't even like Star Wars 🤷‍♂️"
+	title="I don't even like Star Wars 🤷‍♂️"
+	class="rounded-xl w-full mb-8"
+/>
 
-	function nextStep() {
-		completeDisclaimer(DISCLAIMERS.INTRODUCTION);
-
-		// Not using `restorePreDisclaimerDestination` here because in 99% of cases,
-		// the user that ended up here has not read the guide and this redirecting him
-		// to the "final words" of the guide makes no sense.
-		goto('/guide/locations');
-	}
-</script>
-
-<div class="w-full h-full flex justify-center">
-	<div class="my-auto">
-		<div class="max-w-prose card p-8 m-8 text-center">
-			<Disclaimer
-				warning
-				title={$_('guide.welcome.title')}
-				text={$_('guide.welcome.text')}
-				confirmation1={$_('guide.welcome.confirmation1')}
-				confirmation2={$_('guide.welcome.confirmation2')}
-				button={$_('guide.welcome.button')}
-				on:submit={nextStep}
-			/>
-		</div>
-	</div>
-</div>
+Welcome to the E.L.S.A. Handbook! This guide encompasses a multitude of topics for you to read. It
+starts off with an introduction into the base-concepts applied within all the tools, then it gives
+detailed explanations of every tool provided with everything you should know to interpret the data
+correctly. Lastly, we have compiled information from a number of external sources which might be
+helpful in an emergency situation.
+<br />
+<br />
+We hope that this compendium serves you well! If you have any questions, feedback on how we can do even
+better, or ideas for new features feel free to reach out using the contact information in the
+<a href="/imprint">imprint</a>.
+<br />
+<br />
+Thank you for using E.L.S.A., we hope to see you in the sky!

@@ -1,125 +1,155 @@
 {
     "welcomeButton": "Get started",
     "guide": {
+        "overview": {
+            "title": "Overview",
+            "content": "Nothing here yet."
+        },
+        "introduction": {
+            "title": "Introduction",
+            "pages": {
+                "locations": {
+                    "title": "Locations",
+                    "preface": "The core functionality of this tool is to provide you with information about emergency landing sites. Our team surveyed a vast number of potential locations and collected vital data about all of them. Currently, this includes:",
+                    "derivedFactors": "In addition, the tool calculates a couple of values based on the data collected. Some of these are based on the performance characteristics of your currently selected aircraft, marked with an asterisk. Here is a list of all derived values:",
+                    "conclusion": "Below, you can see a card containing all those pieces of information for an example location. When using the tool, you will frequently encounter these cards.",
+                    "factors": {
+                        "elevation": "Elevation",
+                        "surface": "Surface type",
+                        "usage": "Usage category",
+                        "humanPresence": "Probability of human presence",
+                        "headings": "Landable headings",
+                        "remarks": "Other remarks",
+                        "length": "Usable length",
+                        "headroom": "Landing headroom",
+                        "risk": "Risk category"
+                    }
+                },
+                "riskAssessment": {
+                    "title": "Risk assessment",
+                    "preface": "Not every location is equally well suited for an emergency landing. A multitude of factors have to be considered when picking a potential area. Even though some of these are not known before emergency strikes, it is possible to create a rough ranking based on the known aspects. Each location is assigned to one of three risk categories below. You can click on them to see a detailed description!",
+                    "explanation": {
+                        "safe": "A location is considered \"safe\" when it is unlikely that you or other people will be harmed. Note that this is not a guarantee in any way! Locations may change between surveys and emergency landings still pose a hazard even after touchdown.",
+                        "risky": "Risky is a term used for locations where potential damage to the aircraft, passengers, or bystanders may become unavoidable. However, the likelihood depends on the circumstances.",
+                        "unsafe": "When a location is flagged as unsafe, destruction of the aircraft including injury or death is likely. Most of the locations sorted into this category have been included because they provide a lesser evil and minimize harm to bystanders."
+                    },
+                    "conclusion": "Whenever you see one of these three colors used on the map or elsewhere, they indicate the risk associated with the location that the colored object relates to."
+                },
+                "riskFactors": {
+                    "title": "Risk factors",
+                    "preface": "To determine the risk category of a location, the tool considers a number of factors. Some of these are fixed while others can be modified according to your personal preference. Below is a description of each contributing factor.",
+                    "factors": {
+                        "surface": {
+                            "title": "Surface type",
+                            "text": "Unfortunately, not every location is a paved asphalt runway. While grassy surfaces and agricultural areas are considered mostly safe, water bodies are an exception. Even though it is certainly possible to survive a water landing, it strongly depends on the technique and conditions. Thus, locations on water are generally considered <em>unsafe</em>."
+                        },
+                        "headroom": {
+                            "title": "Landing headroom",
+                            "text": "Each aircraft has different performance characteristics. When using the tool, you will select an aircraft profile. This profile determines the distance required to come to a full stop while executing an emergency landing. Since some locations are rather constrained in this regard, the so-called landing headroom will be calculated. It is a percentage of the distance required to come to a full stop: At <code>0%</code> you come to a complete stop at the end of the usable length, <code>100%</code> means you have double the required length. At <code>-15%</code> headroom you miss a couple of meters and will over-run the usable length.<br><br>For the purpose of risk categorization, two thresholds are defined which determine the category based on your currently selected aircraft. Below are the current settings, feel free to change them!"
+                        },
+                        "humanPresence": {
+                            "title": "Human presence",
+                            "text": "While it is unlikely for humans to roam around on the runway of an international airport, it is very likely for them to have a picnic in the park on a warm, sunny summer evening. For this reason, event locations and generally crowded areas have received their own category to which you can assign a risk.<br><br>Event locations can likely be considered safe during times where nothing is on the calendar, however, it remains your duty to check on that! The same goes for public parks and other generally crowded places. During the winter with freezing temperatures it may be unlikely for humans to flock around parks in masses. However, during the summer it is an entirely different story! Use the settings below to change your global personal preferences:"
+                        }
+                    }
+                },
+                "aircraft": {
+                    "title": "Aircraft profiles",
+                    "preface": "Not every aircraft is made equally. Purpose built gliders can reach dozens of miles given a couple hundred feet, while a Piper figuratively plummets to the ground in comparison. The same goes for stall speeds and other performance characteristics. For this reason, E.L.S.A. provides you with profiles for each aircraft which you can select later. These profiles contain:",
+                    "factors": {
+                        "mtow": "Maximum takeoff weight",
+                        "takeoff": "Takeoff performance",
+                        "glide": "Glide characteristics",
+                        "landing": "Landing requirements"
+                    },
+                    "conclusion": "You can see an example on the right. Keep in mind that while we try to provide the most up-to-date profiles, your aircraft might differ. So make sure to compare the values provided against your POH!"
+                },
+                "limitations": {
+                    "title": "Limitations",
+                    "preface": "Even though we try our very best to provide you with the most relevant information for your specific situation, it is not possible to create a perfect simulation and we do not happen to have supercomputers at hand to run an extensive computational fluid-dynamic analysis to determine the impact every last pesky insect on your airframe will make on your glide performance.",
+                    "bulletIntro": "Jokes aside, here is a number of assumptions and limitations that you have to take into account when consuming the data provided:",
+                    "bulletPoints": {
+                        "wind": {
+                            "title": "No wind.",
+                            "content": "While wind is favourable on take-off, it might be harmful when trying to glide somewhere or attempting a landing with that dreaded tailwind. <code>IT IS CRUCIAL</code> that you take a few minutes to figure out how wind will impact the presented data!"
+                        },
+                        "glide": {
+                            "title": "Best glide.",
+                            "content": "All calculations are made at best-glide speed. When turning, <a href=\"https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L135\" target=\"_blank\" rel=\"noopener noreferrer\">the glide factor is reduced</a> based on the bank angle. However, this only serves as an approximation! Your mileage may vary, quite literally."
+                        },
+                        "shortField": {
+                            "title": "Short field technique.",
+                            "content": "For calculation of the landing distances, short field technique as described in the POH is assumed. However, landing distances on non-standard surfaces like grass or when wet may not be accurate. In accordance with most handbooks, a <code>20%</code> increase <a href=\"https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L217\" target=\"_blank\" rel=\"noopener noreferrer\">is applied to grass surfaces</a>."
+                        },
+                        "aboveGroundLevel": {
+                            "title": "Above ground level.",
+                            "content": "The tool assumes that every location is at the same height of 0ft. This obviously does not hold true in reality, the elevation difference across the covered area is roughly 100ft. Keep this in mind when setting the altitude, especially in relation to airspace restrictions! When in doubt, use a lower value. For more details see <a href=\"https://github.com/TilBlechschmidt/ELSA/issues/1#issuecomment-985833109\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>."
+                        },
+                        "humanFactors": {
+                            "title": "Human factors.",
+                            "content": "We do not account for <em>any</em> human factors! It is likely that an engine failure may startle you or you forget to put out full flaps for landing. Additionally, it is unlikely that you hold the glide speed perfectly or execute a flawless turn when your life is at stake. <code>DO NOT TAKE THIS LIGHTLY</code>! You <em>WILL</em> not be handling everything perfectly as past examples show."
+                        }
+                    },
+                    "conclusion": "While everything up to this section has been merely important, the above points are absolutely critical in regards to correctly interpreting the data provided. Make sure you keep everything mentioned here in mind!"
+                }
+            }
+        },
+        "tool": {
+            "reachability": {
+                "title": "Reachability",
+                "overview": {
+                    "title": "Tool overview",
+                    "content": "The core tool provided by E.L.S.A. displays you all available landing sites on a map. Each location is surrounded by a colored area. As long as you fly within this area, you are likely to reach the location — subject to the limitations outlined previously.<br /><br />On the right, you can see a preview of the tool with a number of locations and ranges displayed. On the next few pages, we will be covering all the aspects and peculiarities of the data displayed on the map.<br /><br />Remember that previously discussed aspects still hold true — e.g. colors representing risk associated with a location."
+                },
+                "paths": {
+                    "title": "Shortest path",
+                    "content": "Unlike tanks, aircrafts can not turn on a dime. When heading towards a potential landing site, they have to cope with a given minimum turning radius. To simulate this behaviour, E.L.S.A. uses a concept from geometry which Lester Eli Dubins fortunately figured out some {dubinsPathAge} years ago.<br /><br />On the right you can see a plane that follows the blue line. However, it had an engine failure and wants to divert towards the location depicted as a green line at the top. To reach it with the minimum height loss, it takes two turns at the maximum comfortable, configurable bank angle with a straight segment in between — in this case roughly resembling a base leg. Keep in mind that while the picture on the right shows a traffic-pattern like approach, this may not always be the case. E.L.S.A. always assumes the shortest possible path.<br /><br />We highly recommend reading up <a href=\"https://en.wikipedia.org/wiki/Dubins_path\" target=\"_blank\" rel=\"noopener noreferrer\">on what constitutes these</a> mathematically proven shortest paths from one location and heading to another. It might save your life after all!"
+                },
+                "rangeProfiles": {
+                    "title": "Range profiles",
+                    "content": "Taking the previously explained shortest path, calculating it for every possible location on the screen, and combining it with a threshold altitude gives us a nice range profile. Whenever the aircraft is situated within the shaded area, it can — theoretically at least — reach the location. Note that this also takes into account that some locations, like the one on the right, may only be approachable in one direction due to e.g. power lines.<br /><br />The keen reader may have noticed that in the previous section, we had an aircraft heading to work with. However, when plotting a range profile, we do not necessarily know the heading your aircraft will be flying in advance. For this reason, E.L.S.A. calculates the <em>worst</em> possible heading at each location and uses that. Best case, it gives you a little bit of headroom when you are already facing towards the location. Worst case, you have just the right height when heading away.<br /><br />If you are interested in how the range profile looks without a threshold, take a look at <a href=\"/guide/rangeGraph.gif\" target=\"_blank\" rel=\"noopener noreferrer\">this mesmerizing piece of art</a> we generated while developing the tool."
+                },
+                "criticalArea": {
+                    "title": "Critical area",
+                    "content": "The tool is designed to assess and mitigate risk associated with densely populated areas. However, fortunately overpopulation hasn't quite managed to cover every last speck of the earth with houses. This means that beyond a certain threshold it is reasonably safe to assume that a sufficient amount of agricultural and natural areas are present for you to hopefully never land on.<br /><br />On the map, you can see a red outline that alternates between dashes and dots. This line encompasses the so called <em>critical area</em> outside of which you should-be-fine™. While you are inside the area though, you have to keep a close eye on your options!"
+                },
+                "details": {
+                    "title": "Location details",
+                    "content": "Looking at the big picture is great, but what if you want to dive into the details? We've got you covered!<br /><br />To quickly view details about a location, you can just click on it. This will bring up the familiar location card covered earlier and zoom in. Speaking of zooming in, enlarging the map activates a high-resolution birds eye view of the city using imagery captured by the LGV Hamburg! You can see an example on the right.<br /><br />Note that some locations have an orthogonal dash on one of their ends. This indicates that a location may only be approached in one direction. Usually, the remarks section contains an explanation and hints at some obstacles errected in the vicinity. Most of the them are even visible on the map if you look closely!"
+                }
+            }
+        },
         "welcome": {
             "title": "Safety Warning",
-            "text": "Welcome to E.L.S.A., before you can start using this tool, we need you to first understand and acknowledge the following prerequisites:<br><br>The data made available by this tool is provided without guarantees regarding accuracy, currency, or relevancy. You are solely responsible for the safety of your aircraft, cargo, and passengers and it is your responsibility to assess all involved risks during preflight preparations.<br><br>Furthermore, it is imperative that the data made available by this tool is only used with the proper understanding of its creation, contextualization, and presentation. Relying on any information originating from this tool without the proper understanding of how it is supposed to be used, as detailed in the following page(s), makes said information useless at best and catastrophic at worst.",
+            "text": "Welcome to E.L.S.A.! Before you can start using this tool, we need you to first understand and acknowledge the following prerequisites:<br><br>The data made available by this tool is provided without guarantees regarding accuracy, currency, or relevancy. You are solely responsible for the safety of your aircraft, cargo, and passengers and it is your responsibility to assess all involved risks during preflight preparations.<br><br>Furthermore, it is imperative that the data made available by this tool is only used with the proper understanding of its creation, contextualization, and presentation. Relying on any information originating from this tool without the proper understanding of how it is supposed to be used, as detailed in the following page(s), makes said information useless at best and catastrophic at worst.<br /><br />If you feel you do not fully understand the data presented or are unsure on how to apply it in preflight preparations, do not proceed to use this tool, but instead seek guidance and further help by contacting us at <code>elsa@blechschmidt.dev</code>.<br><br>Thank you for your understanding and <em>fly safe</em>!",
             "text2": "Not every location in this data set may be suitable for every airplane and situation. It is your responsibility to read and understand the assumptions made for and limitations of this computer simulation. The data provided is useless at best and harmful at worst without a proper understanding of the theory involved!",
             "confirmation1": "I acknowledge to have read and understood this disclaimer and agree to carefully read the following explanations.",
             "confirmation2": "I will only use this tool with an understanding of all risks involved as detailed above.",
             "button": "Continue"
-        },
-        "locations": {
-            "title": "Locations",
-            "preface": "The core functionality of this tool is to provide you with information about emergency landing sites. Our team surveyed a vast number of potential locations and collected vital data about all of them. Currently, this includes:",
-            "derivedFactors": "In addition, the tool calculates a couple of values based on the data collected. Some of these are based on the performance characteristics of your currently selected aircraft, marked with an asterisk. Here is a list of all derived values:",
-            "conclusion": "To the right, you can see a card containing all those pieces of information for an example location. When using the tool, you will frequently encounter these cards.",
-            "factors": {
-                "elevation": "Elevation",
-                "surface": "Surface type",
-                "usage": "Usage category",
-                "humanPresence": "Probability of human presence",
-                "headings": "Landable headings",
-                "remarks": "Other remarks",
-                "length": "Usable length",
-                "headroom": "Landing headroom",
-                "risk": "Risk category"
-            }
-        },
-        "risk": {
-            "title": "Risk assessment",
-            "preface": "Not every location is equally well suited for an emergency landing. A multitude of factors have to be considered when picking a potential area. Even though some of these are not known before emergency strikes, it is possible to create a rough ranking based on the known aspects. Each location is assigned to one of three risk categories below. You can click on them to see a detailed description!",
-            "explanation": {
-                "safe": "A location is considered \"safe\" when it is unlikely that you or other people will be harmed. Note that this is not a guarantee in any way! Locations may change between surveys and emergency landings still pose a hazard even after touchdown.",
-                "risky": "Risky is a term used for locations where potential damage to the aircraft, passengers, or bystanders may become unavoidable. However, the likelihood depends on the circumstances.",
-                "unsafe": "When a location is flagged as unsafe, destruction of the aircraft including injury or death is likely. Most of the locations sorted into this category have been included because they provide a lesser evil and minimize harm to bystanders."
-            },
-            "conclusion": "Whenever you see one of these three colors used on the map or elsewhere, they indicate the risk associated with the location that the colored object relates to."
-        },
-        "riskFactors": {
-            "title": "Risk factors",
-            "preface": "To determine the risk category of a location, the tool considers a number of factors. Some of these are fixed while others can be modified according to your personal preference. Below is a description of each contributing factor.",
-            "factors": {
-                "surface": {
-                    "title": "Surface type",
-                    "text": "Unfortunately, not every location is a paved asphalt runway. While grassy surfaces and agricultural areas are considered mostly safe, water bodies are an exception. Even though it is certainly possible to survive a water landing, it strongly depends on the technique and conditions. Thus, locations on water are generally considered <em>unsafe</em>."
-                },
-                "headroom": {
-                    "title": "Landing headroom",
-                    "text": "Each aircraft has different performance characteristics. When using the tool, you will select an aircraft profile. This profile determines the distance required to come to a full stop while executing an emergency landing. Since some locations are rather constrained in this regard, the so-called landing headroom will be calculated. It is a percentage of the distance required to come to a full stop: At <code>0%</code> you come to a complete stop at the end of the usable length, <code>100%</code> means you have double the required length. At <code>-15%</code> headroom you miss a couple of meters and will over-run the usable length.<br><br>For the purpose of risk categorization, two thresholds are defined which determine the category based on your currently selected aircraft. Below are the current settings, feel free to change them!"
-                },
-                "humanPresence": {
-                    "title": "Human presence",
-                    "text": "While it is unlikely for humans to roam around on the runway of an international airport, it is very likely for them to have a picnic in the park on a warm, sunny summer evening. For this reason, event locations and generally crowded areas have received their own category to which you can assign a risk.<br><br>Event locations can likely be considered safe during times where nothing is on the calendar, however, it remains your duty to check on that! The same goes for public parks and other generally crowded places. During the winter with freezing temperatures it may be unlikely for humans to flock around parks in masses. However, during the summer it is an entirely different story! Use the settings below to change your global personal preferences:"
-                }
-            }
-        },
-        "aircraft": {
-            "title": "Aircraft profiles",
-            "preface": "Not every aircraft is made equally. Purpose built gliders can reach dozens of miles given a couple hundred feet, while a Piper figuratively plummets to the ground in comparison. The same goes for stall speeds and other performance characteristics. For this reason, E.L.S.A. provides you with profiles for each aircraft which you can select later. These profiles contain:",
-            "factors": {
-                "mtow": "Maximum takeoff weight",
-                "takeoff": "Takeoff performance",
-                "glide": "Glide characteristics",
-                "landing": "Landing requirements"
-            },
-            "conclusion": "You can see an example on the right. Keep in mind that while we try to provide the most up-to-date profiles, your aircraft might differ. So make sure to compare the values provided against your POH!"
-        },
-        "limitations": {
-            "title": "Assumptions & Limitations",
-            "preface": "Even though we try our very best to provide you with the most relevant information for your specific situation, it is not possible to create a perfect simulation and we do not happen to have supercomputers at hand to run an extensive computational fluid-dynamic analysis to determine the impact every last pesky insect on your airframe will make on your glide performance.",
-            "bulletIntro": "Jokes aside, here is a number of assumptions and limitations that you have to take into account when consuming the data provided:",
-            "bulletPoints": {
-                "wind": {
-                    "title": "No wind.",
-                    "content": "While wind is favourable on take-off, it might be harmful when trying to glide somewhere or attempting a landing with that dreaded tailwind. <code>IT IS CRUCIAL</code> that you take a few minutes to figure out how wind will impact the presented data!"
-                },
-                "glide": {
-                    "title": "Best glide.",
-                    "content": "All calculations are made at best-glide speed. When turning, <a href=\"https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L135\" target=\"_blank\" rel=\"noopener noreferrer\">the glide factor is reduced</a> based on the bank angle. However, this only serves as an approximation! Your mileage may vary, quite literally."
-                },
-                "shortField": {
-                    "title": "Short field technique.",
-                    "content": "For calculation of the landing distances, short field technique as described in the POH is assumed. However, landing distances on non-standard surfaces like grass or when wet may not be accurate. In accordance with most handbooks, a <code>20%</code> increase <a href=\"https://github.com/TilBlechschmidt/ELSA/blob/a9cbe26ad52c4b471139529fbd6f6f6975f0d52d/web-app/elsa/src/data/aircraft.rs#L217\" target=\"_blank\" rel=\"noopener noreferrer\">is applied to grass surfaces</a>."
-                },
-                "aboveGroundLevel": {
-                    "title": "Above ground level.",
-                    "content": "The tool assumes that every location is at the same height of 0ft. This obviously does not hold true in reality, the elevation difference across the covered area is roughly 100ft. Keep this in mind when setting the altitude, especially in relation to airspace restrictions! When in doubt, use a lower value. For more details see <a href=\"https://github.com/TilBlechschmidt/ELSA/issues/1#issuecomment-985833109\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>."
-                },
-                "humanFactors": {
-                    "title": "Human factors.",
-                    "content": "We do not account for <em>any</em> human factors! It is likely that an engine failure may startle you or you forget to put out full flaps for landing. Additionally, it is unlikely that you hold the glide speed perfectly or execute a flawless turn when your life is at stake. <code>DO NOT TAKE THIS LIGHTLY</code>! You <em>WILL</em> not be handling everything perfectly as past examples show."
-                }
-            },
-            "conclusion": "While everything up to this section has been merely important, the above points are absolutely critical in regards to correctly interpreting the data provided. Make sure you keep everything mentioned here in mind!"
-        },
-        "ranges": {
-            "intro": {
-                "title": "Reachability tool",
-                "content": "The core tool provided by E.L.S.A. displays you all available landing sites on a map. Each location is surrounded by a colored area. As long as you fly within this area, you are likely to reach the location — subject to the limitations outlined previously.<br /><br />On the right, you can see a preview of the tool with a number of locations and ranges displayed. On the next few pages, we will be covering all the aspects and peculiarities of the data displayed on the map.<br /><br />Remember that previously discussed aspects still hold true — e.g. colors representing risk associated with a location."
-            },
-            "dubinsPath": {
-                "title": "Shortest path",
-                "content": "Unlike tanks, aircrafts can not turn on a dime. When heading towards a potential landing site, they have to cope with a given minimum turning radius. To simulate this behaviour, E.L.S.A. uses a concept from geometry which Lester Eli Dubins fortunately figured out some {dubinsPathAge} years ago.<br /><br />On the right you can see a plane that follows the blue line. However, it had an engine failure and wants to divert towards the location depicted as a green line at the top. To reach it with the minimum height loss, it takes two turns at the maximum comfortable, configurable bank angle with a straight segment in between — in this case roughly resembling a base leg. Keep in mind that while the picture on the right shows a traffic-pattern like approach, this may not always be the case. E.L.S.A. always assumes the shortest possible path.<br /><br />We highly recommend reading up <a href=\"https://en.wikipedia.org/wiki/Dubins_path\" target=\"_blank\" rel=\"noopener noreferrer\">on what constitutes these</a> mathematically proven shortest paths from one location and heading to another. It might save your life after all!"
-            },
-            "rangeProfiles": {
-                "title": "Range Profiles",
-                "content": "Taking the previously explained shortest path, calculating it for every possible location on the screen, and combining it with a threshold altitude gives us a nice range profile. Whenever the aircraft is situated within the shaded area, it can — theoretically at least — reach the location. Note that this also takes into account that some locations, like the one on the right, may only be approachable in one direction due to e.g. power lines.<br /><br />The keen reader may have noticed that in the previous section, we had an aircraft heading to work with. However, when plotting a range profile, we do not necessarily know the heading your aircraft will be flying in advance. For this reason, E.L.S.A. calculates the <em>worst</em> possible heading at each location and uses that. Best case, it gives you a little bit of headroom when you are already facing towards the location. Worst case, you have just the right height when heading away.<br /><br />If you are interested in how the range profile looks without a threshold, take a look at <a href=\"/guide/rangeGraph.gif\" target=\"_blank\" rel=\"noopener noreferrer\">this mesmerizing piece of art</a> we generated while developing the tool."
-            },
-            "criticalArea": {
-                "title": "Critical area",
-                "content": "The tool is designed to assess and mitigate risk associated with densely populated areas. However, fortunately overpopulation hasn't quite managed to cover every last speck of the earth with houses. This means that beyond a certain threshold it is reasonably safe to assume that a sufficient amount of agricultural and natural areas are present for you to hopefully never land on.<br /><br />On the map, you can see a red outline that alternates between dashes and dots. This line encompasses the so called <em>critical area</em> outside of which you should-be-fine™. While you are inside the area though, you have to keep a close eye on your options!"
-            },
-            "details": {
-                "title": "Zooming in",
-                "content": "Looking at the big picture is great, but what if you want to dive into the details? We've got you covered!<br /><br />To quickly view details about a location, you can just click on it. This will bring up the familiar location card covered earlier and zoom in. Speaking of zooming in, enlarging the map activates a high-resolution birds eye view of the city using imagery captured by the LGV Hamburg! You can see an example on the right.<br /><br />Note that some locations have an orthogonal dash on one of their ends. This indicates that a location may only be approached in one direction. Usually, the remarks section contains an explanation and hints at some obstacles errected in the vicinity. Most of the them are even visible on the map if you look closely!"
-            }
         },
         "finalWords": {
             "title": "Final words",
             "text": "You should now have read the <a href=\"/guide/locations\">introductory information and explanation</a> that should have given you an understanding of the creation, contextualization, and presentation of the data made available by this tool. If you feel you do not fully understand the data presented or are unsure on how to apply it in preflight preparations, do not proceed to use this tool, but instead seek guidance and further help by contacting us at <code>elsa@blechschmidt.dev</code>.<br><br>Should you need to reacquaint yourself with these explanations in the future these pages will be available at any time by accessing the “Help” button on the top-right corner of the screen.<br><br>Thank you for your understanding and <em>fly safe</em>!",
             "confirmation": "I acknowledge to have read and understood this disclaimer as well as the explanations given to you on this and the previous page.",
             "button": "Enter E.L.S.A."
+        }
+    },
+    "tool": {
+        "selection": {
+            "prompt": "Select your tool",
+            "soon": "Coming soon™"
+        },
+        "reachability": {
+            "title": "Reachability analysis",
+            "subtitle": "Ranges for each location"
+        },
+        "routePlanner": {
+            "title": "Route planner",
+            "subtitle": "Analyse your flight"
+        },
+        "guide": {
+            "title": "Handbook",
+            "subtitle": "Crucial knowledge"
         }
     },
     "landUsage": {
@@ -154,6 +184,11 @@
         "remarks": "Remarks"
     },
     "settings": {
+        "links": {
+            "guide": "Guide",
+            "imprint": "Imprint",
+            "report": "Report"
+        },
         "flight": {
             "title": "Flight profile",
             "aircraft": "Aircraft",

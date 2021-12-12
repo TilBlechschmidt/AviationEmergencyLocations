@@ -2,6 +2,8 @@ import { browser } from '$app/env';
 import Worker from './worker.js?worker';
 import { feetToMeters } from '../units';
 
+const AIRCRAFT_CACHE = {};
+
 class ElsaWorker {
     constructor() {
         this.idCounter = 0;
@@ -76,8 +78,12 @@ class ElsaWorker {
         return this.submitRequest('AIRCRAFT_LIST');
     }
 
-    fetchAircraft(aircraftID) {
-        return this.submitRequest('AIRCRAFT', { aircraftID });
+    async fetchAircraft(aircraftID) {
+        if (AIRCRAFT_CACHE.hasOwnProperty(aircraftID)) return AIRCRAFT_CACHE[aircraftID];
+
+        const aircraft = await this.submitRequest('AIRCRAFT', { aircraftID });
+        AIRCRAFT_CACHE[aircraftID] = aircraft;
+        return aircraft;
     }
 
     landingOptions(preferences, latitude, longitude, heading, altitudeInFeet, aircraftID) {

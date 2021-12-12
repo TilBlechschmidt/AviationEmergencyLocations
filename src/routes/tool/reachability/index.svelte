@@ -11,7 +11,7 @@
 
 	if (!map.isMoving()) {
 		map.easeTo({
-			speed: FLY_SPEED,
+			duration: 1000,
 			...camera
 		});
 	}

@@ -76,7 +76,11 @@
 
 		<div class="p-8 text-sm text-gray-500 text-center">
 			{@html $_('imprint.bugs')}
-			<a href="https://github.com/TilBlechschmidt/ELSA" target="_blank" rel="noopener noreferrer">
+			<a
+				href="https://github.com/TilBlechschmidt/ELSA/issues/new"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
 				<code>GitHub</code>
 			</a>.
 			<div class="lg:my-2 my-6" />
