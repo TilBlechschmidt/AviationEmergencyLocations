@@ -15,7 +15,7 @@
 
 	function onSelect(e) {
 		$aircraftID = e.detail;
-		goto('/map/location');
+		goto('/tool/reachability');
 	}
 </script>
 
