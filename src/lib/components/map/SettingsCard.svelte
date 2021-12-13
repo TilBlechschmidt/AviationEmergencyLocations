@@ -26,10 +26,6 @@
 	const padding = 390;
 	const duration = 500;
 
-	function changeAircraft() {
-		goto('/aircrafts');
-	}
-
 	async function updateAircraft(id) {
 		aircraftName = (await elsa.fetchAircraft(id)).name;
 	}
@@ -43,9 +39,14 @@
 		transition:fly={{ x: padding, duration, opacity: 1 }}
 	>
 		<div class="w-80 text-sm card">
-			<a class="p-4 text-center text-xl cursor-pointer no-default block" href="/tool">
-				{$_('tool.reachability.title')}
-				<span class="w-4 h-4 -mb-0.5 inline-block"><GoChevronDown /></span>
+			<a
+				class="no-default mx-4 pt-4 mb-4 text-center text-xl cursor-pointer block tool-title"
+				href="/tool"
+			>
+				<span class="border-b border-solid border-transparent transition-all"
+					>{$_('tool.reachability.title')}</span
+				>
+				<span class="w-4 h-4 -mb-0.5 inline-block icon"><GoChevronDown /></span>
 			</a>
 			<div class="flex justify-around p-4 pt-0 links">
 				<a href="/guide/tool/reachability">
@@ -74,9 +75,7 @@
 			<div class="p-4 pt-6">
 				<Labelled>
 					<span slot="label">{$_('settings.flight.aircraft')}</span>
-					<div class="cursor-pointer dashed-underline font-mono" on:click={changeAircraft}>
-						{aircraftName}
-					</div>
+					<a class="font-mono" href="/aircrafts">{aircraftName}</a>
 				</Labelled>
 				<Labelled>
 					<span slot="label">{$_('settings.flight.bank')}</span>
@@ -120,11 +119,15 @@
 {/if}
 
 <style>
-	.dashed-underline {
-		border-bottom: 1px dashed #999;
+	.links a[href]:not(:hover) {
+		border-bottom-color: rgba(0, 0, 0, 0);
 	}
 
-	.links > a[href] {
-		border: none;
+	.tool-title:hover span.icon {
+		@apply drop-shadow;
+	}
+
+	.tool-title:hover span:not(.icon) {
+		@apply border-blue-400;
 	}
 </style>
