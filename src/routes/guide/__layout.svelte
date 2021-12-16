@@ -140,13 +140,13 @@
 	</div>
 	<div class="h-full overflow-y-auto flex flex-grow" bind:this={scrollContainer}>
 		<div class="m-12 max-w-prose">
-			<h1 class="pb-4 align-bottom flex flex-wrap">
+			<div class="pb-4 align-bottom flex flex-wrap">
 				<h1 class="text-3xl whitespace-nowrap">{page.current.title}</h1>
 				<div class="flex-grow" />
 				<h3 class="text-gray-500 mt-auto whitespace-nowrap">
 					{page.current.section.title}
 				</h3>
-			</h1>
+			</div>
 			<hr class="p-4" />
 
 			<slot />
