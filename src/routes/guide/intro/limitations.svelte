@@ -1,21 +1,21 @@
 <script>
-	import { _ } from 'svelte-i18n';
+	import Localized, { KeyPrefix } from '$lib/components/Localized.svelte';
+	import { setContext } from 'svelte';
+
+	setContext(KeyPrefix, 'guide.introduction.pages.limitations.');
 
 	const bulletPoints = ['wind', 'glide', 'shortField', 'aboveGroundLevel', 'humanFactors'];
 </script>
 
-{$_('guide.introduction.pages.limitations.preface')}
-<br />
-<br />
-{$_('guide.introduction.pages.limitations.bulletIntro')}
+<Localized key="preface" />
 
 <ul class="p-4 pb-8 list-disc list-inside">
 	{#each bulletPoints as bulletPoint}
 		<li class="pt-4">
-			<strong>{$_(`guide.introduction.pages.limitations.bulletPoints.${bulletPoint}.title`)}</strong> —
-			{@html $_(`guide.introduction.pages.limitations.bulletPoints.${bulletPoint}.content`)}
+			<strong><Localized key={`bulletPoints.${bulletPoint}.title`} /></strong> —
+			<Localized key={`bulletPoints.${bulletPoint}.content`} />
 		</li>
 	{/each}
 </ul>
 
-{$_('guide.introduction.pages.limitations.conclusion')}
+<Localized key="conclusion" />

@@ -3,6 +3,7 @@
 	import { preferences } from '$lib/stores';
 	import Labelled from '$lib/components/Labelled.svelte';
 	import { riskyLandingHeadrooms, unsafeLandingHeadrooms } from '$lib/data/constants';
+	import Localized from './Localized.svelte';
 
 	function formatPercentage(value) {
 		const formatted = `${value * 100}%`;
@@ -13,7 +14,7 @@
 </script>
 
 <Labelled>
-	<span slot="label">{$_('settings.risk.landing.risky')}</span>
+	<span slot="label"><Localized key="settings.risk.landing.risky" /></span>
 	<select name="riskyLanding" bind:value={$preferences.riskyLandingHeadroom} class="custom-select">
 		{#each riskyLandingHeadrooms as headroom}
 			<option value={headroom}>{@html formatPercentage(headroom)}</option>
@@ -21,7 +22,7 @@
 	</select>
 </Labelled>
 <Labelled>
-	<span slot="label">{$_('settings.risk.landing.unsafe')}</span>
+	<span slot="label"><Localized key="settings.risk.landing.unsafe" /></span>
 	<select
 		name="unsafeLanding"
 		bind:value={$preferences.unsafeLandingHeadroom}

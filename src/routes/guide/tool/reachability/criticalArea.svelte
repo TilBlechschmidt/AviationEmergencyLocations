@@ -1,6 +1,6 @@
 <script>
-	import { _ } from 'svelte-i18n';
+	import Localized from '$lib/components/Localized.svelte';
 </script>
 
 <img class="guide-cover-image" src="/guide/criticalArea.jpg" alt="Critical area" />
-{@html $_('guide.tool.reachability.criticalArea.content')}
+<Localized key="guide.tool.reachability.criticalArea.content" />

@@ -1,5 +1,5 @@
 <script>
-	import { _ } from 'svelte-i18n';
+	import Localized from './Localized.svelte';
 
 	export let title;
 	export let subtitle;
@@ -15,9 +15,9 @@
 >
 	<span class="w-12 h-12 text-blue-500 mr-4"><slot /></span>
 	<div>
-		<div class:text-gray-400={disabled}>{title}</div>
+		<div class:text-gray-400={disabled}><Localized key={title} /></div>
 		<div class="text-sm text-gray-400" class:text-red-500={disabled}>
-			{disabled ? $_('tool.selection.soon') : subtitle}
+			<Localized key={disabled ? 'tool.selection.soon' : subtitle} />
 		</div>
 	</div>
 </a>

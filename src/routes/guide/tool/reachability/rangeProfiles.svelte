@@ -1,6 +1,6 @@
 <script>
-	import { _ } from 'svelte-i18n';
+	import Localized from '$lib/components/Localized.svelte';
 </script>
 
 <img class="guide-cover-image" src="/guide/range.jpg" alt="Example of a range profile" />
-{@html $_('guide.tool.reachability.rangeProfiles.content')}
+<Localized key="guide.tool.reachability.rangeProfiles.content" />

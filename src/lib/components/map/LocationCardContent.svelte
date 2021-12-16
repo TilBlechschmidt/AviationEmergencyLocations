@@ -1,5 +1,4 @@
 <script>
-	import { _ } from 'svelte-i18n';
 	import FaCompass from 'svelte-icons/fa/FaCompass.svelte';
 	import FaRulerHorizontal from 'svelte-icons/fa/FaRulerHorizontal.svelte';
 	import FaMountain from 'svelte-icons/fa/FaMountain.svelte';
@@ -8,7 +7,8 @@
 	import { parseISO, formatDistanceToNow } from 'date-fns';
 
 	import IconLabelled from '$lib/components/IconLabelled.svelte';
-	import Labelled from '$lib/components//Labelled.svelte';
+	import Labelled from '$lib/components/Labelled.svelte';
+	import Localized from '$lib/components/Localized.svelte';
 
 	export let location;
 
@@ -41,7 +41,7 @@
 	<div class="p-4 flex items-center justify-between">
 		<div>
 			<div class="text-2xl">{location.name}</div>
-			<div class="text-gray-500">{$_(`landUsage.${location.usage}`)}</div>
+			<div class="text-gray-500"><Localized key={`landUsage.${location.usage}`} /></div>
 		</div>
 		<div class="pr-2">
 			{#if location.risk == 'Risky'}
@@ -73,29 +73,29 @@
 	<hr class="text-gray-200" />
 	<div class="p-4 pt-6">
 		<Labelled>
-			<span slot="label">{$_('location.surface')}</span>
-			{$_(`surfaceType.${location.surface}`)}
+			<span slot="label"><Localized key="location.surface" /></span>
+			<Localized key={`surfaceType.${location.surface}`} />
 		</Labelled>
 		<Labelled>
-			<span slot="label">{$_('location.humanPresence')}</span>
-			{$_(`humanPresence.${location.humanPresence}`)}
+			<span slot="label"><Localized key="location.humanPresence" /></span>
+			<Localized key={`humanPresence.${location.humanPresence}`} />
 		</Labelled>
 		<Labelled critical={landingHeadroom < 0}>
-			<span slot="label">{$_('location.landingHeadroom')}</span>
+			<span slot="label"><Localized key="location.landingHeadroom" /></span>
 			{formattedLandingHeadroom}
 		</Labelled>
 	</div>
 	<hr class="text-gray-200" />
 	<div class="p-4 pt-6">
 		<Labelled>
-			<span slot="label">{$_('location.lastSurveyed')}</span>
+			<span slot="label"><Localized key="location.lastSurveyed" /></span>
 			{formatDistanceToNow(parseISO(location.surveyDate), { addSuffix: true })}
 		</Labelled>
 	</div>
 	{#if location.remarks}
 		<hr class="text-gray-200" />
 		<div class="p-4">
-			<Labelled><span slot="label">{$_('location.remarks')}</span></Labelled>
+			<Labelled><span slot="label"><Localized key="location.remarks" /></span></Labelled>
 			{location.remarks}
 		</div>
 	{/if}

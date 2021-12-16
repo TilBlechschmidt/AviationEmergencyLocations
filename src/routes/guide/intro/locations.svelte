@@ -1,10 +1,9 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import { elsa } from '$lib/simulation/elsa';
 	import { aircraftID, preferences } from '$lib/stores';
 	import { guideLocation } from '$lib/data/constants';
-	import { _ } from 'svelte-i18n';
-
+	import Localized, { KeyPrefix } from '$lib/components/Localized.svelte';
 	import LocationCardContent from '$lib/components/map/LocationCardContent.svelte';
 
 	let location;
@@ -13,28 +12,30 @@
 		await elsa.startup;
 		location = await elsa.fetchLocation($preferences, guideLocation, $aircraftID);
 	});
+
+	setContext(KeyPrefix, 'guide.introduction.pages.locations.');
 </script>
 
-{$_('guide.introduction.pages.locations.preface')}
+<Localized key="preface" />
 
 <ul class="p-4 list-disc list-inside">
-	<li>{$_('guide.introduction.pages.locations.factors.elevation')}</li>
-	<li>{$_('guide.introduction.pages.locations.factors.surface')}</li>
-	<li>{$_('guide.introduction.pages.locations.factors.usage')}</li>
-	<li>{$_('guide.introduction.pages.locations.factors.humanPresence')}</li>
-	<li>{$_('guide.introduction.pages.locations.factors.headings')}</li>
-	<li>{$_('guide.introduction.pages.locations.factors.remarks')}</li>
+	<li><Localized key="factors.elevation" /></li>
+	<li><Localized key="factors.surface" /></li>
+	<li><Localized key="factors.usage" /></li>
+	<li><Localized key="factors.humanPresence" /></li>
+	<li><Localized key="factors.headings" /></li>
+	<li><Localized key="factors.remarks" /></li>
 </ul>
 
-{$_('guide.introduction.pages.locations.derivedFactors')}
+<Localized key="derivedFactors" />
 
 <ul class="p-4 list-disc list-inside">
-	<li>{$_('guide.introduction.pages.locations.factors.length')}</li>
-	<li>{$_('guide.introduction.pages.locations.factors.headroom')}<sup class="text-red-600">*</sup></li>
-	<li>{$_('guide.introduction.pages.locations.factors.risk')}<sup class="text-red-600">*</sup></li>
+	<li><Localized key="factors.length" /></li>
+	<li><Localized key="factors.headroom" /><sup class="text-red-600">*</sup></li>
+	<li><Localized key="factors.risk" /><sup class="text-red-600">*</sup></li>
 </ul>
 
-{$_('guide.introduction.pages.locations.conclusion')}
+<Localized key="conclusion" />
 
 <div class="map-component-simulation card w-80 mx-auto mt-12">
 	{#if location}

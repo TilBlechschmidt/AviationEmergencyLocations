@@ -5,7 +5,7 @@
 	import ToolButton from '$lib/components/ToolButton.svelte';
 	import { disclaimerSeen } from '$lib/stores';
 	import { fly } from 'svelte/transition';
-	import { _ } from 'svelte-i18n';
+	import Localized from '$lib/components/Localized.svelte';
 
 	import { getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
@@ -29,30 +29,26 @@
 		out:fly={{ y: 200, duration: 500 }}
 	>
 		<div class="card p-8 pt-4">
-			<div class="w-full text-center mb-4 text-xl">{$_('tool.selection.prompt')}</div>
+			<div class="w-full text-center mb-4 text-xl"><Localized key="tool.selection.prompt" /></div>
 			<div class="flex justify-evenly space-x-4">
 				<ToolButton
-					title={$_('tool.reachability.title')}
-					subtitle={$_('tool.reachability.subtitle')}
+					title="tool.reachability.title"
+					subtitle="tool.reachability.subtitle"
 					href="/tool/reachability"
 				>
 					<MdFlightLand />
 				</ToolButton>
 
 				<ToolButton
-					title={$_('tool.routePlanner.title')}
-					subtitle={$_('tool.routePlanner.subtitle')}
+					title="tool.routePlanner.title"
+					subtitle="tool.routePlanner.subtitle"
 					href="/tool/route"
 					disabled
 				>
 					<MdNavigation />
 				</ToolButton>
 
-				<ToolButton
-					title={$_('tool.guide.title')}
-					subtitle={$_('tool.guide.subtitle')}
-					href="/guide"
-				>
+				<ToolButton title="tool.guide.title" subtitle="tool.guide.subtitle" href="/guide">
 					<GoBook />
 				</ToolButton>
 			</div>

@@ -1,8 +1,11 @@
 <script>
 	import FaCircle from 'svelte-icons/fa/FaCircle.svelte';
 	import IconLabelled from '$lib/components/IconLabelled.svelte';
-	import { _ } from 'svelte-i18n';
 	import { riskCategories } from '$lib/data/constants';
+	import Localized, { KeyPrefix } from '$lib/components/Localized.svelte';
+	import { setContext } from 'svelte';
+
+	setContext(KeyPrefix, 'guide.introduction.pages.riskAssessment.');
 
 	let selectedRisk = 'safe';
 	const riskColors = {
@@ -12,7 +15,7 @@
 	};
 </script>
 
-{$_('guide.introduction.pages.riskAssessment.preface')}
+<Localized key="preface" />
 
 <div class="flex justify-around pt-8">
 	{#each riskCategories as risk}
@@ -23,14 +26,14 @@
 		>
 			<IconLabelled iconColor={riskColors[risk]} textColor="text-black">
 				<span slot="icon"><FaCircle /></span>
-				{$_(`risk.${risk}`)}
+				<Localized key={`^risk.${risk}`} />
 			</IconLabelled>
 		</div>
 	{/each}
 </div>
 
 <div class="p-8 text-gray-500 text-sm">
-	{$_(`guide.introduction.pages.riskAssessment.explanation.${selectedRisk}`)}
+	<Localized key={`explanation.${selectedRisk}`} />
 </div>
 
-{$_('guide.introduction.pages.riskAssessment.conclusion')}
+<Localized key="conclusion" />

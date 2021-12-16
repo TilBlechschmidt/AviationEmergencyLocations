@@ -1,7 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 	import { Map } from '@beyonk/svelte-mapbox';
-	import { _ } from 'svelte-i18n';
 
 	import Modal from '$lib/components/Modal.svelte';
 	import Disclaimer from '$lib/components/Disclaimer.svelte';
@@ -46,11 +45,11 @@
 		<div class="p-8">
 			<Disclaimer
 				warning
-				title={$_('guide.welcome.title')}
-				text={$_('guide.welcome.text')}
-				confirmation1={$_('guide.welcome.confirmation1')}
-				confirmation2={$_('guide.welcome.confirmation2')}
-				button={$_('guide.welcome.button')}
+				title="guide.welcome.title"
+				text="guide.welcome.text"
+				confirmation1="guide.welcome.confirmation1"
+				confirmation2="guide.welcome.confirmation2"
+				button="guide.welcome.button"
 				on:submit={dismissGuide}
 			/>
 		</div>

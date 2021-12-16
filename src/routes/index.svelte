@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { _ } from 'svelte-i18n';
+	import Localized from '$lib/components/Localized.svelte';
 
 	let shown = false;
 
@@ -29,7 +29,7 @@
 			class="m-8 p-4 rounded border-gray-200 border-solid border text-gray-500 hover:shadow-md transition-all no-default"
 			on:click={enter}
 		>
-			{$_('welcomeButton')}
+			<Localized key="welcomeButton" />
 			<span class="w-6 h-6 text-gray-500 align-middle inline-block -mt-1 ml-2">
 				<MdArrowForward />
 			</span>

@@ -1,5 +1,5 @@
 <script>
-	import { _ } from 'svelte-i18n';
+	import Localized from '$lib/components/Localized.svelte';
 </script>
 
 <img
@@ -7,4 +7,4 @@
 	src="/guide/locationDetails.jpg"
 	alt="Zoomed in location detail view"
 />
-{@html $_('guide.tool.reachability.details.content')}
+<Localized key="guide.tool.reachability.details.content" />

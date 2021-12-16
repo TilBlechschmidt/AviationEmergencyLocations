@@ -13,7 +13,7 @@ const config = {
 	})],
 	kit: {
 		// Disabled due to issues with hydration+i18n duplicating HTML elements after {@html $_('...')} tags
-		ssr: false,
+		ssr: true,
 		target: '#svelte',
 		adapter: adapter({
 			out: 'build',

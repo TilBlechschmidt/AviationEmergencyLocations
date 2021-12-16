@@ -1,12 +1,10 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { fly } from 'svelte/transition';
 	import Labelled from '$lib/components/Labelled.svelte';
 	import { aircraftID, preferences, altitude } from '$lib/stores';
 	import { elsa } from '$lib/simulation/elsa';
 	import { onMount } from 'svelte';
 	import { degreesToRadians } from '@turf/helpers';
-	import { _ } from 'svelte-i18n';
 	import HeadroomThresholdDropdowns from '../HeadroomThresholdDropdowns.svelte';
 	import HumanPresenceDropdowns from '../HumanPresenceDropdowns.svelte';
 	import { bankAngles } from '$lib/data/constants';
@@ -15,6 +13,7 @@
 	import GoMention from 'svelte-icons/go/GoMention.svelte';
 	import GoIssueOpened from 'svelte-icons/go/GoIssueOpened.svelte';
 	import IconLabelled from '$lib/components/IconLabelled.svelte';
+	import Localized from '$lib/components/Localized.svelte';
 
 	let aircraftName = 'Loading ...';
 
@@ -44,7 +43,7 @@
 				href="/tool"
 			>
 				<span class="border-b border-solid border-transparent transition-all"
-					>{$_('tool.reachability.title')}</span
+					><Localized key="tool.reachability.title" /></span
 				>
 				<span class="w-4 h-4 -mb-0.5 inline-block icon"><GoChevronDown /></span>
 			</a>
@@ -52,33 +51,33 @@
 				<a href="/guide/tool/reachability">
 					<IconLabelled>
 						<GoBook slot="icon" />
-						{$_('settings.links.guide')}
+						<Localized key="settings.links.guide" />
 					</IconLabelled>
 				</a>
 				<a href="/imprint">
 					<IconLabelled>
 						<GoMention slot="icon" />
-						{$_('settings.links.imprint')}
+						<Localized key="settings.links.imprint" />
 					</IconLabelled>
 				</a>
 				<a href="https://github.com/TilBlechschmidt/ELSA/issues/new" target="_blank">
 					<IconLabelled>
 						<GoIssueOpened slot="icon" />
-						{$_('settings.links.report')}
+						<Localized key="settings.links.report" />
 					</IconLabelled>
 				</a>
 			</div>
 		</div>
 		<div class="w-80 text-sm mt-8 card">
-			<div class="p-4 text-center text-lg">{$_('settings.flight.title')}</div>
+			<div class="p-4 text-center text-lg"><Localized key="settings.flight.title" /></div>
 			<hr class="text-gray-200" />
 			<div class="p-4 pt-6">
 				<Labelled>
-					<span slot="label">{$_('settings.flight.aircraft')}</span>
+					<span slot="label"><Localized key="settings.flight.aircraft" /></span>
 					<a class="font-mono" href="/aircrafts">{aircraftName}</a>
 				</Labelled>
 				<Labelled>
-					<span slot="label">{$_('settings.flight.bank')}</span>
+					<span slot="label"><Localized key="settings.flight.bank" /></span>
 					<select name="bank" bind:value={$preferences.bank} class="custom-select">
 						{#each bankAngles as bank}
 							<option value={degreesToRadians(bank)}>{bank}º</option>
@@ -89,7 +88,7 @@
 			<hr class="text-gray-200" />
 			<div class="p-4 pt-6">
 				<Labelled>
-					<span slot="label">{$_('settings.flight.altitude')}</span>
+					<span slot="label"><Localized key="settings.flight.altitude" /></span>
 					<span class="font-mono">{$altitude}ft</span>
 				</Labelled>
 				<input
@@ -103,15 +102,17 @@
 			</div>
 		</div>
 		<div class="w-80 text-sm mt-8 card">
-			<div class="p-4 text-center text-lg">{$_('settings.risk.title')}</div>
+			<div class="p-4 text-center text-lg"><Localized key="settings.risk.title" /></div>
 			<hr class="text-gray-200" />
 			<div class="p-4">
-				<div class="pb-4 font-medium">{$_('settings.risk.landing.title')}</div>
+				<div class="pb-4 font-medium"><Localized key="settings.risk.landing.title" /></div>
 				<HeadroomThresholdDropdowns />
 			</div>
 			<hr class="text-gray-200" />
 			<div class="p-4">
-				<div class="pb-4 font-medium">{$_('settings.risk.humanPresence.eventLocation')}</div>
+				<div class="pb-4 font-medium">
+					<Localized key="settings.risk.humanPresence.eventLocation" />
+				</div>
 				<HumanPresenceDropdowns />
 			</div>
 		</div>

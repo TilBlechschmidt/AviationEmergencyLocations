@@ -1,19 +1,22 @@
 <script>
 	import HeadroomThresholdDropdowns from '$lib/components/HeadroomThresholdDropdowns.svelte';
 	import HumanPresenceDropdowns from '$lib/components/HumanPresenceDropdowns.svelte';
-	import { _ } from 'svelte-i18n';
+	import Localized, { KeyPrefix } from '$lib/components/Localized.svelte';
+	import { setContext } from 'svelte';
+
+	setContext(KeyPrefix, 'guide.introduction.pages.riskFactors.');
 
 	const factors = ['headroom', 'humanPresence', 'surface'];
 </script>
 
-{$_('guide.introduction.pages.riskFactors.preface')}
+<Localized key="preface" />
 
 {#each factors as factor}
 	<div class="pt-8 pb-4">
 		<h2 class="font-bold text-center pb-2">
-			{$_(`guide.introduction.pages.riskFactors.factors.${factor}.title`)}
+			<Localized key={`factors.${factor}.title`} />
 		</h2>
-		{@html $_(`guide.introduction.pages.riskFactors.factors.${factor}.text`)}
+		<Localized key={`factors.${factor}.text`} />
 
 		{#if factor == 'headroom'}
 			<div class="max-w-xs items-center mx-auto pt-4">
