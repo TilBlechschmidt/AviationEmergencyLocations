@@ -63,3 +63,9 @@
 		</div>
 	</div>
 {/if}
+
+<style global>
+	body {
+		overflow: hidden;
+	}
+</style>
