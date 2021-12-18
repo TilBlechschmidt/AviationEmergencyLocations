@@ -121,7 +121,7 @@ function serializeLocation(location, aircraft, calculator, preferences) {
         surface: location.surface,
         humanPresence: location.humanPresence,
 
-        risk: calculator.assessRisk(preferences, location, aircraft),
+        risk: calculator.assessRisk(preferences, location, aircraft).toJSON(),
         landingHeadroom: location.landingHeadroom(aircraft),
 
         surveyDate: location.surveyDate,

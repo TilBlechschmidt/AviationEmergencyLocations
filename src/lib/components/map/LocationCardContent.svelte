@@ -44,11 +44,11 @@
 			<div class="text-gray-500"><Localized key={`^landUsage.${location.usage}`} /></div>
 		</div>
 		<div class="pr-2">
-			{#if location.risk == 'Risky'}
+			{#if location.risk.overall == 'Risky'}
 				<div class="w-6 h-6 text-yellow-500">
 					<FaExclamationTriangle />
 				</div>
-			{:else if location.risk == 'Unsafe'}
+			{:else if location.risk.overall == 'Unsafe'}
 				<div class="w-7 h-7 text-red-500">
 					<MdReport />
 				</div>
@@ -72,15 +72,21 @@
 	</div>
 	<hr class="text-gray-200" />
 	<div class="p-4 pt-6">
-		<Labelled>
+		<Labelled
+			warning={location.risk.surface == 'Risky'}
+			critical={location.risk.surface == 'Unsafe'}
+		>
 			<span slot="label"><Localized key="^location.surface" /></span>
 			<Localized key={`^surfaceType.${location.surface}`} />
 		</Labelled>
-		<Labelled>
+		<Labelled warning={location.risk.humans == 'Risky'} critical={location.risk.humans == 'Unsafe'}>
 			<span slot="label"><Localized key="^location.humanPresence" /></span>
 			<Localized key={`^humanPresence.${location.humanPresence}`} />
 		</Labelled>
-		<Labelled critical={landingHeadroom < 0}>
+		<Labelled
+			warning={location.risk.headroom == 'Risky'}
+			critical={location.risk.headroom == 'Unsafe'}
+		>
 			<span slot="label"><Localized key="^location.landingHeadroom" /></span>
 			{formattedLandingHeadroom}
 		</Labelled>

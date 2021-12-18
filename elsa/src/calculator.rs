@@ -51,6 +51,15 @@ pub struct Preferences {
     pub densely_crowded_classification: RiskClassification,
 }
 
+#[wasm_bindgen(inspectable)]
+#[derive(Serialize, Deserialize, Clone, Copy)]
+pub struct RiskAssessment {
+    pub overall: RiskClassification,
+    pub surface: RiskClassification,
+    pub headroom: RiskClassification,
+    pub humans: RiskClassification,
+}
+
 #[wasm_bindgen]
 pub struct Calculator;
 
@@ -241,22 +250,21 @@ impl Calculator {
         preferences: &Preferences,
         location: &Location,
         aircraft: &Aircraft,
-    ) -> RiskClassification {
-        let mut risky = false;
-        let mut deadly = false;
+    ) -> RiskAssessment {
+        use RiskClassification::*;
 
         // Step 1: Check surface type
-        match location.surface {
-            SurfaceType::Water => deadly = true,
-            _ => {}
-        }
+        let surface = match location.surface {
+            SurfaceType::Water => Unsafe,
+            _ => Safe,
+        };
 
         // Step 2: Verify landing headroom
-        match location.landing_headroom(aircraft) {
-            headroom if headroom < preferences.unsafe_landing_headroom => deadly = true,
-            headroom if headroom < preferences.risky_landing_headroom => risky = true,
-            _ => {}
-        }
+        let headroom = match location.landing_headroom(aircraft) {
+            headroom if headroom < preferences.unsafe_landing_headroom => Unsafe,
+            headroom if headroom < preferences.risky_landing_headroom => Risky,
+            _ => Safe,
+        };
 
         // Step 3: Check for human presence
         let event_risky = preferences.event_location_classification == RiskClassification::Risky;
@@ -264,21 +272,20 @@ impl Calculator {
         let dense_risky = preferences.densely_crowded_classification == RiskClassification::Risky;
         let dense_unsafe = preferences.densely_crowded_classification == RiskClassification::Unsafe;
 
-        match location.human_presence {
-            HumanPresenceCategory::EventOnly if event_risky => risky = true,
-            HumanPresenceCategory::EventOnly if event_unsafe => deadly = true,
-            HumanPresenceCategory::Dense if dense_risky => risky = true,
-            HumanPresenceCategory::Dense if dense_unsafe => deadly = true,
-            _ => {}
-        }
+        let humans = match location.human_presence {
+            HumanPresenceCategory::EventOnly if event_risky => Risky,
+            HumanPresenceCategory::EventOnly if event_unsafe => Unsafe,
+            HumanPresenceCategory::Dense if dense_risky => Risky,
+            HumanPresenceCategory::Dense if dense_unsafe => Unsafe,
+            _ => Safe,
+        };
 
         // Step 4: Profit!
-        if deadly {
-            RiskClassification::Unsafe
-        } else if risky {
-            RiskClassification::Risky
-        } else {
-            RiskClassification::Safe
+        RiskAssessment {
+            overall: surface + headroom + humans,
+            surface,
+            headroom,
+            humans,
         }
     }
 
@@ -296,7 +303,7 @@ impl Calculator {
         // Step 2: Create polygons and assess risk for each location
         let polygons = location_map.locations().map(|location| {
             (
-                self.assess_risk(preferences, location, aircraft),
+                self.assess_risk(preferences, location, aircraft).overall,
                 self.location_range_polygon(location, aircraft, &aircraft_range_profile),
                 location.id(),
             )
@@ -409,7 +416,7 @@ impl Calculator {
                 let mut properties = Map::new();
                 properties.insert(
                     String::from("risk"),
-                    to_value(self.assess_risk(preferences, location, aircraft)).unwrap(),
+                    to_value(self.assess_risk(preferences, location, aircraft).overall).unwrap(),
                 );
 
                 Feature {
@@ -485,7 +492,7 @@ impl Calculator {
                 |(path, height_loss, location): (GeographicDubinPath, f64, &Location)| {
                     let points = path.points().map(|p| p.0).collect::<Vec<_>>();
                     let line = LineString(points);
-                    let risk = self.assess_risk(preferences, location, aircraft);
+                    let risk = self.assess_risk(preferences, location, aircraft).overall;
 
                     let mut properties = Map::new();
                     properties.insert(String::from("risk"), to_value(risk).unwrap());

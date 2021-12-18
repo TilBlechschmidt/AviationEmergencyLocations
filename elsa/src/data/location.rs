@@ -1,5 +1,6 @@
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
+use std::ops::Add;
 
 use geo::geodesic_distance::GeodesicDistance;
 use geo::prelude::{Bearing, BoundingRect, Centroid, HaversineDestination};
@@ -66,6 +67,39 @@ pub enum RiskClassification {
     Risky = "Risky",
     /// Guaranteed damage to the aircraft, questionable outcome for the passengers, high likelyhood for outside damage
     Unsafe = "Unsafe",
+}
+
+impl Into<u8> for RiskClassification {
+    fn into(self) -> u8 {
+        match self {
+            RiskClassification::Safe => 0,
+            RiskClassification::Risky => 1,
+            RiskClassification::Unsafe => 2,
+            _ => panic!("unexpected risk classification variant"),
+        }
+    }
+}
+
+impl From<u8> for RiskClassification {
+    fn from(value: u8) -> Self {
+        match value {
+            0 => RiskClassification::Safe,
+            1 => RiskClassification::Risky,
+            2 => RiskClassification::Unsafe,
+            _ => panic!("Not a valid risk classification: {}", value),
+        }
+    }
+}
+
+impl Add for RiskClassification {
+    type Output = RiskClassification;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let a: u8 = self.into();
+        let b: u8 = rhs.into();
+
+        a.max(b).into()
+    }
 }
 
 // TODO Remove this default
