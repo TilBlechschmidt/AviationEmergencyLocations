@@ -1,7 +1,7 @@
 <script>
 	import { getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
-	import { overviewCamera, FLY_SPEED } from '$lib/components/map/helpers';
+	import { overviewCamera } from '$lib/components/map/helpers';
 
 	import SettingsCard from '$lib/components/map/SettingsCard.svelte';
 

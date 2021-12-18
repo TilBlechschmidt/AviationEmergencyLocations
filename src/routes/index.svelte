@@ -4,6 +4,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import Localized from '$lib/components/Localized.svelte';
+	import Head from '$lib/components/Head.svelte';
 
 	let shown = false;
 
@@ -15,6 +16,8 @@
 		goto('/map/location');
 	}
 </script>
+
+<Head />
 
 <div class="w-full h-full flex flex-col justify-center items-center" out:fade={{ duration: 500 }}>
 	{#if shown}

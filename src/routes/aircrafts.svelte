@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 	import AircraftCardContent from '$lib/components/AircraftCardContent.svelte';
+	import Head from '$lib/components/Head.svelte';
 
 	let aircrafts = [];
 
@@ -18,6 +19,8 @@
 		goto('/tool/reachability');
 	}
 </script>
+
+<Head title="Aircraft profiles" />
 
 <div class="w-full h-full flex flex-col" transition:fade={{ duration: 500 }}>
 	<div class="text-4xl font-extralight text-center mt-8 mb-4">Choose your aircraft</div>

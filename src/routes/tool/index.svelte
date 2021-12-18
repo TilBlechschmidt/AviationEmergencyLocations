@@ -6,6 +6,7 @@
 	import { disclaimerSeen } from '$lib/stores';
 	import { fly } from 'svelte/transition';
 	import Localized from '$lib/components/Localized.svelte';
+	import Head from '$lib/components/Head.svelte';
 
 	import { getContext } from 'svelte';
 	import { contextKey } from '@beyonk/svelte-mapbox';
@@ -21,6 +22,8 @@
 		});
 	}
 </script>
+
+<Head />
 
 {#if $disclaimerSeen}
 	<div

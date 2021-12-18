@@ -41,7 +41,7 @@
 	<div class="p-4 flex items-center justify-between">
 		<div>
 			<div class="text-2xl">{location.name}</div>
-			<div class="text-gray-500"><Localized key={`landUsage.${location.usage}`} /></div>
+			<div class="text-gray-500"><Localized key={`^landUsage.${location.usage}`} /></div>
 		</div>
 		<div class="pr-2">
 			{#if location.risk == 'Risky'}
@@ -73,29 +73,29 @@
 	<hr class="text-gray-200" />
 	<div class="p-4 pt-6">
 		<Labelled>
-			<span slot="label"><Localized key="location.surface" /></span>
-			<Localized key={`surfaceType.${location.surface}`} />
+			<span slot="label"><Localized key="^location.surface" /></span>
+			<Localized key={`^surfaceType.${location.surface}`} />
 		</Labelled>
 		<Labelled>
-			<span slot="label"><Localized key="location.humanPresence" /></span>
-			<Localized key={`humanPresence.${location.humanPresence}`} />
+			<span slot="label"><Localized key="^location.humanPresence" /></span>
+			<Localized key={`^humanPresence.${location.humanPresence}`} />
 		</Labelled>
 		<Labelled critical={landingHeadroom < 0}>
-			<span slot="label"><Localized key="location.landingHeadroom" /></span>
+			<span slot="label"><Localized key="^location.landingHeadroom" /></span>
 			{formattedLandingHeadroom}
 		</Labelled>
 	</div>
 	<hr class="text-gray-200" />
 	<div class="p-4 pt-6">
 		<Labelled>
-			<span slot="label"><Localized key="location.lastSurveyed" /></span>
+			<span slot="label"><Localized key="^location.lastSurveyed" /></span>
 			{formatDistanceToNow(parseISO(location.surveyDate), { addSuffix: true })}
 		</Labelled>
 	</div>
 	{#if location.remarks}
 		<hr class="text-gray-200" />
 		<div class="p-4">
-			<Labelled><span slot="label"><Localized key="location.remarks" /></span></Labelled>
+			<Labelled><span slot="label"><Localized key="^location.remarks" /></span></Labelled>
 			{location.remarks}
 		</div>
 	{/if}

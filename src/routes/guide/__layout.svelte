@@ -4,6 +4,7 @@
 	import MdMap from 'svelte-icons/md/MdMap.svelte';
 	import TiArrowRight from 'svelte-icons/ti/TiArrowRight.svelte';
 	import TiArrowLeft from 'svelte-icons/ti/TiArrowLeft.svelte';
+	import Head from '$lib/components/Head.svelte';
 
 	import { _ } from 'svelte-i18n';
 	import { page as pageStore } from '$app/stores';
@@ -97,6 +98,14 @@
 	$: page = findPageContext($pageStore.path);
 	$: scrollToTop($pageStore.path);
 </script>
+
+<Head
+	site="E.L.S.A. Guide"
+	title={`${page.current.section.title ? `${page.current.section.title} — ` : ''}${
+		page.current.title
+	}`}
+	description="Knowledge base containing information on how to use E.L.S.A. as well as useful tips for emergency situations like e.g. what to watch out for when ditching an aircraft."
+/>
 
 <div class="flex w-full h-full">
 	<div

@@ -2,7 +2,10 @@
 	import Labelled from '$lib/components/Labelled.svelte';
 	import GoMarkGithub from 'svelte-icons/go/GoMarkGithub.svelte';
 	import Localized from '$lib/components/Localized.svelte';
+	import Head from '$lib/components/Head.svelte';
 </script>
+
+<Head title="Imprint" />
 
 <div class="flex justify-center w-full h-full flex-wrap">
 	<div class="imprint m-t-auto my-auto p-8">

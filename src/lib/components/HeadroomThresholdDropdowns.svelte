@@ -14,7 +14,7 @@
 </script>
 
 <Labelled>
-	<span slot="label"><Localized key="settings.risk.landing.risky" /></span>
+	<span slot="label"><Localized key="^settings.risk.landing.risky" /></span>
 	<select name="riskyLanding" bind:value={$preferences.riskyLandingHeadroom} class="custom-select">
 		{#each riskyLandingHeadrooms as headroom}
 			<option value={headroom}>{@html formatPercentage(headroom)}</option>
@@ -22,7 +22,7 @@
 	</select>
 </Labelled>
 <Labelled>
-	<span slot="label"><Localized key="settings.risk.landing.unsafe" /></span>
+	<span slot="label"><Localized key="^settings.risk.landing.unsafe" /></span>
 	<select
 		name="unsafeLanding"
 		bind:value={$preferences.unsafeLandingHeadroom}
