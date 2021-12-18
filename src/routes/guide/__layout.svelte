@@ -67,7 +67,7 @@
 		},
 		{
 			title: '',
-			pages: [{ title: $_('guide.finalRemarks.title'), path: '/guide/devnote' }]
+			pages: [{ title: $_('guide.finalRemarks.title'), path: '/guide/remarks' }]
 		}
 	];
 

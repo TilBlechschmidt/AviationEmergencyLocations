@@ -18,8 +18,11 @@
 
 <Localized key="closingWords" />
 
-<button
-	class="my-8 disabled:bg-gray-200 disabled:text-gray-400 w-full rounded-lg border border-gray-200 bg-white text-sm font-medium px-4 py-2 text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 mr-3 mb-3"
+<br />
+
+<a
+	href="/tool"
+	class="no-default block text-center my-8 disabled:bg-gray-200 disabled:text-gray-400 w-full rounded-lg border border-gray-200 bg-white text-sm font-medium px-4 py-2 text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 mr-3 mb-3"
 >
 	<Localized key="button" />
-</button>
+</a>
