@@ -1,5 +1,4 @@
 <script>
-	import { _ } from 'svelte-i18n';
 	import Localized, { KeyPrefix } from '$lib/components/Localized.svelte';
 	import { setContext } from 'svelte';
 

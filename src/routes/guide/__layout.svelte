@@ -64,6 +64,10 @@
 					path: '/guide/tool/reachability/details'
 				}
 			]
+		},
+		{
+			title: '',
+			pages: [{ title: $_('guide.finalRemarks.title'), path: '/guide/devnote' }]
 		}
 	];
 
