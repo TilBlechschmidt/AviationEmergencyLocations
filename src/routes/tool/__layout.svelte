@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { Map } from '@beyonk/svelte-mapbox';
-	import { page } from '$app/stores';
+	import { page, navigating } from '$app/stores';
 
 	import SatelliteImagery from '$lib/components/map/layers/SatelliteImagery.svelte';
 	import LocationLines from '$lib/components/map/layers/LocationLines.svelte';
@@ -49,7 +49,9 @@
 </script>
 
 <svelte:window bind:innerWidth />
-<Head {...headProperties} />
+{#if headProperties}
+	<Head {...headProperties} />
+{/if}
 
 <Map
 	accessToken="pk.eyJ1IjoidGlsYmxlY2hzY2htaWR0IiwiYSI6ImNqczYxZXplZjA3bnM0M3A5djB1cDl3azUifQ.MEU9Fe4JHD1_3U1BLNJWbg"
