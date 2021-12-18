@@ -102,11 +102,6 @@ impl Add for RiskClassification {
     }
 }
 
-// TODO Remove this default
-fn fourty_two() -> u32 {
-    42
-}
-
 #[wasm_bindgen]
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -136,7 +131,6 @@ pub struct Location {
 
     /// Field elevation above MSL in feet
     #[wasm_bindgen(readonly)]
-    #[serde(default = "fourty_two")]
     pub elevation: u32,
 
     /// Start and end coordinates of the location

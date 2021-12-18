@@ -1,4 +1,5 @@
 - name: EDDH 05/23
+  elevation: 33
   reversible: true
   surface: Asphalt
   usage: Aeronautical
@@ -8,6 +9,7 @@
   assets: []
   surveyDate: 2021-11-21T15:42:56+0000
 - name: EDDH 15/33
+  elevation: 44
   reversible: true
   surface: Asphalt
   usage: Aeronautical
@@ -18,6 +20,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: EDHI 05/23
+  elevation: 14
   reversible: true
   surface: Asphalt
   usage: Aeronautical
@@ -28,6 +31,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Segelflugplatz Boberg
+  elevation: 5
   reversible: true
   surface: Gras
   usage: Aeronautical
@@ -38,6 +42,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Trabrennbahn
+  elevation: 133
   # TODO Note hazards (large tents) at the beginning of reversed approach
   reversible: true
   surface: Gras
@@ -50,6 +55,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Entenwerder Nord
+  elevation: 22
   reversible: true
   surface: Gras
   usage: Park
@@ -61,6 +67,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Entenwerder Süd
+  elevation: 14
   reversible: true
   surface: Gras
   usage: Park
@@ -72,6 +79,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Niendorfer Gehege
+  elevation: 39
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -84,6 +92,7 @@
 # The Planetarium has a height of 63.5m and the landing calculations account for a ~15m high obstruction.
 # To retain the reversibility of the remaining park, the Planetarium and Stadtpark have been split up.
 - name: Stadtpark
+  elevation: 51
   reversible: true
   surface: Gras
   usage: Park
@@ -95,6 +104,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Planetarium
+  elevation: 69
   reversible: false
   surface: Gras
   usage: Park
@@ -107,6 +117,7 @@
   remarks: Tall building (~220ft) at the NW end of the landing site, restricting landings to the SE approach only as landing calculations only assume a 50ft obstacle at the end of the landing zone!
 
 - name: Brakenburg
+  elevation: 3
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -117,6 +128,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Raakmoor
+  elevation: 82
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -127,6 +139,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Glashütte
+  elevation: 102
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -137,6 +150,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Klosterwiese
+  elevation: 99
   reversible: true
   surface: Gras
   usage: Nature
@@ -147,6 +161,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Öjendorf
+  elevation: 72
   reversible: false
   surface: Gras
   usage: Agricultural
@@ -158,6 +173,7 @@
   remarks: High-voltage powerlines at the NE end, thus approach only possible from the SW!
 
 - name: Bramfelder See
+  elevation: 52
   reversible: true
   surface: Water
   usage: Nature
@@ -168,6 +184,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Stellmoorer Tunneltal
+  elevation: 119
   reversible: true
   surface: Gras
   usage: Nature
@@ -178,6 +195,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Außenalster
+  elevation: 9
   reversible: true
   surface: Water
   usage: Waterway
@@ -190,6 +208,7 @@
 
 # Hazard (Radar tower) at the east approach end which can be bypassed
 - name: Waltershof
+  elevation: 20
   reversible: true
   surface: Gras
   usage: Nature
@@ -200,6 +219,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Horner Rennbahn
+  elevation: 44
   reversible: true
   surface: Gras
   usage: Event
@@ -211,6 +231,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Barsbüttel
+  elevation: 85
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -221,6 +242,7 @@
   surveyDate: 2021-11-21T15:42:56+0000
 
 - name: Golfplatz Treudelberg
+  elevation: 82
   reversible: true
   surface: Gras
   usage: Park
@@ -232,6 +254,7 @@
   surveyDate: 2021-11-24T10:31:45+0000
 
 - name: Bergstedt
+  elevation: 92
   reversible: true
   surface: Gras
   usage: Nature
@@ -243,6 +266,7 @@
   surveyDate: 2021-11-24T10:31:45+0000
 
 - name: Moorburg
+  elevation: 0
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -255,6 +279,7 @@
   remarks: Powerlines 700m SW of the field, making an approach from the NE favourable.
 
 - name: Moorwerder Deich
+  elevation: 19
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -266,6 +291,7 @@
   surveyDate: 2021-11-24T10:31:45+0000
 
 - name: Appelbüttler Tal
+  elevation: 119
   reversible: true
   surface: Gras
   usage: Agricultural
@@ -277,6 +303,7 @@
   surveyDate: 2021-11-24T10:31:45+0000
 
 - name: Friedrich-Ebert-Allee
+  elevation: 62
   reversible: true
   surface: Gras
   usage: Nature
@@ -288,6 +315,7 @@
   surveyDate: 2021-11-24T10:31:45+0000
 
 - name: Sülldorf
+  elevation: 63
   reversible: true
   surface: Gras
   usage: Nature
@@ -299,6 +327,7 @@
   surveyDate: 2021-11-24T10:31:45+0000
 
 - name: Travehafen
+  elevation: 7
   reversible: true
   surface: Water
   usage: Waterway
