@@ -3,25 +3,19 @@
 	import { Map } from '@beyonk/svelte-mapbox';
 	import { page } from '$app/stores';
 
-	import Modal from '$lib/components/Modal.svelte';
-	import Disclaimer from '$lib/components/Disclaimer.svelte';
 	import SatelliteImagery from '$lib/components/map/layers/SatelliteImagery.svelte';
 	import LocationLines from '$lib/components/map/layers/LocationLines.svelte';
 	import Head from '$lib/components/Head.svelte';
+	import SafetyDisclaimerModal from '$lib/components/SafetyDisclaimerModal.svelte';
 
 	import { elsa } from '$lib/simulation/elsa';
-	import { aircraftID, disclaimerSeen } from '$lib/stores';
+	import { aircraftID } from '$lib/stores';
 
 	onMount(async () => {
 		await elsa.startup;
 	});
 
 	let innerWidth = 0;
-
-	function dismissGuide() {
-		disclaimerSeen.set(true);
-		window.open('/guide', '_blank');
-	}
 
 	// Since child components are only mounted once the map is rendered, we have to kinda cheese our way into setting the correct header :(
 	function calculateHead(page) {
@@ -73,19 +67,8 @@
 	<slot />
 </Map>
 
-<Modal hidden={$disclaimerSeen}>
-	<div class="p-8">
-		<Disclaimer
-			warning
-			title="guide.welcome.title"
-			text="guide.welcome.text"
-			confirmation1="guide.welcome.confirmation1"
-			confirmation2="guide.welcome.confirmation2"
-			button="guide.welcome.button"
-			on:submit={dismissGuide}
-		/>
-	</div>
-</Modal>
+<SafetyDisclaimerModal />
+
 {#if innerWidth < 650}
 	<div class="absolute flex items-center justify-center h-full w-full z-50 top-0 left-0 bg-white">
 		<div class="p-8 text-center mx-auto">

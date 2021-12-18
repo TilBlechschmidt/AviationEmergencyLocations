@@ -5,6 +5,7 @@
 	import TiArrowRight from 'svelte-icons/ti/TiArrowRight.svelte';
 	import TiArrowLeft from 'svelte-icons/ti/TiArrowLeft.svelte';
 	import Head from '$lib/components/Head.svelte';
+	import SafetyDisclaimerModal from '$lib/components/SafetyDisclaimerModal.svelte';
 
 	import { _ } from 'svelte-i18n';
 	import { page as pageStore } from '$app/stores';
@@ -106,6 +107,8 @@
 	}`}
 	description="Knowledge base containing information on how to use E.L.S.A. as well as useful tips for emergency situations like e.g. what to watch out for when ditching an aircraft."
 />
+
+<SafetyDisclaimerModal noRedirect />
 
 <div class="flex w-full h-full">
 	<div
