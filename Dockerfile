@@ -13,9 +13,9 @@ FROM node:14-alpine3.14 AS web
 
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN yarn
 COPY --from=wasm /app/target/pkg /app/elsa/target/pkg
-RUN npm run build
+RUN yarn build
 
 # ----- Delivery
 FROM node:17-alpine3.12
