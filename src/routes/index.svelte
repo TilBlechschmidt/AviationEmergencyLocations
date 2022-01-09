@@ -11,10 +11,6 @@
 	onMount(() => {
 		shown = true;
 	});
-
-	function enter() {
-		goto('/map/location');
-	}
 </script>
 
 <Head />
@@ -30,7 +26,6 @@
 			href="/tool"
 			in:fade={{ y: 200, duration: 1000, delay: 750 }}
 			class="m-8 p-4 rounded border-gray-200 border-solid border text-gray-500 hover:shadow-md transition-all no-default"
-			on:click={enter}
 		>
 			<Localized key="welcomeButton" />
 			<span class="w-6 h-6 text-gray-500 align-middle inline-block -mt-1 ml-2">
