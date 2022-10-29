@@ -338,6 +338,20 @@
   assets: []
   surveyDate: 2021-11-24T10:31:45+0000
   remarks: Small harbor with low traffic and shallow beaches on the east shore.
+
+- name: Steinwerder
+  elevation: 10
+  reversible: true
+  surface: Gras
+  usage: Nature
+  humanPresence: Sparse
+  coordinates:
+    start: [53.53469952081253, 9.956337221989818]
+    end: [53.52971317245954, 9.9682109984018]
+  assets: []
+  surveyDate: 2022-10-29T19:35:16+0000
+  remarks: Sand pit which is likely a future construction site. Though for the past couple of years there has been no activity.
+
 # - name: Norderelbe
 #   reversible: true
 #   surface: Water
