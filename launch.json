@@ -1,0 +1,15 @@
+{
+  "id": "01GQX8ZFYJQ5WF0C7RJ74FA9X0",
+  "root": "build",
+  "name": "E.L.S.A.",
+  "domain": "elsa.blechschmidt.dev",
+  "compress": [
+    "html",
+    "js",
+    "json",
+    "css",
+    "woff",
+    "woff2"
+  ],
+  "fallback": "/200.html"
+}

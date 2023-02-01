@@ -519,11 +519,11 @@ impl Calculator {
     }
 
     #[wasm_bindgen(js_name = takeoffProfile)]
-    pub fn takeoff_profile(&self, aircraft: &Aircraft) -> String {
+    pub fn takeoff_profile(&self, aircraft: &Aircraft, distance: f64) -> String {
         let fifty_feet = 15.24;
 
         // Location geometry data
-        let available_distance = 3800.0; // 2270.0 D6; 2800 D8; 3800 A1;
+        let available_distance = distance; // 2270.0 D6; 2800 D8; 3800 A1;
 
         // Aircraft performance data
         let takeoff_ground_roll = aircraft.takeoff.ground_roll();
@@ -559,6 +559,7 @@ impl Calculator {
         let climb_through_altitude = climb_slope * available_distance + climb_y_intercept;
         let climb_through_point = Point::new(available_distance, climb_through_altitude);
 
+        log::debug!("Distn avail: {:?}", available_distance);
         log::debug!("Tkoff point: {:?}", rotation_point.x());
         log::debug!("Climb point: {:?}", climb_point);
         log::debug!("Lndg point:  {:?}", landing_point);

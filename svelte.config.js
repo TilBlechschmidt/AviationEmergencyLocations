@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-static';
 import preprocess from 'svelte-preprocess';
 import { resolve } from 'path';
 
@@ -15,10 +15,7 @@ const config = {
 		// Disabled due to issues with hydration+i18n duplicating HTML elements after {@html $_('...')} tags
 		ssr: true,
 		target: '#svelte',
-		adapter: adapter({
-			out: 'build',
-			precompress: true,
-		}),
+		adapter: adapter({ fallback: '200.html' }),
 		vite: {
 			resolve: {
 				alias: {

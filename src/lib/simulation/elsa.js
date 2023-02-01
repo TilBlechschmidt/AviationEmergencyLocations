@@ -7,7 +7,7 @@ const AIRCRAFT_CACHE = {};
 class ElsaWorker {
     constructor() {
         this.idCounter = 0;
-        this.worker = browser ? new Worker() : { postMessage: () => { } };
+        this.worker = browser ? new Worker() : { postMessage: () => {} };
         this.responseHandlers = {};
 
         this.worker.onmessage = (msg) => {
@@ -94,8 +94,8 @@ class ElsaWorker {
         }).then(JSON.parse);
     }
 
-    takeoffProfile(aircraftID) {
-        return this.submitRequest('TAKEOFF_PROFILE', { aircraftID });
+    takeoffProfile(aircraftID, distance) {
+        return this.submitRequest('TAKEOFF_PROFILE', { aircraftID, distance });
     }
 }
 

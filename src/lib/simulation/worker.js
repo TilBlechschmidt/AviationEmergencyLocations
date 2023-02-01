@@ -7,7 +7,7 @@ function parsePrefs(preferences) {
 
 async function run() {
     // Start fetching everything we need
-    const elsaPromise = init(dev ? undefined : '/elsa.wasm');
+    const elsaPromise = init(dev ? undefined : '/assets/elsa.wasm');
     const aircraftsPromise = fetch('/data/aircrafts.yml').then(res => res.text());
     const locationsPromise = fetch('/data/locations.yml').then(res => res.text());
     const dataPromise = Promise.all([aircraftsPromise, locationsPromise]);
@@ -80,9 +80,9 @@ async function run() {
                 break;
             }
             case 'TAKEOFF_PROFILE': {
-                const { aircraftID } = data;
+                const { aircraftID, distance } = data;
                 const aircraft = aircrafts.get(aircraftID);
-                response = calculator.takeoffProfile(aircraft);
+                response = calculator.takeoffProfile(aircraft, distance);
                 break;
             }
             default:
