@@ -13,20 +13,24 @@
 	export let longitude;
 	export let altitude;
 	export let heading;
+	export let availableCount = 0;
 
 	let icon;
 
 	$: paint = {
-		'line-opacity': [
-			'interpolate',
-			['linear'],
-			['get', 'heightLoss'],
-			// TODO Make this a user-configurable parameter :)
-			feetToMeters(altitude * 0.5),
-			1,
-			feetToMeters(altitude),
-			0
-		],
+		'line-opacity':
+			altitude > 0
+				? [
+						'interpolate',
+						['linear'],
+						['get', 'heightLoss'],
+						// TODO Make this a user-configurable parameter :)
+						feetToMeters(altitude * 0.5),
+						1,
+						feetToMeters(altitude),
+						0
+				  ]
+				: 1,
 		'line-width': 2.5,
 		'line-color': ['get', ['get', 'risk'], ['literal', riskColors]],
 		'line-dasharray': [2, 0.5]
@@ -46,6 +50,8 @@
 			altitude,
 			aircraftID
 		);
+
+		availableCount = geojson.features.length;
 	}
 
 	$: updateGeoJSON($preferences, latitude, longitude, heading, altitude, aircraftID);

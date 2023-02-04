@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { aircraftID } from '$lib/stores';
 
-	let svg = '';
+	let profile = { svg: '', points: [] };
 	let aircrafts = [];
 	let distance = 2270;
 
@@ -14,7 +14,7 @@
 	};
 
 	async function updateSVG(aircraftID, distance) {
-		svg = await elsa.takeoffProfile(aircraftID, distance);
+		profile = await elsa.takeoffProfile(aircraftID, distance);
 	}
 
 	function loadPreset(e) {
@@ -27,6 +27,7 @@
 		await updateSVG($aircraftID, distance);
 	});
 
+	$: svg = profile.svg;
 	$: updateSVG($aircraftID, distance || 3800);
 </script>
 

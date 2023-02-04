@@ -60,6 +60,17 @@ pub struct RiskAssessment {
     pub humans: RiskClassification,
 }
 
+// TODO Move into its own file and put calculation logic inside
+#[derive(Serialize, Deserialize, Clone)]
+pub struct TakeoffProfile {
+    /// Points on the takeoff profile
+    points: Vec<(f64, f64)>,
+    /// Gives height gained when multiplied by the distance covered over the ground
+    slope: f64,
+    /// Rendering of the takeoff profile
+    svg: String,
+}
+
 #[wasm_bindgen]
 pub struct Calculator;
 
@@ -509,6 +520,8 @@ impl Calculator {
             )
             .collect::<Vec<_>>();
 
+        // TODO Also consider landing points that are partially into the runway (if long enough)
+
         let geojson = GeoJson::FeatureCollection(FeatureCollection {
             bbox: None,
             features,
@@ -519,7 +532,7 @@ impl Calculator {
     }
 
     #[wasm_bindgen(js_name = takeoffProfile)]
-    pub fn takeoff_profile(&self, aircraft: &Aircraft, distance: f64) -> String {
+    pub fn takeoff_profile(&self, aircraft: &Aircraft, distance: f64) -> Result<String, JsValue> {
         let fifty_feet = 15.24;
 
         // Location geometry data
@@ -638,7 +651,7 @@ impl Calculator {
         );
         let height_text = Text::new()
             .set("x", 10)
-            .set("dy", 10)
+            .set("dy", -20)
             .set("alignment-baseline", "hanging")
             .set(
                 "y",
@@ -668,8 +681,24 @@ impl Calculator {
             .add(build_path(deceleration_line_data, asphalt_color));
 
         let wrapper = Document::new().add(graph).add(height_text);
+        let svg = wrapper.to_string();
 
-        wrapper.to_string()
+        let profile = TakeoffProfile {
+            svg,
+            slope: climb_slope,
+            points: vec![
+                (0.0, 0.0),
+                // X: Takeoff roll
+                // Y: 0.0
+                rotation_point.x_y(),
+                // Y: 50ft
+                climb_point.x_y(),
+                // Y: Intersection point
+                intersection.x_y(),
+            ],
+        };
+
+        Ok(serde_json::to_string(&profile).map_err(|e| e.to_string())?)
     }
 }
 

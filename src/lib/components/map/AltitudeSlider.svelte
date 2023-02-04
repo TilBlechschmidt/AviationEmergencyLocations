@@ -2,6 +2,8 @@
 	import { fly } from 'svelte/transition';
 
 	export let altitude;
+	export let min = 1500;
+	export let max = 2500;
 
 	const padding = 390;
 	const duration = 500;
@@ -15,13 +17,13 @@
 		class="h-48 mb-4"
 		type="range"
 		bind:value={altitude}
-		min="1500"
-		max="2500"
+		{min}
+		{max}
 		step="10"
 		orient="vertical"
 		name="foo"
 	/>
-	<div class="text-lg">{altitude}ft</div>
+	<div class="text-lg">{Math.round(altitude)}ft</div>
 </div>
 
 <style>

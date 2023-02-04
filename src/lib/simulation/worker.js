@@ -83,6 +83,7 @@ async function run() {
                 const { aircraftID, distance } = data;
                 const aircraft = aircrafts.get(aircraftID);
                 response = calculator.takeoffProfile(aircraft, distance);
+                console.log(response);
                 break;
             }
             default:

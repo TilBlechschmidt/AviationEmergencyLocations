@@ -95,7 +95,7 @@ class ElsaWorker {
     }
 
     takeoffProfile(aircraftID, distance) {
-        return this.submitRequest('TAKEOFF_PROFILE', { aircraftID, distance });
+        return this.submitRequest('TAKEOFF_PROFILE', { aircraftID, distance }).then(JSON.parse);
     }
 }
 

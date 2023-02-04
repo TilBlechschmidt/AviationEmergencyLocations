@@ -156,7 +156,9 @@
         },
         "routePlanner": {
             "title": "Route planner",
-            "subtitle": "Analyse your flight"
+            "subtitle": "Analyse your flight",
+            "profile":  "Takeoff profile"
+
         },
         "guide": {
             "title": "Handbook",
@@ -204,7 +206,9 @@
             "title": "Flight profile",
             "aircraft": "Aircraft",
             "bank": "Bank angle",
-            "altitude": "Altitude"
+            "altitude": "Altitude",
+            "targetAltitude": "Target altitude",
+            "route": "Route"
         },
         "risk": {
             "title": "Risk assessment",

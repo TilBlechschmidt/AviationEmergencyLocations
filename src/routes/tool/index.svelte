@@ -46,7 +46,6 @@
 					title="tool.routePlanner.title"
 					subtitle="tool.routePlanner.subtitle"
 					href="/tool/route"
-					disabled
 				>
 					<MdNavigation />
 				</ToolButton>

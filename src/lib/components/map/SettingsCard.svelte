@@ -16,6 +16,17 @@
 	import Localized from '$lib/components/Localized.svelte';
 
 	let aircraftName = 'Loading ...';
+	let aircrafts = [];
+
+	export let title;
+
+	export let aircraftDropdown = false;
+
+	export let disableAltitude = false;
+	export let targetAltitude = null;
+
+	export let routeChoices = [];
+	export let selectedRoute = null;
 
 	onMount(async () => {
 		await elsa.startup;
@@ -27,6 +38,7 @@
 
 	async function updateAircraft(id) {
 		aircraftName = (await elsa.fetchAircraft(id)).name;
+		aircrafts = await elsa.fetchAircraftList();
 	}
 
 	$: updateAircraft($aircraftID);
@@ -43,7 +55,7 @@
 				href="/tool"
 			>
 				<span class="border-b border-solid border-transparent transition-all"
-					><Localized key="tool.reachability.title" /></span
+					><Localized key={title} /></span
 				>
 				<span class="w-4 h-4 -mb-0.5 inline-block icon"><GoChevronDown /></span>
 			</a>
@@ -74,7 +86,15 @@
 			<div class="p-4 pt-6">
 				<Labelled>
 					<span slot="label"><Localized key="settings.flight.aircraft" /></span>
-					<a class="font-mono" href="/aircrafts">{aircraftName}</a>
+					{#if aircraftDropdown}
+						<select name="aircraft" bind:value={$aircraftID} class="custom-select">
+							{#each aircrafts as aircraft}
+								<option value={aircraft.id}>{aircraft.name}</option>
+							{/each}
+						</select>
+					{:else}
+						<a class="font-mono" href="/aircrafts">{aircraftName}</a>
+					{/if}
 				</Labelled>
 				<Labelled>
 					<span slot="label"><Localized key="settings.flight.bank" /></span>
@@ -85,20 +105,49 @@
 					</select>
 				</Labelled>
 			</div>
+			{#if routeChoices.length > 0}
+				<hr class="text-gray-200" />
+				<div class="p-4 pt-6">
+					<Labelled>
+						<span slot="label"><Localized key="settings.flight.route" /></span>
+						<select name="routeChoice" bind:value={selectedRoute} class="custom-select">
+							{#each routeChoices as choice}
+								<option value={choice}>{choice}</option>
+							{/each}
+						</select>
+					</Labelled>
+				</div>
+			{/if}
 			<hr class="text-gray-200" />
 			<div class="p-4 pt-6">
 				<Labelled>
 					<span slot="label"><Localized key="settings.flight.altitude" /></span>
-					<span class="font-mono">{$altitude}ft</span>
+					<span class="font-mono">{Math.round($altitude)}ft</span>
 				</Labelled>
-				<input
-					type="range"
-					bind:value={$altitude}
-					min="1500"
-					max="2500"
-					step="10"
-					class="w-full mt-2"
-				/>
+				{#if !disableAltitude}
+					<input
+						type="range"
+						bind:value={$altitude}
+						min="1500"
+						max="2500"
+						step="10"
+						class="w-full mt-2"
+					/>
+				{/if}
+				{#if targetAltitude}
+					<Labelled>
+						<span slot="label"><Localized key="settings.flight.targetAltitude" /></span>
+						<span class="font-mono">{Math.round(targetAltitude)}ft</span>
+					</Labelled>
+					<input
+						type="range"
+						bind:value={targetAltitude}
+						min="1500"
+						max="2500"
+						step="10"
+						class="w-full mt-2"
+					/>
+				{/if}
 			</div>
 		</div>
 		<div class="w-80 text-sm mt-8 card">
